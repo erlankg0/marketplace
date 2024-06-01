@@ -4,9 +4,20 @@
   gap: 2rem;
 }
 
-.content {
-  display: flex;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 3rem;
+.error {
+  font-weight: 500;
+  font-size: 2.5rem;
+  color: red;
 }
 
+.label {
+  color: #888888;
+  font-weight: 400;
+  font-size: 2.5rem;
+}
+
+.input {
+  width: 100%;
+  padding: .5rem 1rem;
+  -moz-outline-radius: .5rem;
+}

@@ -26,7 +26,8 @@
       "@assets/*": ["src/assets/*"],
       "@layout/*": ["src/layout/*"],
       "@styles/*": ["src/styles/*"],
-      "@interfaces/*": ["src/interfaces/*"]
+      "@interfaces/*": ["src/interfaces/*"],
+      "@validations/*": ["src/validations/*"],
     }
   },
   "include": ["src"],  // Move include out of compilerOptions

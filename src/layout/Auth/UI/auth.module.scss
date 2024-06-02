@@ -1,17 +1,34 @@
+.content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  min-height: 100vh;
+  background-color: #888888;
+}
+
+.auth {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  text-align: center;
+}
+
 .form {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  padding: .5rem 1rem;
 }
 
 .error {
   font-weight: 500;
   font-size: 2.5rem;
-  color: red;
+  color: red !important;
 }
 
 .label {
-  color: #888888;
+  color: #0e0a0a;
   font-weight: 400;
   font-size: 2.5rem;
 }

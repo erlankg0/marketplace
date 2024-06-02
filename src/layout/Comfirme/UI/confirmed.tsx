@@ -26,8 +26,11 @@ const Confirmed = () => {
             <Flex gap={"5rem"} justify={"center"} align={"center"} vertical={true}>
 
                 <Typography.Title level={5}>With custom display character</Typography.Title>
-                <Input.OTP mask="🔒" {...sharedProps}  />
-                <Button htmlType={'submit'}>Confirm</Button>
+                <Input.OTP
+                    length={4}
+                    mask="🔒"
+                    {...sharedProps}/>
+                <Button onSubmit={onSubmit} htmlType={'submit'}>Confirm</Button>
             </Flex>
 
         </form>

@@ -3,8 +3,10 @@ import {ISingUp} from '@layout/SingUp/interface.ts';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {ValidationSingUp} from '@validations/singUp.ts';
 import {NavLink, useNavigate} from 'react-router-dom';
-import {Button, Flex} from 'antd';
+import {Flex} from 'antd';
 import styles from "@layout/Auth/UI/auth.module.scss";
+import authBackground from "@assets/images/authBackground.jpg";
+import ButtonSing from "@components/button/UI/button.tsx";
 
 const SingUp = () => {
     const navigate = useNavigate();
@@ -19,62 +21,113 @@ const SingUp = () => {
     };
 
     return (
-        <div className={styles.content}>
-            <div>
+        <article className={styles.content}>
+            <section className={styles.auth}>
+                <div className={styles.auth__text}>
+                    <h2 className={styles.auth__title}><strong>Регистрация</strong></h2>
+                    <p>Введите ваши ФИО и почту, чтобы войти в систему</p>
+                </div>
+                <i className={'line'}></i>
                 <form onSubmit={handleSubmit(onSubmit)}>
+
                     <Flex vertical style={{gap: '16px'}}>
-                        <div>
+                        <div className={styles.field}>
+                            <label
+                                className={errors.lastName ? `${styles.label} ${styles.error}` : `${styles.label}`}
+                                htmlFor="lastName"
+                            >Фамилия*</label>
+                            <input
+                                type="text"
+                                id="lastName"
+                                {...register('lastName')}
+                                autoFocus={touchedFields.lastName}
+                                className={styles.input}
+                                placeholder={"Абдраимов"}
+                            />
+                        </div>
+
+                        <div className={styles.field}>
+                            <label
+                                className={errors.firstName ? `${styles.label} ${styles.error}` : `${styles.label}`}
+                                htmlFor="firstName"
+                            >Имя*</label>
+                            <input
+                                type="text"
+                                id="firstName"
+                                {...register('firstName')}
+                                autoFocus={touchedFields.firstName}
+                                className={styles.input}
+                                placeholder={"Эрлан"}
+                            />
+                        </div>
+                        <div className={styles.field}>
+                            <label
+                                className={errors.middleName ? `${styles.label} ${styles.error}` : `${styles.label}`}
+                                htmlFor="middleName"
+                            >Отчество*</label>
+                            <input
+                                type="text"
+                                id="middleName"
+                                {...register('middleName')}
+                                autoFocus={touchedFields.middleName}
+                                className={styles.input}
+                                placeholder={"Кубанычбекович"}
+                            />
+                        </div>
+
+                        <div className={styles.field}>
                             <label
                                 className={errors.email ? `${styles.label} ${styles.error}` : `${styles.label}`}
                                 htmlFor="email"
-                            >Эл. почта</label>
+                            >Почта*</label>
                             <input
                                 type="email"
                                 id="email"
                                 {...register('email')}
                                 autoFocus={touchedFields.email}
                                 className={styles.input}
+                                placeholder={"example@jom.com.kg"}
                             />
-
-                            {errors.email && <p className="error-message">{errors.email.message}</p>}
                         </div>
-                        <div>
+
+                        <div className={styles.field}>
                             <label
+                                className={errors.phone ? `${styles.label} ${styles.error}` : `${styles.label}`}
                                 htmlFor="phone"
-                                className={errors.phone ? `${styles.label} ${styles.error}` : styles.label}
-                            >Номер телефона</label>
+                            >Отчество*</label>
                             <input
                                 type="tel"
                                 id="phone"
                                 {...register('phone')}
                                 autoFocus={touchedFields.phone}
                                 className={styles.input}
+                                placeholder={"+90 553 368 73 69"}
                             />
-                            {errors.phone && <p className="error-message">{errors.phone.message}</p>}
                         </div>
-                        <div>
-                            <label
-                                htmlFor="username"
-                                className={errors.username ? `${styles.label} ${styles.error}` : styles.label}
-                            >Имя пользователя</label>
-                            <input
-                                type="text"
-                                id="username"
-                                {...register('username')}
-                                autoFocus={touchedFields.username}
-                                className={styles.input}
-                            />
-                            {errors.username && <p className="error-message">{errors.username.message}</p>}
-                        </div>
-                        <Button htmlType="submit" type="dashed">Регистрация</Button>
-                        <NavLink className={'link'} to="/auth">Авторизация</NavLink>
+                        <Flex vertical={false} gap={5}>
+                            <input type={'checkbox'}/>
+                            <label htmlFor={'remember'}>Запомнить меня</label>
+                        </Flex>
+                        <ButtonSing text={'Зарегистрироваться'} onSubmit={() => alert('ok')}/>
+                        <Flex gap={5}>
+                            <p>Уже зарегистрированы?</p>
+                            <NavLink className={'link'}  to="/">Войти</NavLink>
+                        </Flex>
                     </Flex>
                 </form>
-            </div>
-            <div>
-                a
-            </div>
-        </div>
+            </section>
+            <section className={styles.intro} style={{backgroundImage: `url(${authBackground})`}}>
+                <div className={styles.intro__content}>
+                    <div className={styles.intro__logo}>
+                        <p>ST</p>
+                    </div>
+                    <text className={styles.intro__text}>
+                        <h1>SmartTale</h1>
+                        <p>Мониторинг и управление швейным производством</p>
+                    </text>
+                </div>
+            </section>
+        </article>
     );
 };
 

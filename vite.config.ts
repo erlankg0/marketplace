@@ -12,6 +12,7 @@ export default defineConfig({
             '@styles': '/src/styles',
             '@interfaces': '/src/interfaces',
             '@validations': '/src/validations',
+            '@utils': '/src/utils',
         },
     },
 });

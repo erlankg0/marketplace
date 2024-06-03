@@ -28,6 +28,7 @@
       "@styles/*": ["src/styles/*"],
       "@interfaces/*": ["src/interfaces/*"],
       "@validations/*": ["src/validations/*"],
+      "@utils/*": ["src/utils/*"],
     }
   },
   "include": ["src"],  // Move include out of compilerOptions

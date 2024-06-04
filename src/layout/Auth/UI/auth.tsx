@@ -18,7 +18,7 @@ const Auth = () => {
         console.log("form submit", data)
     }
     return (
-        <article className={styles.content}>
+        <section className={styles.content}>
             <section className={styles.auth}>
                 <div className={styles.auth__text}>
                     <h2 className={styles.auth__title}><strong>Авторизация</strong></h2>
@@ -80,7 +80,7 @@ const Auth = () => {
                     </text>
                 </div>
             </section>
-        </article>
+        </section>
     )
 }
 

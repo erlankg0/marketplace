@@ -1,17 +1,37 @@
+@import "src/styles/typography/colors";
+
 .content {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   width: 100%;
   min-height: 100vh;
-  background-color: #888888;
 }
 
 .auth {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding: 5rem;
+  gap: 6rem;
 
-  text-align: center;
+  &__text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    font-weight: 700;
+    font-size: 3.6rem;
+    line-height: 5.6rem;
+    letter-spacing: -2%;
+  }
+
+  &__paragraph {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    font-weight: 400;
+    font-size: 1.6rem;
+    line-height: 1.6rem;
+  }
 }
 
 .form {
@@ -22,19 +42,88 @@
 }
 
 .error {
-  font-weight: 500;
-  font-size: 2.5rem;
   color: red !important;
 }
 
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
 .label {
-  color: #0e0a0a;
-  font-weight: 400;
-  font-size: 2.5rem;
+  font-weight: 510;
+  font-size: 1.4rem;
+  line-height: 1.4rem;
+  color: $black;
 }
 
 .input {
   width: 100%;
+  height: 5rem;
   padding: .5rem 1rem;
   -moz-outline-radius: .5rem;
+  font-size: 1.5rem;
+  font-weight: 400;
+
+}
+
+.intro {
+  height: 100%;
+  background-color: #c6ff22;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-bottom-left-radius: 25%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    max-width: 35rem;
+  }
+
+  &__logo {
+    background-color: $yellow;
+    width: 11.5rem;
+    height: 11.5rem;
+    border-radius: 1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__logo p {
+    font-weight: 700;
+    font-size: 4rem;
+    line-height: 3.7rem;
+
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+
+    & h1 {
+      font-weight: 700;
+      font-size: 4rem;
+      line-height: 3.7rem;
+      color: $white;
+      text-align: center;
+    }
+
+    & p {
+      font-size: 2.4rem;
+      line-height: 2.8rem;
+      text-align: center;
+      color: $white;
+    }
+  }
+
 }

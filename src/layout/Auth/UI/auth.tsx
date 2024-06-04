@@ -1,72 +1,85 @@
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {FormValues} from "@interfaces/auth.ts";
 import {validationSchema} from "@validations/auth.ts";
-import {Button, Flex, Typography} from "antd";
+import {Flex} from "antd";
 import styles from "./auth.module.scss";
+import authBackground from "@assets/images/authBackground.jpg";
+import ButtonSing from "@components/button/UI/button.tsx";
+import {NavLink} from "react-router-dom";
+import {IAuth} from "@layout/Auth/interface.ts";
 
-const {Title} = Typography;
+
 const Auth = () => {
-    const form = useForm<FormValues>({
+    const form = useForm<IAuth>({
         resolver: yupResolver(validationSchema),
     });
     const {register, formState: {errors, touchedFields}, handleSubmit} = form
-    const onSubmit = (data: FormValues) => {
+    const onSubmit = (data: IAuth) => {
         console.log("form submit", data)
     }
     return (
         <section className={styles.content}>
-            <div className={styles.auth}>
-                <Title level={3}>Страница Авторизации</Title>
-                <form noValidate className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-                    <Flex style={{gap: "1.6rem"}} justify={"center"} vertical={true}>
-                        <label
-                            htmlFor={"email"}
-                            className={errors.email ? `${styles.label} ${styles.error}` : styles.label}
-                        >Email</label>
-                        <input
-                            className={styles.input}
-                            type={"email"}
-                            id={"email"}
-                            {...register("email")}
-                            autoFocus={touchedFields.email}
-                        />
-                        {errors.email && (<p className={styles.error}>{errors.email.message}</p>)}
-                        <label
-                            className={errors.username ? `${styles.label} ${styles.error}` : styles.label}
-                            htmlFor={"username"}
-                        >Email</label>
-                        <input
-                            type={"text"}
-                            id={"username"}
-                            {...register("username")}
-                            className={styles.input}
-                            autoFocus={touchedFields.username}
+            <section className={styles.auth}>
+                <div className={styles.auth__text}>
+                    <h2 className={styles.auth__title}><strong>Авторизация</strong></h2>
+                    <p>Введите ваши почту и номер телефона, чтобы войти в систему</p>
+                </div>
+                <i className={'line'}></i>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Flex vertical style={{gap: '16px'}}>
+                        <div className={styles.field}>
+                            <label
+                                className={errors.email ? `${styles.label} ${styles.error}` : `${styles.label}`}
+                                htmlFor="email"
+                            >Почта*</label>
+                            <input
+                                type="email"
+                                id="email"
+                                {...register('email')}
+                                autoFocus={touchedFields.email}
+                                className={styles.input}
+                                placeholder={"example@jom.com.kg"}
+                            />
+                        </div>
 
-                        />
-                        {errors.username && (<p className={styles.error}>{errors.username.message}</p>)}
-
-
-                        <label
-                            className={errors.password ? `${styles.label} ${styles.error}` : styles.label}
-                            htmlFor={"password"}
-                        >Email</label>
-                        <input
-                            type={"password"}
-                            id={"password"}
-                            {...register("password")}
-                            className={styles.input}
-                            autoFocus={touchedFields.password}
-
-                        />
-                        {errors.password && (<p className={styles.error}>{errors.password.message}</p>)}
-
-                        <Button htmlType={'submit'}>SingIn</Button>
+                        <div className={styles.field}>
+                            <label
+                                className={errors.phone ? `${styles.label} ${styles.error}` : `${styles.label}`}
+                                htmlFor="phone"
+                            >Номер телефона*</label>
+                            <input
+                                type="tel"
+                                id="phone"
+                                {...register('phone')}
+                                autoFocus={touchedFields.phone}
+                                className={styles.input}
+                                placeholder={"+90 553 368 73 69"}
+                            />
+                        </div>
+                        <Flex vertical={false} gap={5}>
+                            <input type={'checkbox'}/>
+                            <label htmlFor={'remember'}>Запомнить меня</label>
+                        </Flex>
+                        <ButtonSing text={'Авторизация'} onSubmit={() => alert('ok')}/>
+                        <Flex gap={5}>
+                            <p>Нету аккаунта?</p>
+                            <NavLink className={'link'} to="/singup">Регистрация</NavLink>
+                        </Flex>
                     </Flex>
-
                 </form>
-            </div>
-            <div></div>
+            </section>
+
+            <section className={styles.intro} style={{backgroundImage: `url(${authBackground})`}}>
+                <div className={styles.intro__content}>
+                    <div className={styles.intro__logo}>
+                        <p>ST</p>
+                    </div>
+                    <text className={styles.intro__text}>
+                        <h1>SmartTale</h1>
+                        <p>Мониторинг и управление швейным производством</p>
+                    </text>
+                </div>
+            </section>
         </section>
     )
 }

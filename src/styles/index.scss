@@ -13,12 +13,21 @@ html, body, main {
   font-weight: 400;
 }
 
+h1, h2, h3, p, text {
+  margin: 0;
+  padding: 0;
+}
+
 input[type="text"],
 input[type="email"],
 input[type="number"],
 input[type="data"],
 input[type="password"] {
   display: block;
+}
+
+input[type="checkbox"]:checked {
+  accent-color: #2B3674;
 }
 
 input[type="*"]:active:focus:checked {
@@ -38,10 +47,15 @@ input[type="*"]:active:focus:checked {
 }
 
 .link {
-  text-decoration: none;
+  text-decoration: underline;
   font-weight: 400;
-  font-size: 1.6rem;
-  color: #c6ff22;
   cursor: pointer;
   text-align: center;
+  color: black;
+}
+
+.line {
+  background-color: #888888;
+  height: 1px;
+  width: 100%;
 }

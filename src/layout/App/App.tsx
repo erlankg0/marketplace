@@ -4,6 +4,7 @@ import {Route, Routes} from "react-router-dom";
 import SingUp from "@layout/SingUp/UI/singUp.tsx";
 import Confirmed from "@layout/Comfirme/UI/confirmed.tsx";
 import Progress from "@layout/Progress/UI/progress.tsx";
+import Marketplace from "@layout/Marketplace/UI/marketplace.tsx";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                     <Route path={'/singup'} element={<SingUp/>}/>
                     <Route path={'/confirmed'} element={<Confirmed/>}/>
                     <Route path={'/progress'} element={<Progress/>}/>
+                    <Route path={'/marketplace'} element={<Marketplace/>}/>
                 </Routes>
             </main>
         </>

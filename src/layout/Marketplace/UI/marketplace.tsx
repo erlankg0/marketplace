@@ -3,6 +3,7 @@ import Logo from "@components/logo/UI/logo.tsx";
 import Dropdown from "@components/dropdown/UI/dropdown.tsx";
 import Logout from "@components/logout/UI/logout.tsx";
 import Header from "@components/header/UI/header.tsx";
+import Card from "@components/card/UI/card.tsx";
 
 
 const Marketplace = () => {
@@ -35,7 +36,14 @@ const Marketplace = () => {
             <section className={styles.content}>
                 <Header/>
                 <div className={'line'}></div>
-
+                <div className={styles.cards}>
+                    <Card/>
+                    <Card/>
+                    <Card/>
+                    <Card/>
+                    <Card/>
+                    <Card/>
+                </div>
             </section>
         </main>
     )

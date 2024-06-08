@@ -1,6 +1,7 @@
 import {useLocation} from "react-router";
 import styles from "./header.module.scss";
 import Search from "@components/search/UI/search.tsx";
+import Push from "@components/push/UI/push.tsx";
 
 const Header = () => {
     const location = useLocation();
@@ -15,9 +16,8 @@ const Header = () => {
             </div>
             <div className={styles.header__form}>
                 <Search/>
-                <div>
-                    push
-                </div>
+                <Push/>
+                
             </div>
         </header>
     )

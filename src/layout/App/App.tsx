@@ -9,15 +9,13 @@ import Marketplace from "@layout/Marketplace/UI/marketplace.tsx";
 function App() {
     return (
         <>
-            <main className={'container'}>
-                <Routes>
-                    <Route path={'/'} element={<Auth/>}/>
-                    <Route path={'/singup'} element={<SingUp/>}/>
-                    <Route path={'/confirmed'} element={<Confirmed/>}/>
-                    <Route path={'/progress'} element={<Progress/>}/>
-                    <Route path={'/marketplace'} element={<Marketplace/>}/>
-                </Routes>
-            </main>
+            <Routes>
+                <Route path={'/marketplace'} element={<Auth/>}/>
+                <Route path={'/singup'} element={<SingUp/>}/>
+                <Route path={'/confirmed'} element={<Confirmed/>}/>
+                <Route path={'/progress'} element={<Progress/>}/>
+                <Route path={'/'} element={<Marketplace/>}/>
+            </Routes>
         </>
     )
 }

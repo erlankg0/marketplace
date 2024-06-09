@@ -1,9 +1,10 @@
 import styles from "./card.module.scss";
 import cardImage from "@assets/images/cardimage.png";
-import Button from "@components/button/UI/button.tsx";
-import user from "@assets/images/user.png"
+import React from "react";
+import {ICard} from "@components/card/interface.ts";
+import Seller from "@components/seller/UI/seller.tsx";
 
-const Card = () => {
+const Card: React.FC<ICard> = ({setActiveModal}) => {
     return (
         <div className={styles.card}>
             <img className={styles.card__image} src={cardImage} alt={'Card Image'}/>
@@ -13,19 +14,15 @@ const Card = () => {
                         <p className={styles.title}>Нитки</p>
                         <p className={styles.price}>100 сом</p>
                     </div>
-                    <div className={styles.user}>
-                        <img className={styles.user__image} src={user} alt={'user image'}/>
-                        <div className={styles.user__text}>
-                            <h4 className={styles.user__title}>Sandy Wilder Cheng</h4>
-                            <p className={styles.user__paragraph}>Автор объявления</p>
-                        </div>
-                    </div>
+                    <Seller/>
                     <p className={styles.user__description}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing eliе...
                     </p>
                 </div>
                 <div>
-                    <Button text={'Побробнее'} onSubmit={() => undefined}/>
+                    <button type={'submit'} onClick={() => setActiveModal(true)}
+                            className={styles.card__button}>Подробнее
+                    </button>
                 </div>
             </div>
         </div>

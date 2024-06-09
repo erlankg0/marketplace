@@ -4,9 +4,13 @@ import Dropdown from "@components/dropdown/UI/dropdown.tsx";
 import Logout from "@components/logout/UI/logout.tsx";
 import Header from "@components/header/UI/header.tsx";
 import Card from "@components/card/UI/card.tsx";
+import {useState} from "react";
+import Modal from "@components/modal/UI/modal.tsx";
+import CardModal from "@components/cardModal/UI/cardModal.tsx";
 
 
 const Marketplace = () => {
+    const [modalActive, setModalActive] = useState<boolean>(false)
     return (
         <main className={styles.body}>
             <aside className={styles.aside}>
@@ -37,14 +41,20 @@ const Marketplace = () => {
                 <Header/>
                 <div className={'line'}></div>
                 <div className={styles.cards}>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
+                    <Card setActiveModal={setModalActive}/>
+                    <Card setActiveModal={setModalActive}/>
+                    <Card setActiveModal={setModalActive}/>
+                    <Card setActiveModal={setModalActive}/>
+                    <Card setActiveModal={setModalActive}/>
+                    <Card setActiveModal={setModalActive}/>
                 </div>
             </section>
+            <Modal
+                active={modalActive}
+                setModalActive={setModalActive}
+                component={CardModal}
+                componentProps={{}}
+            />
         </main>
     )
 }

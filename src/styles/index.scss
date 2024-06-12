@@ -13,7 +13,7 @@ html, body, main {
   font-weight: 400;
 }
 
-h1, h2, h3, p, text {
+h1, h2, h3, h4, p, text {
   margin: 0;
   padding: 0;
 }
@@ -40,7 +40,7 @@ input[type="*"]:active:focus:checked {
   margin: 0 auto;
 }
 
-.content {
+.body {
   display: flex;
   grid-template-columns: repeat(2, 1fr);
   gap: 3rem;
@@ -58,4 +58,28 @@ input[type="*"]:active:focus:checked {
   background-color: #888888;
   height: 1px;
   width: 100%;
+}
+
+ul, ol, li {
+  list-style: none;
+}
+
+a{
+  text-decoration: none;
+  color: black;
+}
+
+.title{
+  font-size: 3.4rem;
+  line-height: 4.2rem;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none !important;
+  border: none;
+}
+
+input {
+  border: none;
+
 }

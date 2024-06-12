@@ -1,0 +1,29 @@
+.inputBox {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+
+  height: 4.4rem;
+
+  border: rgba(black, .5) solid .1rem;
+  border-radius: 1rem;
+
+  background-color: white;
+  padding: 0 .5rem;
+
+  &:active:focus{
+    outline: rgba(black, .7) solid 1px;
+  }
+  &__input {
+    outline-color: rgba(black, .5);
+    width: 100%;
+    justify-content: center;
+  }
+
+  &__icon {
+    width: 2rem;
+    height: 2rem;
+  }
+}

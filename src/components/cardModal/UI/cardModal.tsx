@@ -1,22 +1,65 @@
 import styles from "./cardModal.module.scss";
 import Seller from "@components/seller/UI/seller.tsx";
-import sliderMain from "@assets/images/sliderMain.jpg";
 import nitka from "@assets/images/nitki.jpg";
+import ni from "@assets/images/nitki02.jpg";
+import {useState} from 'react';
+import {Swiper, SwiperSlide} from 'swiper/react';
+import {Navigation, Pagination, Thumbs, FreeMode} from 'swiper/modules';
+import SwiperCore from "swiper";
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/thumbs';
+
+SwiperCore.use([Navigation, Pagination, Thumbs, FreeMode]);
+
 
 const CardModal = () => {
+
+    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
+
+    const slides = [
+        nitka,
+        nitka, nitka, nitka, ni, nitka];
+
     return (
         <section className={styles.card}>
             <div className={styles.card__gallery}>
                 <div className={styles.card__slide}>
-                    <img src={sliderMain} alt={''}/>
+                    <div>
+                        <Swiper
+                            loop={true}
+                            thumbs={{swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null}}
+                            modules={[Navigation, Pagination, Thumbs, FreeMode]}
+                            className="main-swiper"
+                        >
+                            {slides.map((slide, index) => (
+                                <SwiperSlide key={index}>
+                                    <img className={`${styles.card__slide} ${styles.card__image}`} src={slide} alt={`Slide ${index}`}/>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    </div>
+                    <div className={styles.card__slides}>
+                        <Swiper
+                            onSwiper={setThumbsSwiper}
+                            spaceBetween={10}
+                            slidesPerView={4}
+                            freeMode={true}
+                            watchSlidesProgress={true}
+                            modules={[Thumbs, FreeMode]}
+                            className="thumbs-swiper"
+                        >
+                            {slides.map((slide, index) => (
+
+                                <SwiperSlide key={index}>
+                                    <img className={styles.card__slider} src={slide} alt={`Thumb ${index}`}/>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    </div>
                 </div>
-                <div className={styles.card__slides}>
-                    <img className={styles.card__slider} src={nitka} alt={'nitka'}/>
-                    <img className={styles.card__slider} src={nitka} alt={'nitka'}/>
-                    <img className={styles.card__slider} src={nitka} alt={'nitka'}/>
-                    <img className={styles.card__slider} src={nitka} alt={'nitka'}/>
-                    <img className={styles.card__slider} src={nitka} alt={'nitka'}/>
-                </div>
+
             </div>
             <div className={styles.card__content}>
                 <div className={styles.card__header}>

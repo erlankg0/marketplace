@@ -7,6 +7,8 @@ import Card from "@components/card/UI/card.tsx";
 import {useState} from "react";
 import Modal from "@components/modal/UI/modal.tsx";
 import CardModal from "@components/cardModal/UI/cardModal.tsx";
+import {Route, Routes} from "react-router-dom";
+import Ads from "@layout/ads/UI/ads.tsx";
 
 
 const Marketplace = () => {
@@ -40,14 +42,13 @@ const Marketplace = () => {
             <section className={styles.content}>
                 <Header/>
                 <div className={'line'}></div>
-                <div className={styles.cards}>
-                    <Card setActiveModal={setModalActive}/>
-                    <Card setActiveModal={setModalActive}/>
-                    <Card setActiveModal={setModalActive}/>
-                    <Card setActiveModal={setModalActive}/>
-                    <Card setActiveModal={setModalActive}/>
-                    <Card setActiveModal={setModalActive}/>
-                </div>
+                <Routes>
+                    <Route path={'/'} element={<div className={styles.cards}>
+                        <Card setActiveModal={setModalActive}/>
+                    </div>}/>
+                    <Route path={'/services'} element={<Ads/>}/>
+                </Routes>
+
             </section>
             <Modal
                 active={modalActive}

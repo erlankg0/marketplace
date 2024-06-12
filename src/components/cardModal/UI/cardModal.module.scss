@@ -23,23 +23,20 @@
     height: 100%;
     width: 100%;
     aspect-ratio: 1 / 1;
+    border-radius: 1rem;
+  }
 
-    & > img {
-      border-radius: 1rem;
-      border: #FF9500 solid .1rem;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+  &__image{
+    border-radius: 1rem;
+    border: #FF9500 solid .1rem;
   }
 
   &__slides {
+    margin: 2rem;
     grid-row: 2 / -1;
     display: flex;
     flex-direction: row;
     gap: 1rem;
-    height: 5rem;
-    width: 5rem;
     align-self: center;
   }
 

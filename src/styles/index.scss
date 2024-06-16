@@ -83,3 +83,22 @@ input {
   border: none;
 
 }
+
+textarea{
+  min-width: 100%;
+  resize: none;
+  box-sizing: border-box; /* Учитывает padding и border в общей ширине */
+  white-space: pre-wrap; /* Автоматический перенос строк */
+  word-wrap: break-word; /* Перенос длинных слов на следующую строку */
+  border: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}

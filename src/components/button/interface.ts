@@ -1,4 +1,6 @@
-export interface IButtonSing {
+export interface IButton {
     text: string,
-    onSubmit: () => void,
+    onSubmit?: () => void,
+    action?: boolean,
+    onClickAction?: () => void,
 }

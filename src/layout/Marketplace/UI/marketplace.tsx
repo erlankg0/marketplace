@@ -9,10 +9,16 @@ import Modal from "@components/modal/UI/modal.tsx";
 import CardModal from "@components/cardModal/UI/cardModal.tsx";
 import {Route, Routes} from "react-router-dom";
 import Ads from "@layout/ads/UI/ads.tsx";
+import Alert from "@components/alert/UI/alert.tsx";
 
 
 const Marketplace = () => {
     const [modalActive, setModalActive] = useState<boolean>(false)
+    const [logoutModalActive, setLogoutModalActive] = useState<boolean>(false); // Состояние нового модального окна для подтверждения выхода
+    const handleLogout = () => {
+        setLogoutModalActive(true); // Показать модальное окно для подтверждения выхода при нажатии на кнопку выхода
+    };
+
     return (
         <main className={styles.body}>
             <aside className={styles.aside}>
@@ -37,7 +43,7 @@ const Marketplace = () => {
 
                     <div className={'line'}></div>
                 </div>
-                <Logout/>
+                <Logout onClick={handleLogout}/>
             </aside>
             <section className={styles.content}>
                 <Header/>
@@ -56,6 +62,13 @@ const Marketplace = () => {
                 component={CardModal}
                 componentProps={{}}
             />
+            <Modal
+                active={logoutModalActive}
+                setModalActive={setLogoutModalActive}
+                component={Alert} // Передача компонента модального окна для подтверждения выхода
+                componentProps={{}}
+            />
+
         </main>
     )
 }

@@ -6,6 +6,9 @@ import {useForm} from "react-hook-form";
 import {validationADS} from "@validations/ads.ts";
 import {IADS} from "@layout/ads/interface.ts";
 import {yupResolver} from "@hookform/resolvers/yup";
+import UploadImage from "@components/uploadImage/UI/upload.tsx";
+import Date from "@components/date/UI/date.tsx";
+
 
 const Ads = () => {
     const [selectedButton, setSelectedButton] = useState('equipment');
@@ -43,7 +46,9 @@ const Ads = () => {
                         <label
                             htmlFor="title"
                             className={styles.label}
-                        >Название <div className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div></label>
+                        >Название <div
+                            className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
+                        </label>
                         <input
                             type="text"
                             id="title"
@@ -60,7 +65,9 @@ const Ads = () => {
                         <label
                             htmlFor="description"
                             className={styles.label}
-                        >Описание <div className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div></label>
+                        >Описание <div
+                            className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
+                        </label>
                         <input
                             type={'text'}
                             id="description"
@@ -78,7 +85,9 @@ const Ads = () => {
                         <label
                             htmlFor="count"
                             className={styles.label}
-                        >Количество <div className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div></label>
+                        >Количество <div
+                            className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
+                        </label>
                         <input
                             type="number"
                             id="count"
@@ -86,17 +95,44 @@ const Ads = () => {
                             autoFocus={touchedFields.title}
                             className={styles.input}
                             placeholder={"1"}
+                            minLength={1}
                         />
                     </div>
                 </div>
+                <div className={styles.form__field}>
+                    <div className={styles.form__input}>
+                        <label
+                            htmlFor="price"
+                            className={styles.label}
+                        >Стоимость <div
+                            className={errors.price ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
+                        </label>
+                        <input
+                            type="number"
+                            id="price"
+                            {...register('price')}
+                            autoFocus={touchedFields.price}
+                            className={styles.input}
+                            placeholder={"1000 сом"}
+                        />
+                    </div>
+                </div>
+                <div>
+                    <Date/>
+                </div>
                 <p className={styles.form__title}>Галерея фотографий</p>
+                <div className={styles.form__field}>
+                    <UploadImage/>
+                </div>
                 <p className={styles.form__title}>Контактаця информация</p>
                 <div className={styles.form__field}>
                     <div className={styles.form__input}>
                         <label
                             htmlFor="title"
                             className={styles.label}
-                        >Название <div className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div></label>
+                        >Название <div
+                            className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
+                        </label>
                         <input
                             type="text"
                             id="title"

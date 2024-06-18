@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import type {GetProp, UploadFile, UploadProps} from "antd";
 import {Image, Upload} from "antd";
+import {IUploadImages} from "@components/uploadImage/Interface.ts";
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -12,10 +13,15 @@ const getBase64 = (file: FileType): Promise<string> =>
         reader.onerror = (error) => reject(error);
     });
 
-const UploadImage: React.FC = () => {
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
+const UploadImage: React.FC<IUploadImages> = ({
+                                                  previewImage,
+                                                  setPreviewImage,
+                                                  setFileList,
+                                                  fileList,
+                                                  previewOpen,
+                                                  setPreviewOpen
+                                              }) => {
+
 
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
@@ -26,12 +32,12 @@ const UploadImage: React.FC = () => {
         setPreviewOpen(true);
     };
 
-    const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
+    const handleChange: UploadProps['onChange'] = ({fileList: newFileList}) =>
         setFileList(newFileList);
 
     const uploadButton = (
-        <button style={{ border: 0, background: 'none' }} type="button">
-            <div style={{ padding: "1rem" }}>
+        <button style={{border: 0, background: 'none'}} type="button">
+            <div style={{padding: "1rem"}}>
                 <div style={{
                     width: "100%",
                     height: "100%",
@@ -55,13 +61,13 @@ const UploadImage: React.FC = () => {
                 fileList={fileList}
                 onPreview={handlePreview}
                 onChange={handleChange}
-                customRequest={({ onSuccess }) => onSuccess?.("ok")}
+                customRequest={({onSuccess}) => onSuccess?.("ok")}
             >
                 {fileList.length >= 8 ? null : uploadButton}
             </Upload>
             {previewImage && (
                 <Image
-                    wrapperStyle={{ display: 'none' }}
+                    wrapperStyle={{display: 'none'}}
                     preview={{
                         visible: previewOpen,
                         onVisibleChange: (visible) => setPreviewOpen(visible),

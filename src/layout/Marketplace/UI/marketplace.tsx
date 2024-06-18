@@ -1,15 +1,22 @@
-import styles from "./marketplace.module.scss";
 import Logo from "@components/logo/UI/logo.tsx";
+import Alert from "@components/alert/UI/alert.tsx";
 import Dropdown from "@components/dropdown/UI/dropdown.tsx";
 import Logout from "@components/logout/UI/logout.tsx";
 import Header from "@components/header/UI/header.tsx";
 import Card from "@components/card/UI/card.tsx";
-import {useState} from "react";
 import Modal from "@components/modal/UI/modal.tsx";
 import CardModal from "@components/cardModal/UI/cardModal.tsx";
-import {Route, Routes} from "react-router-dom";
+
 import Ads from "@layout/ads/UI/ads.tsx";
-import Alert from "@components/alert/UI/alert.tsx";
+
+import {useState} from "react";
+import {Route, Routes} from "react-router-dom";
+
+import styles from "./marketplace.module.scss";
+
+import person from "@assets/icon/person.svg"
+import clipboard from "@assets/icon/clipboard.svg"
+import shopping from "@assets/icon/shopping.svg"
 
 
 const Marketplace = () => {
@@ -31,15 +38,17 @@ const Marketplace = () => {
 
                     <div className={'line'}></div>
 
-                    <Dropdown/>
+                    <Dropdown icon={person} title={'Личный кабинет'}
+                              tabs={['Профиль', 'Мои объявления', 'Мои покупки', 'История заказов', 'Организация']}/>
 
                     <div className={'line'}></div>
 
-                    <Dropdown/>
+                    <Dropdown icon={clipboard} title={"Заказы"} tabs={['Текущие заказы', 'История']}/>
 
                     <div className={'line'}></div>
 
-                    <Dropdown/>
+                    <Dropdown icon={shopping} title={'Маркетплейс'}
+                              tabs={['Оборудования', 'Услуги', 'Разместить заказ']}/>
 
                     <div className={'line'}></div>
                 </div>

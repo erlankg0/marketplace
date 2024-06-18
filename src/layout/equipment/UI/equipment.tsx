@@ -1,56 +1,42 @@
-import styles from "@layout/ads/UI/ads.module.scss";
-import SelectButton from "@components/button/UI/selectButton.tsx";
 import UploadImage from "@components/uploadImage/UI/upload.tsx";
 import ButtonSing from "@components/button/UI/button.tsx";
+
 import {useState} from "react";
+import {UploadFile} from "antd";
 import {useForm} from "react-hook-form";
-import {IADS} from "@layout/ads/interface.ts";
 import {yupResolver} from "@hookform/resolvers/yup";
+
+import styles from "@layout/ads/UI/ads.module.scss";
 import {validationADS} from "@validations/ads.ts";
+import {IADS} from "@layout/ads/interface.ts";
 
 const Equipment = () => {
-    const [selectedButton, setSelectedButton] = useState('equipment');
-    const form = useForm<IADS>({resolver: yupResolver(validationADS)})
-    const {register, formState: {errors, touchedFields}, handleSubmit} = form
+    const form = useForm<IADS>({resolver: yupResolver(validationADS)});
+    const {register, formState: {errors}, handleSubmit} = form;
 
-    const handleButtonClick = (buttonType: string) => {
-        setSelectedButton(buttonType);
-    };
+    // images upload
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
 
     const onSubmit = (data: IADS) => {
-        console.log("form submit", data)
-    }
+        console.log("form submit", data);
+        console.log(fileList)
+    };
+
     return (
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-            <h3 className={styles.form__title}>Тип объявления</h3>
-            <div className={styles.form__category}>
-                {/*category ads*/}
-                <SelectButton
-                    text="Оборудования"
-                    action={selectedButton === 'equipment'}
-                    onClickAction={() => handleButtonClick('equipment')}
-                />
-                <SelectButton
-                    text="Заказ"
-                    action={selectedButton === 'order'}
-                    onClickAction={() => handleButtonClick('order')}
-                />
-                {/*category ads*/}
-            </div>
             <p className={styles.form__title}>Информация об оборудовании</p>
             <div className={styles.form__field}>
                 <div className={styles.form__input}>
-                    <label
-                        htmlFor="title"
-                        className={styles.label}
-                    >Название <div
+                    <label htmlFor="title" className={styles.label}>
+                        Название <div
                         className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
                     </label>
                     <input
                         type="text"
                         id="title"
                         {...register('title')}
-                        autoFocus={touchedFields.title}
                         className={styles.input}
                         placeholder={"..."}
                     />
@@ -59,18 +45,14 @@ const Equipment = () => {
             </div>
             <div className={styles.form__field}>
                 <div className={styles.form__input}>
-                    <label
-                        htmlFor="description"
-                        className={styles.label}
-                    >Описание <div
-                        className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
+                    <label htmlFor="description" className={styles.label}>
+                        Описание <div
+                        className={errors.description ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
                     </label>
-                    <input
-                        type={'text'}
+                    <textarea
                         id="description"
                         {...register('description')}
-                        autoFocus={touchedFields.description}
-                        className={styles.input}
+                        className={styles.textarea}
                         placeholder={"..."}
                         maxLength={1001}
                     />
@@ -79,17 +61,14 @@ const Equipment = () => {
             </div>
             <div className={styles.form__field}>
                 <div className={styles.form__input}>
-                    <label
-                        htmlFor="count"
-                        className={styles.label}
-                    >Количество <div
-                        className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
+                    <label htmlFor="count" className={styles.label}>
+                        Количество <div
+                        className={errors.count ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
                     </label>
                     <input
                         type="number"
                         id="count"
                         {...register('count')}
-                        autoFocus={touchedFields.title}
                         className={styles.input}
                         placeholder={"1"}
                         minLength={1}
@@ -98,17 +77,14 @@ const Equipment = () => {
             </div>
             <div className={styles.form__field}>
                 <div className={styles.form__input}>
-                    <label
-                        htmlFor="price"
-                        className={styles.label}
-                    >Стоимость <div
+                    <label htmlFor="price" className={styles.label}>
+                        Стоимость <div
                         className={errors.price ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
                     </label>
                     <input
                         type="number"
                         id="price"
                         {...register('price')}
-                        autoFocus={touchedFields.price}
                         className={styles.input}
                         placeholder={"1000 сом"}
                     />
@@ -116,22 +92,26 @@ const Equipment = () => {
             </div>
             <p className={styles.form__title}>Галерея фотографий</p>
             <div className={styles.form__field}>
-                <UploadImage/>
+                <UploadImage
+                    previewOpen={previewOpen}
+                    setPreviewOpen={setPreviewOpen}
+                    setPreviewImage={setPreviewImage}
+                    previewImage={previewImage}
+                    fileList={fileList}
+                    setFileList={setFileList}
+                />
             </div>
-            <p className={styles.form__title}>Контактаця информация</p>
+            <p className={styles.form__title}>Контактная информация</p>
             <div className={styles.form__field}>
                 <div className={styles.form__input}>
-                    <label
-                        htmlFor="title"
-                        className={styles.label}
-                    >Название <div
-                        className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
+                    <label htmlFor="phone" className={styles.label}>
+                        Телефон <div
+                        className={errors.phone ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
                     </label>
                     <input
                         type="text"
-                        id="title"
+                        id="phone"
                         {...register('phone')}
-                        autoFocus={touchedFields.phone}
                         className={styles.input}
                         placeholder={"+996 xxx xxx xxx"}
                     />
@@ -142,8 +122,7 @@ const Equipment = () => {
                 <ButtonSing text={'Разместить Объявления'}/>
             </div>
         </form>
-
-    )
-}
+    );
+};
 
 export default Equipment;

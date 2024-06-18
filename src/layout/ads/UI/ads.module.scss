@@ -62,3 +62,27 @@
   line-height: 2.4rem;
   color: black;
 }
+
+.textarea {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  color: black;
+  height: auto;
+  min-height: 10rem; /* Задайте минимальную высоту */
+  max-height: 15rem; /* Задайте максимальную высоту, если необходимо */
+}
+
+.tag {
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 1.6rem;
+  padding: .5rem;
+  background-color: white !important;
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 3.2rem;
+}

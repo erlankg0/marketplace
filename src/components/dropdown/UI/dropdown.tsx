@@ -1,8 +1,8 @@
-import person from "@assets/icon/person.svg";
 import styles from "./dropdown.module.scss";
-import {useState} from "react";
+import React, {useState} from "react";
+import {IDropdown} from "@components/dropdown/interface.ts";
 
-const Dropdown = () => {
+const Dropdown: React.FC<IDropdown> = ({title, tabs, icon}) => {
     const [isOpen, setOpen] = useState<boolean>(false);
 
     const handleToggleDropdown = () => {
@@ -10,17 +10,14 @@ const Dropdown = () => {
     }
     return (
         <div className={styles.dropdown}>
-            <div className={isOpen ? `${styles.dropdown__title} ${styles.active}` : styles.dropdown__title} onClick={handleToggleDropdown}>
-                <img src={person}/>
-                <p>Личный кабинет</p>
+            <div className={isOpen ? `${styles.dropdown__title} ${styles.active}` : styles.dropdown__title}
+                 onClick={handleToggleDropdown}>
+                <img src={icon} alt={`icon ${title}`}/>
+                <p>{title}</p>
             </div>
             {isOpen && (
                 <ul className={styles.dropdown__list}>
-                    <li className={styles.dropdown__list_text} >Профиль</li>
-                    <li className={styles.dropdown__list_text}>Мои объявления</li>
-                    <li className={styles.dropdown__list_text}>Мои покупки</li>
-                    <li className={styles.dropdown__list_text}>История заказов</li>
-                    <li className={styles.dropdown__list_text}>Организация</li>
+                    {tabs.map((tab) => <li className={styles.dropdown__list_text}>{tab}</li>)}
                 </ul>
             )}
         </div>

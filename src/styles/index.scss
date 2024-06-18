@@ -100,3 +100,10 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+.custom-select .ant-select-selector {
+  border-color: transparent !important;
+}
+
+:where(.css-dev-only-do-not-override-1fumvat).ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
+  border-color: transparent !important;
+}

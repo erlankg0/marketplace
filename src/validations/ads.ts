@@ -1,5 +1,4 @@
 import * as Yup from "yup";
-import {phoneRegex} from "@utils/regex/phone.ts";
 
 export const validationADS = Yup.object().shape({
     title: Yup.string()
@@ -16,8 +15,7 @@ export const validationADS = Yup.object().shape({
     price: Yup.string()
         .required("Объязательное поле"),
     phone: Yup.string()
-        .matches(phoneRegex, "Неправильный номер телефона")
-        .min(10, "Не правльной номер телефона <Мин 10 симоволов>")
+        .min(5, "Не правльной номер телефона <Мин 10 симоволов>")
         .max(15, "Не правльной номер телефона <Макс 15 симоволов>")
         .required("Обязательное поле"),
 })

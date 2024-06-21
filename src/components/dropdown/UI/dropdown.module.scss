@@ -1,0 +1,70 @@
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+
+  &__title {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+
+    align-items: center;
+    font-weight: 400;
+    font-size: 1.6rem;
+    line-height: 1.9rem;
+    position: relative;
+    padding: 1rem;
+    border-top-left-radius: .5rem;
+    border-bottom-left-radius: .5rem;
+    cursor: pointer;
+
+    &.active {
+      background-color: #F3F4FD;
+      color: rgba(black, .5);
+    }
+
+    &.active:before {
+      position: absolute;
+      content: ' ';
+      width: .4rem;
+      height: 100%;
+      background-color: yellow;
+      border-top-left-radius: .5rem;
+      border-bottom-left-radius: .5rem;
+      left: 0;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+    position: relative;
+    padding-left: 2.2rem; /* Add padding to create space between list items and the before pseudo-element */
+    z-index: 0;
+    width: 70%;
+    margin: 0 auto;
+    cursor: pointer;
+    &:before {
+      position: absolute;
+      content: ' ';
+      width: .1rem;
+      height: 100%;
+      background-color: rgba(black, .5);
+      margin-left: -2.2rem; /* Shift the pseudo-element back by the padding amount */
+      z-index: 1;
+    }
+
+    &_text {
+      font-weight: 400;
+      font-size: 1.6rem;
+      line-height: 1.9rem;
+      color: rgba(black, .5);
+    }
+  }
+}
+
+.active{
+  color: black;
+}

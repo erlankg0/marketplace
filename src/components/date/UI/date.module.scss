@@ -1,0 +1,21 @@
+.date {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background-color: white;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    width: 12rem;
+  }
+
+  &__label {
+    font-size: 1.4rem;
+    line-height: 1.7rem;
+    color: #8E8E93;
+  }
+}

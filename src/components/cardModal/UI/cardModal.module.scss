@@ -1,0 +1,152 @@
+.card {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 80rem;
+  height: 100%;
+  gap: 2rem;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  &__gallery {
+    display: grid;
+    grid-template-rows: 30rem 6rem;
+    gap: 2rem;
+    justify-content: center;
+  }
+
+  &__slide {
+    grid-row: 1/2;
+    height: 100%;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 1rem;
+  }
+
+  &__image {
+    border-radius: 1rem;
+    border: #FF9500 solid .1rem;
+    cursor: pointer;
+  }
+
+  &__slides {
+    margin: 2rem;
+    grid-row: 2 / -1;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-self: center;
+  }
+
+  &__slider {
+    width: 100%;
+    height: 100%;
+    border: #FF9500 solid .1rem;
+    border-radius: .5rem;
+    cursor: pointer;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__bread {
+    font-size: 1.4rem;
+    line-height: 1.9rem;
+    color: #8E8E93;
+  }
+
+  &__title {
+    font-size: 1.7rem;
+    line-height: 2.2rem;
+  }
+
+  &__price {
+    font-size: 2.4rem;
+    line-height: 2.9rem;
+    color: #FF9500;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 10rem;
+
+  &__tags {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+
+  &__tag {
+    font-size: 1.2rem;
+    line-height: 2.4rem;
+    color: rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+
+    &.active {
+      color: black;
+    }
+  }
+
+  &__text {
+    font-size: 1.4rem;
+    line-height: 2.2rem;
+    color: rgba(0, 0, 0, 0.45);
+  }
+
+  &__count {
+    font-size: 1.4rem;
+    line-height: 2.2rem;
+
+    & > strong {
+      font-weight: 700;
+    }
+  }
+
+}
+
+.button {
+  padding: 1.6rem;
+  text-align: center;
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  background-color: #2B3674;
+  border: none;
+  border-radius: 1rem;
+  transition: all .3s ease-in-out;
+  color: white;
+  max-width: 12rem;
+
+  &:active {
+    transform: translateY(3px);
+  }
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.time {
+  padding: .5rem 1.5rem;
+  text-align: center;
+  font-size: 1.2rem;
+  line-height: 2.2rem;
+  background-color: #FFCC00;
+  border-radius: 1rem;
+}

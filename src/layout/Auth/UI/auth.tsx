@@ -60,7 +60,7 @@ const Auth = () => {
                             <input type={'checkbox'}/>
                             <label htmlFor={'remember'}>Запомнить меня</label>
                         </Flex>
-                        <ButtonSing text={'Авторизация'} onSubmit={() => alert('ok')}/>
+                        <ButtonSing text={'Авторизация'}/>
                         <Flex gap={5}>
                             <p>Нету аккаунта?</p>
                             <NavLink className={'link'} to="/singup">Регистрация</NavLink>

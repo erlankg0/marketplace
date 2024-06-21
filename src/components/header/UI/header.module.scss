@@ -1,0 +1,22 @@
+.header {
+  grid-column: 1 / 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  align-items: center;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__form {
+    display: grid;
+    grid-template-columns: 40rem 3rem;
+    gap: 1rem;
+  }
+}
+
+.breads {
+  color: rgba(black, .5);
+}

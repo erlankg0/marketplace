@@ -41,39 +41,6 @@ const Monitoring: React.FC = () => {
         }
     };
 
-    // const handleValidation = (result: DropResult) => {
-    //     const {source, destination} = result
-    //
-    //     const currentData = source.droppableId; // здания которую мы выбрали
-    //     const choiceColumn = destination?.droppableId;
-    //
-    //     // ультат не создержить названия (на пример был брошел за пределами коллоник ничего не делаем просто)
-    //     if (!destination) {
-    //         return;
-    //     }
-    //
-    //     // Если значения элемента был перещен в ту же зону и остался в том же мест, выходим из фунции
-    //     if (source.droppableId === destination.droppableId && source.index === destination.index) {
-    //         return;
-    //     }
-    //
-    //     if (destination) {
-    //         if (!isTransitionAllowed(currentData, choiceColumn)) {
-    //             // Создаем копию текущего состояния элементов, чтобы не мутировать его напрямую.
-    //             const newOrders = {...orders};
-    //
-    //             // Извлекаем элемент из исходной зоны. Метод splice возвращает массив удаленных элементов, поэтому используем деструктуризацию для получения первого элемента.
-    //             const [movedItem] = newOrders[source.droppableId].splice(source.index, 1);
-    //
-    //             // Вставляем извлеченный элемент в новую зону на указанную позицию. Метод splice используется для вставки элемента.
-    //             newOrders[destination.droppableId].splice(destination.index, 0, movedItem);
-    //             // Обновляем состояние с новыми значениями. Это вызывает перерисовку компонента с обновленным порядком элементов.
-    //
-    //             return newOrders;
-    //         }
-    //     }
-    // }
-
     // Фунция для обработки завершения перетаскивания
     const handleValidation = (result: DropResult) => {
         const {source, destination} = result;

@@ -1,0 +1,35 @@
+.order {
+  background-color: #F3F4FD;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1.2rem;
+  border-radius: 1rem;
+
+  &__title {
+    font-weight: 500;
+    font-size: 1.6rem;
+    line-height: 1.9rem;
+    color: black;
+  }
+
+  &__description {
+    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: 1.67rem;
+    color: rgba(black, 0.5)
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__time {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+}

@@ -1,24 +1,27 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {useDateSelect} from "react-ymd-date-select";
 import {Select} from "antd";
 import styles from "./date.module.scss";
 
 interface CustomDateSelectProps {
     onChange: (value: string) => void;
-    value: string;
+    value: string,
+    visibleDate?: boolean
 }
 
-function CustomDateSelect(props: CustomDateSelectProps) {
+const CustomDateSelect = (props: CustomDateSelectProps) => {
     const dateSelect = useDateSelect(props.value, props.onChange);
 
     return (
         <div className={styles.date}>
             <div className={styles.date__field}>
-                <label className={styles.date__label}>
-                    День
-                </label>
+                {props.visibleDate && (
+                    <label className={styles.date__label}>
+                        День
+                    </label>
+                )}
 
-                <Select value={dateSelect.dayValue} onChange={dateSelect.onDayChange}>
+                <Select value={dateSelect.dayValue} onChange={dateSelect.onDayChange} placeholder={'День'}>
                     {dateSelect.dayOptions.map((dayOption) => (
                         <option key={dayOption.value} value={dayOption.value}>
                             {dayOption.label}
@@ -28,12 +31,18 @@ function CustomDateSelect(props: CustomDateSelectProps) {
             </div>
 
             <div className={styles.date__field}>
-                <label className={styles.date__label}>
-                    Месяц
-                </label>
+                {props.visibleDate &&
+                    (
+                        <label className={styles.date__label}>
+                            Месяц
+                        </label>
+                    )
+                }
+
                 <Select
                     value={dateSelect.monthValue}
                     onChange={dateSelect.onMonthChange}
+                    placeholder={'Месяц'}
                 >
                     {dateSelect.monthOptions.map((monthOption) => (
                         <option key={monthOption.value} value={monthOption.value}>
@@ -44,11 +53,12 @@ function CustomDateSelect(props: CustomDateSelectProps) {
 
             </div>
             <div className={styles.date__field}>
-                <label className={styles.date__label}>
-                    Год
-                </label>
-
-                <Select value={dateSelect.yearValue} onChange={dateSelect.onYearChange}>
+                {props.visibleDate && (
+                    <label className={styles.date__label}>
+                        Год
+                    </label>
+                )}
+                <Select value={dateSelect.yearValue} onChange={dateSelect.onYearChange} placeholder={'Год'}>
                     {dateSelect.yearOptions.map((yearOption) => (
                         <option key={yearOption.value} value={yearOption.value}>
                             {yearOption.label}
@@ -60,12 +70,12 @@ function CustomDateSelect(props: CustomDateSelectProps) {
     );
 }
 
-const DateSelect = () => {
+const DateSelect: React.FC<{ visibleDate?: boolean }> = ({visibleDate}) => {
     const [date, setDate] = useState("");
 
     return (
         <div>
-            <CustomDateSelect value={date} onChange={setDate}/>
+            <CustomDateSelect visibleDate={visibleDate} value={date} onChange={setDate}/>
         </div>
     );
 }

@@ -18,6 +18,7 @@ import person from "@assets/icon/person.svg"
 import clipboard from "@assets/icon/clipboard.svg"
 import shopping from "@assets/icon/shopping.svg"
 import Monitoring from "@layout/Monitoring/UI/monitoring.tsx";
+import History from "@layout/MonitoringHistory/UI/monitoring.tsx";
 
 
 const Marketplace = () => {
@@ -49,8 +50,8 @@ const Marketplace = () => {
 
                     <Dropdown icon={clipboard} title={'Заказы'}
                               tabs={[{title: "Текущие заказы", url: "current-orders"}, {
-                                  title: "Заказы",
-                                  url: 'order'
+                                  title: "История заказов",
+                                  url: 'history-orders'
                               }]}/>
 
 
@@ -75,6 +76,7 @@ const Marketplace = () => {
                     <Route path={'/order'} element={<Cards setActiveModal={setModalActive}/>}/>
                     <Route path={'/add-order'} element={<Ads/>}/>
                     <Route path={'current-orders'} element={<Monitoring/>}/>
+                    <Route path={'/history-orders'} element={<History setModalActive={setModalActive}/>}/>
                 </Routes>
 
             </section>

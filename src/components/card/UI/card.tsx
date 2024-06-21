@@ -12,15 +12,21 @@ const Card: React.FC<ICard> = ({setActiveModal}) => {
                 <div className={styles.card__text}>
                     <div className={styles.card__title}>
                         <p className={styles.title}>Нитки</p>
+
                         <p className={styles.price}>100 сом</p>
                     </div>
                     <Seller/>
                     <p className={styles.user__description}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing eliе...
+                        Lorem ipsum dolor sit amet, consectetur adipiscing eliе...
+                        Lorem ipsum dolor sit amet, consectetur adipiscing eliе...
+                        Lorem ipsum dolor sit amet, consectetur adipiscing eliе...
                     </p>
                 </div>
                 <div>
-                    <button type={'submit'} onClick={() => setActiveModal(true)}
+                    <button type={'submit'} onClick={() => {
+                        setActiveModal(true);
+                    }}
                             className={styles.card__button}>Подробнее
                     </button>
                 </div>

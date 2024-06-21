@@ -1,8 +1,9 @@
 import styles from "./dropdown.module.scss";
 import React, {useState} from "react";
 import {IDropdown} from "@components/dropdown/interface.ts";
+import {NavLink} from "react-router-dom";
 
-const Dropdown: React.FC<IDropdown> = ({title, tabs, icon}) => {
+const Dropdown: React.FC<IDropdown> = ({tabs, icon, title}) => {
     const [isOpen, setOpen] = useState<boolean>(false);
 
     const handleToggleDropdown = () => {
@@ -17,7 +18,16 @@ const Dropdown: React.FC<IDropdown> = ({title, tabs, icon}) => {
             </div>
             {isOpen && (
                 <ul className={styles.dropdown__list}>
-                    {tabs.map((tab) => <li className={styles.dropdown__list_text}>{tab}</li>)}
+                    {tabs.map((tab) => <li className={styles.dropdown__list_text}>
+                        <NavLink
+                            to={tab.url}
+                            className={({isActive, isPending}) =>
+                                isPending ? "" : isActive ? styles.active : ""
+                            }
+                        >
+                            {tab.title}
+                        </NavLink>
+                    </li>)}
                 </ul>
             )}
         </div>

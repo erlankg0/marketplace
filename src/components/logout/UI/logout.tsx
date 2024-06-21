@@ -6,7 +6,7 @@ import {ILogout} from "@components/logout/interface.ts";
 
 const Logout: React.FC<ILogout>= ({onClick}) => {
     return (
-        <NavLink to={'/'} className={styles.logout} onClick={onClick}>
+        <NavLink to={'/marketplace'} className={styles.logout} onClick={onClick}>
             <img className={styles.logout__img} src={logout} alt={'Копка выхода'}/>
             <p className={styles.logout__text}>Выйти</p>
         </NavLink>

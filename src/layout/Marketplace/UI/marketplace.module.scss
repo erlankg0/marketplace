@@ -47,12 +47,6 @@
   display: grid;
   grid-template-rows: 13rem .1rem 1fr;
   padding: 3.2rem;
+  gap: 2rem;
 }
 
-.cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  margin: 0 auto;
-  gap: 3rem;
-  padding: 3.2rem 0;
-}

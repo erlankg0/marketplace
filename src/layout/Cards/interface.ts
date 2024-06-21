@@ -1,4 +1,3 @@
-export interface ICard {
+export interface ICards {
     setActiveModal: (active: boolean) => void,
-    price?: string
 }

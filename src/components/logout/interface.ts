@@ -1,3 +1,4 @@
 export interface ILogout {
-    onClick?: () => void
+    onClick?: () => void,
+    active: boolean
 }

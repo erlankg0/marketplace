@@ -5,7 +5,7 @@ import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import styles from "@layout/Auth/UI/auth.module.scss";
 import authBackground from "@assets/images/authBackground.jpg";
-import ButtonSing from "@components/button/UI/button.tsx";
+import ButtonComponent from "@components/button/UI/button.tsx";
 
 const Confirmed = () => {
     const navigate = useNavigate();
@@ -44,7 +44,7 @@ const Confirmed = () => {
                             style={{gap: '2rem', height: '8rem'}}
                             onError={() => (<div>Error</div>)}
                             {...sharedProps}/>
-                        <ButtonSing text={'Подверждения'} onSubmit={() => undefined}/>
+                        <ButtonComponent text={'Подверждения'} onSubmit={() => undefined}/>
                     </Flex>
                 </form>
             </section>

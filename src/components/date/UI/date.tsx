@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {useDateSelect} from "react-ymd-date-select";
 import {Select} from "antd";
 import styles from "./date.module.scss";
@@ -9,8 +9,23 @@ interface CustomDateSelectProps {
     visibleDate?: boolean
 }
 
+const {Option} = Select
 const CustomDateSelect = (props: CustomDateSelectProps) => {
     const dateSelect = useDateSelect(props.value, props.onChange);
+    const monthNames = [
+        {value: "01", label: "Январь"},
+        {value: "02", label: "Февраль"},
+        {value: "03", label: "Март"},
+        {value: "04", label: "Апрель"},
+        {value: "05", label: "Май"},
+        {value: "06", label: "Июнь"},
+        {value: "07", label: "Июль"},
+        {value: "08", label: "Август"},
+        {value: "09", label: "Сентябрь"},
+        {value: "10", label: "Октябрь"},
+        {value: "11", label: "Ноябрь"},
+        {value: "12", label: "Декабрь"}
+    ];
 
     return (
         <div className={styles.date}>
@@ -45,9 +60,9 @@ const CustomDateSelect = (props: CustomDateSelectProps) => {
                     placeholder={'Месяц'}
                 >
                     {dateSelect.monthOptions.map((monthOption) => (
-                        <option key={monthOption.value} value={monthOption.value}>
-                            {monthOption.label}
-                        </option>
+                        <Option key={monthOption.value} value={monthOption.value}>
+                            {monthNames[+monthOption.value - 1].label}
+                        </Option>
                     ))}
                 </Select>
 
@@ -59,10 +74,11 @@ const CustomDateSelect = (props: CustomDateSelectProps) => {
                     </label>
                 )}
                 <Select value={dateSelect.yearValue} onChange={dateSelect.onYearChange} placeholder={'Год'}>
+                    <Option selected={true}>Год</Option>
                     {dateSelect.yearOptions.map((yearOption) => (
-                        <option key={yearOption.value} value={yearOption.value}>
+                        <Option key={yearOption.value} value={yearOption.value}>
                             {yearOption.label}
-                        </option>
+                        </Option>
                     ))}
                 </Select>
             </div>
@@ -70,9 +86,11 @@ const CustomDateSelect = (props: CustomDateSelectProps) => {
     );
 }
 
-const DateSelect: React.FC<{ visibleDate?: boolean }> = ({visibleDate}) => {
-    const [date, setDate] = useState("");
-
+const DateSelect: React.FC<{ visibleDate?: boolean, date: string, setDate: (date: string) => void }> = ({
+                                                                                                            visibleDate,
+                                                                                                            date,
+                                                                                                            setDate
+                                                                                                        }) => {
     return (
         <div>
             <CustomDateSelect visibleDate={visibleDate} value={date} onChange={setDate}/>

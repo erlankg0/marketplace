@@ -4,7 +4,6 @@ import Dropdown from "@components/dropdown/UI/dropdown.tsx";
 import Logout from "@components/logout/UI/logout.tsx";
 import Header from "@components/header/UI/header.tsx";
 import Modal from "@components/modal/UI/modal.tsx";
-import CardModal from "@components/cardModal/UI/cardModal.tsx";
 
 import Cards from "@layout/Cards/UI/cards.tsx";
 import Ads from "@layout/ads/UI/ads.tsx";
@@ -19,6 +18,7 @@ import clipboard from "@assets/icon/clipboard.svg"
 import shopping from "@assets/icon/shopping.svg"
 import Monitoring from "@layout/Monitoring/UI/monitoring.tsx";
 import History from "@layout/MonitoringHistory/UI/monitoring.tsx";
+import CardModal from "@components/cardModal/UI/cardModal.tsx";
 
 
 const Marketplace = () => {
@@ -66,7 +66,7 @@ const Marketplace = () => {
 
                     <div className={'line'}></div>
                 </div>
-                <Logout onClick={handleLogout}/>
+                <Logout active={!modalActive} onClick={handleLogout}/>
             </aside>
             <section className={styles.content}>
                 <Header/>
@@ -84,15 +84,14 @@ const Marketplace = () => {
                 active={modalActive}
                 setModalActive={setModalActive}
                 component={CardModal}
-                componentProps={{setAlert: setLogoutModalActive, price: '', setModal: setModalActive}}
+                componentProps={{ setModal: setModalActive, setAlert: setLogoutModalActive , price: '1000'}}
             />
             <Modal
                 active={logoutModalActive}
                 setModalActive={setLogoutModalActive}
                 component={Alert} // Передача компонента модального окна для подтверждения выхода
-                componentProps={{}}
+                componentProps={{logout: true, setModalActive: setLogoutModalActive}}
             />
-
         </main>
     )
 }

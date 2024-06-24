@@ -1,5 +1,5 @@
 import UploadImage from "@components/uploadImage/UI/upload.tsx";
-import ButtonSing from "@components/button/UI/button.tsx";
+import ButtonComponent from "@components/button/UI/button.tsx";
 
 import {useState} from "react";
 import {Select, UploadFile, Tag} from "antd";
@@ -19,6 +19,7 @@ const MAX_COUNT = 3;
 const Order = () => {
     const form = useForm<IADS>({resolver: yupResolver(validationADS)})
     const {register, formState: {errors, touchedFields}, handleSubmit} = form
+    const [date, setDate] = useState("");
 
     // images upload
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -161,7 +162,7 @@ const Order = () => {
                 </div>
             </div>
             <div>
-                <DateSelect/>
+                <DateSelect setDate={setDate} date={date}/>
             </div>
             <p className={styles.form__title}>Галерея фотографий</p>
             <div className={styles.form__field}>
@@ -195,7 +196,7 @@ const Order = () => {
             </div>
             <div className={'line'}></div>
             <div className={styles.form__button}>
-                <ButtonSing text={'Разместить Объявления'}/>
+                <ButtonComponent text={'Разместить Объявления'}/>
             </div>
         </form>
     )

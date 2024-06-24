@@ -1,11 +1,14 @@
-import styles from "./push.module.scss"
+import React, {useState} from "react";
+import {IPush} from "@components/push/interface.ts";
 import push from "@assets/icon/push.svg";
-import {useState} from "react";
 
-const Push = () => {
+import styles from "./push.module.scss"
+
+const Push: React.FC<IPush> = ({onClick}) => {
     const [isOpen, setOpen] = useState<boolean>(false);
     const handleToggle = () => {
         setOpen(!isOpen);
+        onClick();
     }
     return (
         <div className={styles.push}>

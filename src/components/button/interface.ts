@@ -4,4 +4,5 @@ export interface IButton {
     action?: boolean,
     onClickAction?: () => void,
     onClick?: () => void,
+    waiting?: boolean
 }

@@ -4,7 +4,7 @@ import {validationSchema} from "@validations/auth.ts";
 import {Flex} from "antd";
 import styles from "./auth.module.scss";
 import authBackground from "@assets/images/authBackground.jpg";
-import ButtonSing from "@components/button/UI/button.tsx";
+import ButtonComponent from "@components/button/UI/button.tsx";
 import {NavLink} from "react-router-dom";
 import {IAuth} from "@layout/Auth/interface.ts";
 
@@ -60,7 +60,7 @@ const Auth = () => {
                             <input type={'checkbox'}/>
                             <label htmlFor={'remember'}>Запомнить меня</label>
                         </Flex>
-                        <ButtonSing text={'Авторизация'}/>
+                        <ButtonComponent text={'Авторизация'}/>
                         <Flex gap={5}>
                             <p>Нету аккаунта?</p>
                             <NavLink className={'link'} to="/singup">Регистрация</NavLink>

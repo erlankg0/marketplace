@@ -1,5 +1,5 @@
 import UploadImage from "@components/uploadImage/UI/upload.tsx";
-import ButtonSing from "@components/button/UI/button.tsx";
+import ButtonComponent from "@components/button/UI/button.tsx";
 
 import {useState} from "react";
 import {UploadFile} from "antd";
@@ -9,6 +9,8 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import styles from "@layout/ads/UI/ads.module.scss";
 import {validationADS} from "@validations/ads.ts";
 import {IADS} from "@layout/ads/interface.ts";
+import Modal from "@components/modal/UI/modal.tsx";
+import Alert from "@components/alert/UI/alert.tsx";
 
 const Equipment = () => {
     const form = useForm<IADS>({resolver: yupResolver(validationADS)});
@@ -19,7 +21,17 @@ const Equipment = () => {
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState<UploadFile[]>([]);
 
+
+    const [error, setError] = useState<boolean>(false)
+    const handleToggle = () => {
+        setError(!error);
+    }
     const onSubmit = (data: IADS) => {
+        if (Object.keys(errors).length > 0) {
+            setError(true);
+            return;
+        }
+        setError(false)
         console.log("form submit", data);
         console.log(fileList)
     };
@@ -119,8 +131,15 @@ const Equipment = () => {
             </div>
             <div className={'line'}></div>
             <div className={styles.form__button}>
-                <ButtonSing text={'Разместить Объявления'}/>
+                <ButtonComponent onClick={handleToggle} text={'Разместить Объявления'}/>
             </div>
+            <Modal
+                active={error}
+                setModalActive={handleToggle}
+                component={Alert} // Передача компонента модального окна для подтверждения выхода
+                componentProps={{forgot: true, setModalActive: handleToggle,}}
+            />
+
         </form>
     );
 };

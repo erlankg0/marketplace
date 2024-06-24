@@ -1,23 +1,18 @@
-import ButtonSing from "@components/button/UI/button.tsx";
+import React from "react";
 import styles from "./alert.module.scss";
+import {IAlert} from "@components/alert/interface.ts";
+import Forgot from "@components/alerts/forgot/UI/forgot.tsx";
+import Out from "@components/alerts/out/UI/out.tsx";
 
-const Alert = () => {
+const Alert: React.FC<IAlert> = ({forgot, logout, setModalActive}) => {
     return (
         <div className={styles.alert}>
-            <div>
-                <p className={styles.alert__emoji}>🥳</p>
-            </div>
-            <div>
-                <h2 className={styles.alert__title}>Поздравляем!</h2>
-                <h2 className={styles.alert__title}>
-                    Вы приняли заказ!</h2>
-            </div>
-            <div>
-                <p className={styles.alert__description}>Ваш заказ отображается в вашем личном кабинете</p>
-            </div>
-            <div>
-                <ButtonSing text={'Посмотреть'}/>
-            </div>
+            {forgot && (
+                <Forgot setModalActive={setModalActive}/>
+            )}
+            {logout == true && (
+                <Out setModalActive={setModalActive}/>
+            )}
         </div>
     )
 }

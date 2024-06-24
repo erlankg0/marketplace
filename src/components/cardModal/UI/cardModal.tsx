@@ -1,24 +1,16 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from "./cardModal.module.scss";
 import Seller from "@components/seller/UI/seller.tsx";
 import nitka from "@assets/images/nitki.jpg";
 import ni from "@assets/images/nitki02.jpg";
-import {useState} from 'react';
 import {Swiper, SwiperSlide} from 'swiper/react';
-import {Navigation, Pagination, Thumbs, FreeMode} from 'swiper/modules';
+import {FreeMode, Navigation, Pagination, Thumbs} from 'swiper/modules';
 import SwiperCore from "swiper";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/thumbs';
-import {
-    Tabs,
-    TabList,
-    TabPanels,
-    Tab,
-    TabPanel,
-    TabIndicator
-} from '@chakra-ui/react';
+import {Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react';
 import {ICardModal} from "@components/cardModal/interface.ts";
 
 
@@ -131,7 +123,9 @@ const CardModal: React.FC<ICardModal> = ({setAlert, setModal}) => {
 
                     </div>
                     <button onClick={() => {
-                        setAlert(true);
+                        if(setAlert){
+                            setAlert(true);
+                        }
                         setModal(false);
                     }} className={styles.button}>Купить
                     </button>

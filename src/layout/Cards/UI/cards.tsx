@@ -7,6 +7,15 @@ const Cards: React.FC<ICards> = ({setActiveModal}) => {
     return (
         <section className={styles.cards}>
             <Card  setActiveModal={setActiveModal}/>
+            <Card  setActiveModal={setActiveModal}/>
+            <Card  setActiveModal={setActiveModal}/>
+            <Card  setActiveModal={setActiveModal}/>
+            <Card  setActiveModal={setActiveModal}/>
+            <Card  setActiveModal={setActiveModal}/>
+            <Card  setActiveModal={setActiveModal}/>
+            <Card  setActiveModal={setActiveModal}/>
+            <Card  setActiveModal={setActiveModal}/>
+
         </section>
     )
 }

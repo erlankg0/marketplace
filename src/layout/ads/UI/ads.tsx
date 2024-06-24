@@ -8,7 +8,6 @@ import Button from "@components/button/UI/button.tsx";
 const Ads = () => {
     const [selectedButton, setSelectedButton] = useState('equipment');
     const [count, setCount] = useState<number>(0);
-
     const handleButtonClick = (buttonType: string) => {
         setSelectedButton(buttonType);
     };

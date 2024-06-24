@@ -6,7 +6,7 @@ import {NavLink, useNavigate} from 'react-router-dom';
 import {Flex} from 'antd';
 import styles from "@layout/Auth/UI/auth.module.scss";
 import authBackground from "@assets/images/authBackground.jpg";
-import ButtonSing from "@components/button/UI/button.tsx";
+import ButtonComponent from "@components/button/UI/button.tsx";
 
 const SingUp = () => {
     const navigate = useNavigate();
@@ -108,7 +108,7 @@ const SingUp = () => {
                             <input type={'checkbox'}/>
                             <label htmlFor={'remember'}>Запомнить меня</label>
                         </Flex>
-                        <ButtonSing text={'Зарегистрироваться'} onSubmit={() => alert('ok')}/>
+                        <ButtonComponent text={'Зарегистрироваться'} onSubmit={() => alert('ok')}/>
                         <Flex gap={5}>
                             <p>Уже зарегистрированы?</p>
                             <NavLink className={'link'}  to="/">Войти</NavLink>

@@ -2,7 +2,7 @@
   background-color: white;
   padding: 1rem;
   text-align: center;
-  border: none;
+  border: solid black .05rem;
   border-radius: 1rem;
   transition: all .3s ease-in-out;
   font-size: 1.4rem;
@@ -12,7 +12,8 @@
 
   &.action {
     background-color: #FFCC00;
-    border: solid black .05rem;;
+    border: none;
+
   }
 
   &:active {

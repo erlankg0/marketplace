@@ -1,5 +1,8 @@
 import UploadImage from "@components/uploadImage/UI/upload.tsx";
 import ButtonComponent from "@components/button/UI/button.tsx";
+import Modal from "@components/modal/UI/modal.tsx";
+import Alert from "@components/alert/UI/alert.tsx";
+import SelectButton from "@components/button/UI/selectButton.tsx";
 
 import {useState} from "react";
 import {UploadFile} from "antd";
@@ -7,10 +10,9 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 
 import styles from "@layout/ads/UI/ads.module.scss";
-import {validationADS} from "@validations/ads.ts";
 import {IADS} from "@layout/ads/interface.ts";
-import Modal from "@components/modal/UI/modal.tsx";
-import Alert from "@components/alert/UI/alert.tsx";
+
+import {validationADS} from "@validations/ads.ts";
 
 const Equipment = () => {
     const form = useForm<IADS>({resolver: yupResolver(validationADS)});
@@ -21,6 +23,7 @@ const Equipment = () => {
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState<UploadFile[]>([]);
 
+    const [selectedButton, setSelectedButton] = useState<'phone' | 'email'>('phone');
 
     const [error, setError] = useState<boolean>(false)
     const handleToggle = () => {
@@ -114,18 +117,30 @@ const Equipment = () => {
                 />
             </div>
             <p className={styles.form__title}>Контактная информация</p>
+            <div className={styles.row}>
+                <SelectButton
+                    text="Номер телефона"
+                    action={selectedButton == 'phone'}
+                    onClickAction={() => setSelectedButton('phone')}
+                />
+                <SelectButton
+                    text="Почта"
+                    action={selectedButton == 'email'}
+                    onClickAction={() => setSelectedButton('email')}
+                />
+            </div>
             <div className={styles.form__field}>
                 <div className={styles.form__input}>
-                    <label htmlFor="phone" className={styles.label}>
-                        Телефон <div
+                    <label htmlFor={selectedButton} className={styles.label}>
+                        {selectedButton == 'phone' ? 'Номер телефеона' : 'Почта'} <div
                         className={errors.phone ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
                     </label>
                     <input
-                        type="text"
-                        id="phone"
-                        {...register('phone')}
+                        type={selectedButton == 'phone' ? 'tel' : 'email'}
+                        id={selectedButton}
+                        {...register(selectedButton)}
                         className={styles.input}
-                        placeholder={"+996 xxx xxx xxx"}
+                        placeholder={selectedButton == 'phone' ? '+996 ххх ххх ххх' : 'marketing@utopiaworld.com.tr'}
                     />
                 </div>
             </div>
@@ -144,4 +159,4 @@ const Equipment = () => {
     );
 };
 
-export default Equipment;
+export default Equipment

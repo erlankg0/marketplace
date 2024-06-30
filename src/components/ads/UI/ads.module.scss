@@ -1,0 +1,26 @@
+.ads {
+  display: grid;
+  flex-direction: row;
+  grid-template-columns: 10rem 1fr 30rem;
+  background-color: #FFCC00;
+  border-radius: 1rem;
+  padding: 0 1rem;
+
+  &__image {
+    object-fit: cover;
+    object-position: center;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-content: center;
+  }
+
+  &__description {
+    font-size: 1.7rem;
+    line-height: 2.55rem;
+  }
+
+}

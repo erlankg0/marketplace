@@ -4,11 +4,12 @@ import styles from "./ads.module.scss";
 import Equipment from "@layout/equipment/UI/equipment.tsx";
 import Order from "@layout/order/UI/order.tsx";
 import Button from "@components/button/UI/button.tsx";
+import Service from "@layout/service/UI/service.tsx";
 
 const Ads = () => {
-    const [selectedButton, setSelectedButton] = useState('equipment');
+    const [selectedButton, setSelectedButton] = useState<'equipment' | 'order' | 'service'>('equipment');
     const [count, setCount] = useState<number>(0);
-    const handleButtonClick = (buttonType: string) => {
+    const handleButtonClick = (buttonType: 'equipment' | 'order' | 'service') => {
         setSelectedButton(buttonType);
     };
     const handleIncrement = () => {
@@ -52,10 +53,18 @@ const Ads = () => {
                                     action={selectedButton === 'order'}
                                     onClickAction={() => handleButtonClick('order')}
                                 />
+
+                                <SelectButton
+                                    text="Услуги"
+                                    action={selectedButton === 'service'}
+                                    onClickAction={() => handleButtonClick('service')}
+                                />
                                 {/*category ads*/}
                             </div>
                         </div>
-                        {selectedButton == 'equipment' ? (<Equipment/>) : (<Order/>)}
+                        {selectedButton == 'service' && (<Service/>)}
+                        {selectedButton == 'equipment' && (<Equipment/>)}
+                        {selectedButton == 'order' && (<Order/>)}
                     </>
                 )}
 

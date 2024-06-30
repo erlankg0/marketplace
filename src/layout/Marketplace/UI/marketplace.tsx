@@ -19,6 +19,7 @@ import shopping from "@assets/icon/shopping.svg"
 import Monitoring from "@layout/Monitoring/UI/monitoring.tsx";
 import History from "@layout/MonitoringHistory/UI/monitoring.tsx";
 import CardModal from "@components/cardModal/UI/cardModal.tsx";
+import Profile from "@layout/Profile/UI/profile.tsx";
 
 
 const Marketplace = () => {
@@ -41,7 +42,7 @@ const Marketplace = () => {
                     <div className={'line'}></div>
 
                     <Dropdown icon={person} title={'Личный кабинет'}
-                              tabs={[{title: "Оборудования", url: "equipment"}, {
+                              tabs={[{title: "Профиль", url: "profile"}, {
                                   title: "Заказы",
                                   url: 'order'
                               }, {title: 'Разместить заказ', url: 'add-order'}]}/>
@@ -72,6 +73,7 @@ const Marketplace = () => {
                 <Header/>
                 <div className={'line'}></div>
                 <Routes>
+                    <Route path={'/profile'} element={<Profile/>}/>
                     <Route path={'/equipment'} element={<Cards setActiveModal={setModalActive}/>}/>
                     <Route path={'/order'} element={<Cards setActiveModal={setModalActive}/>}/>
                     <Route path={'/add-order'} element={<Ads/>}/>

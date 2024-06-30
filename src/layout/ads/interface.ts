@@ -3,5 +3,6 @@ export interface IADS {
     description: string,
     count: number,
     price: string,
-    phone: string
+    phone?: string,
+    email?: string
 }

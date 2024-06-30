@@ -1,0 +1,13 @@
+.button {
+  background-color: white;
+  border: none;
+  border-radius: 1rem;
+  height: 5rem;
+  align-self: center;
+  font-size: 1.6rem;
+  line-height: 2rem;
+  transition: all .3s ease-in-out;
+  &:active{
+    transform: translateY(3px);
+  }
+}

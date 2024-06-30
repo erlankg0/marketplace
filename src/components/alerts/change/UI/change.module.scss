@@ -1,0 +1,46 @@
+.change {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  &__head {
+    width: 6rem;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  &__title {
+    font-size: 2.4rem;
+    line-height: 3.2rem;
+    color: black;
+  }
+
+  &__description {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    color: rgba(black, .5);
+  }
+
+  &__upload {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: .8rem;
+    align-items: center;
+    justify-content: center;
+    border: dotted 1px #BABFC3;
+    border-radius: 1rem;
+  }
+}
+
+.button{
+  align-self: start;
+}
+
+input[type="file"]{
+  background-color: #E5EFFD;
+}

@@ -1,16 +1,22 @@
+import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
+
 import type {GetProp} from 'antd';
 import {Flex, Input} from 'antd';
 import type {OTPProps} from 'antd/es/input/OTP';
-import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
+
+import ButtonComponent from "@components/button/UI/button.tsx";
 import styles from "@layout/Auth/UI/auth.module.scss";
 import authBackground from "@assets/images/authBackground.jpg";
-import ButtonComponent from "@components/button/UI/button.tsx";
+import Timer from "@components/timer/UI/timer.tsx";
+
 
 const Confirmed = () => {
     const navigate = useNavigate();
     const [code, setCode] = useState<string>();
-    const [error, setError] = useState<boolean>(false)
+    const [error, setError] = useState<boolean>(false);
+    const [waiting, setWaiting] = useState<boolean>(true);
+
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log(code)
@@ -24,6 +30,14 @@ const Confirmed = () => {
     const onChange: GetProp<typeof Input.OTP, 'onChange'> = (text) => {
         console.log('onChange:', text);
         setCode(text);
+    };
+    const handleResendCode = () => {
+        setWaiting(true);
+        // Логика для повторной отправки кода
+        console.log('Код отправлен снова');
+    };
+    const handleTimerReset = () => {
+        setWaiting(false);
     };
 
     const sharedProps: OTPProps = {
@@ -44,8 +58,9 @@ const Confirmed = () => {
                             style={{gap: '2rem', height: '8rem'}}
                             onError={() => (<div>Error</div>)}
                             {...sharedProps}/>
-                        <ButtonComponent text={'Подверждения'} onSubmit={() => undefined}/>
+                        <ButtonComponent text={'Отправить код ещё раз'} waiting={waiting} onClick={handleResendCode} />
                     </Flex>
+                    <Timer initialSeconds={60} onReset={handleTimerReset} />
                 </form>
             </section>
             <section className={styles.intro} style={{backgroundImage: `url(${authBackground})`}}>

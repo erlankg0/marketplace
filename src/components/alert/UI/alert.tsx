@@ -4,8 +4,9 @@ import {IAlert} from "@components/alert/interface.ts";
 import Forgot from "@components/alerts/forgot/UI/forgot.tsx";
 import Out from "@components/alerts/out/UI/out.tsx";
 import Change from "@components/alerts/change/UI/change.tsx";
+import Subscribe from "@components/alerts/subscribe/UI/subscribe.tsx";
 
-const Alert: React.FC<IAlert> = ({forgot, change, logout, setModalActive}) => {
+const Alert: React.FC<IAlert> = ({forgot, success, change, logout, setModalActive}) => {
     return (
         <div className={styles.alert}>
             {forgot && (
@@ -14,8 +15,11 @@ const Alert: React.FC<IAlert> = ({forgot, change, logout, setModalActive}) => {
             {logout == true && (
                 <Out setModalActive={setModalActive}/>
             )}
-            {change == true &&(
+            {change == true && (
                 <Change/>
+            )}
+            {success == true && (
+                <Subscribe setModalActive={setModalActive}/>
             )}
 
         </div>

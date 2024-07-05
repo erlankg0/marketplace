@@ -13,6 +13,8 @@ export default defineConfig({
             '@interfaces': '/src/interfaces',
             '@validations': '/src/validations',
             '@utils': '/src/utils',
+            '@redux': '/src/redux',
+            '@network': '/src/network',
         },
     },
 });

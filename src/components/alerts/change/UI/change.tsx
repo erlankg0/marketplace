@@ -10,11 +10,12 @@ const Change = () => {
             </div>
             <div className={styles.change__text}>
                 <h2 className={styles.change__title}>Изменить фото профиля?</h2>
-                <p className={styles.change__description}>Загрузите фотографию из своей галлерииl</p>
+                <p className={styles.change__description}>Загрузите фотографию из своей галлерии</p>
             </div>
             <div className={styles.change__upload}>
-                <input type={'file'}/>
-                <label className={styles.change__description}>Формат JPG, JPEG, PNG</label>
+                <label htmlFor={'file'} className={styles.label}>+ Загрузить файл</label>
+                <input id={'file'} type={'file'}/>
+                <p className={styles.change__description}>Формат JPG, JPEG, PNG</p>
             </div>
             <div className={styles.button}>
                 <ButtonComponent text={'Сохранить'}/>

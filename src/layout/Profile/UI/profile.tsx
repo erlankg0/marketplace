@@ -15,6 +15,7 @@ const Profile = () => {
     const form = useForm<IProfile>({resolver: yupResolver(validateProfile)});
     const {register, formState: {errors}, handleSubmit} = form;
     const [modal, setModal] = useState<boolean>(false)
+    const [success, setSuccess] = useState<boolean>(false)
     const onSubmit = (data: IProfile) => {
         console.log(data);
     }
@@ -79,12 +80,14 @@ const Profile = () => {
                 <div style={{display: "flex", flexDirection: "column", gap: "5rem"}}>
                     <div className={'line'}></div>
                     <div style={{alignSelf: "end"}}>
-                        <ButtonComponent text={'Изменить данные'}/>
+                        <ButtonComponent text={'Изменить данные'} onClick={() => setSuccess(!success)}/>
                     </div>
                 </div>
             </section>
             <Modal active={modal} setModalActive={setModal} component={Alert}
                    componentProps={{change: true, setModalActive: setModal}}/>
+            <Modal active={success} setModalActive={setModal} component={Alert}
+                   componentProps={{success: success, setModalActive: setSuccess}}/>
         </section>
     )
 }

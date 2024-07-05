@@ -50,7 +50,7 @@
       transform: translateY(.3rem);
     }
 
-    &:hover{
+    &:hover {
       border: #000000 .1rem dot-dash;
     }
   }
@@ -63,4 +63,9 @@
 
 .price {
   color: #FF9500;
+}
+
+.description {
+  font-size: 1.4rem !important;
+  line-height: 2rem;
 }

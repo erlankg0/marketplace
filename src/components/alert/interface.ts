@@ -3,4 +3,5 @@ export interface IAlert {
     forgot?: boolean,
     logout?: boolean,
     change?: boolean,
+    success?: boolean
 }

@@ -29,6 +29,8 @@
       "@interfaces/*": ["src/interfaces/*"],
       "@validations/*": ["src/validations/*"],
       "@utils/*": ["src/utils/*"],
+      "@redux/*": ["src/redux/*"],
+      "@network/*": ["src/network/*"],
     }
   },
   "include": ["src"],  // Move include out of compilerOptions

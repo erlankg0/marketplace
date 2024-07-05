@@ -59,7 +59,7 @@ const Marketplace = () => {
                     <div className={'line'}></div>
 
                     <Dropdown icon={shopping} title={'Маркетплейс'}
-                              tabs={[{title: "Оборудования", url: "equipment"}, {
+                              tabs={[{title: "Оборудования", url: ""}, {
                                   title: "Заказы",
                                   url: 'order'
                               }, {title: 'Разместить заказ', url: 'add-order'}]}/>
@@ -74,26 +74,25 @@ const Marketplace = () => {
                 <div className={'line'}></div>
                 <Routes>
                     <Route path={'/profile'} element={<Profile/>}/>
-                    <Route path={'/equipment'} element={<Cards setActiveModal={setModalActive}/>}/>
+                    <Route path={'/'} element={<Cards setActiveModal={setModalActive}/>}/>
                     <Route path={'/order'} element={<Cards setActiveModal={setModalActive}/>}/>
                     <Route path={'/add-order'} element={<Ads/>}/>
                     <Route path={'current-orders'} element={<Monitoring/>}/>
                     <Route path={'/history-orders'} element={<History setModalActive={setModalActive}/>}/>
                 </Routes>
-
+                <Modal
+                    active={modalActive}
+                    setModalActive={setModalActive}
+                    component={CardModal}
+                    componentProps={{ setModal: setModalActive, setAlert: setLogoutModalActive , price: '1000'}}
+                />
+                <Modal
+                    active={logoutModalActive}
+                    setModalActive={setLogoutModalActive}
+                    component={Alert} // Передача компонента модального окна для подтверждения выхода
+                    componentProps={{logout: true, setModalActive: setLogoutModalActive}}
+                />
             </section>
-            <Modal
-                active={modalActive}
-                setModalActive={setModalActive}
-                component={CardModal}
-                componentProps={{ setModal: setModalActive, setAlert: setLogoutModalActive , price: '1000'}}
-            />
-            <Modal
-                active={logoutModalActive}
-                setModalActive={setLogoutModalActive}
-                component={Alert} // Передача компонента модального окна для подтверждения выхода
-                componentProps={{logout: true, setModalActive: setLogoutModalActive}}
-            />
         </main>
     )
 }

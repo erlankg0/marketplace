@@ -37,10 +37,21 @@
   }
 }
 
-.button{
+.button {
   align-self: start;
 }
 
-input[type="file"]{
+input[type="file"] {
+  background-color: #E5EFFD;
+  display: none;
+}
+
+.label {
+  font-size: 1.2rem;
+  line-height: 1.6rem;
+  color: #1F5199;
+  text-align: center;
+  padding: .4rem 1rem;
+  border-radius: .4rem;
   background-color: #E5EFFD;
 }

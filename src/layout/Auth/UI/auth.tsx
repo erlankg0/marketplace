@@ -10,6 +10,7 @@ import {IAuth} from "@layout/Auth/interface.ts";
 import {useAddDispatch} from "@redux/hooks.ts";
 import {login} from "@redux/slices/singup.ts";
 import {useAppSelector} from "@redux/hooks.ts";
+import {useNavigate} from "react-router-dom";
 
 const Auth = () => {
     const form = useForm<IAuth>({
@@ -26,7 +27,7 @@ const Auth = () => {
         isAuthenticated,
         remember
     } = useAppSelector(state => state.singUp);
-
+    const navigate = useNavigate();
     const onSubmit = (data: IAuth) => {
         dispatch(login(data))
         console.log("form submit", data)
@@ -75,7 +76,9 @@ const Auth = () => {
                             <input type={'checkbox'}/>
                             <label htmlFor={'remember'}>Запомнить меня</label>
                         </Flex>
-                        <ButtonComponent text={'Авторизация'}/>
+                        <ButtonComponent text={'Авторизация'} onClick={()=> {
+                            navigate('/marketplace')
+                        }}/>
                         <Flex gap={5}>
                             <p>Нету аккаунта?</p>
                             <NavLink className={'link'} to="/singup">Регистрация</NavLink>

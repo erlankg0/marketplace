@@ -14,7 +14,7 @@ function App() {
                 <Route path={'/singup'} element={<SingUp/>}/>
                 <Route path={'/confirmed'} element={<Confirmed/>}/>
                 <Route path={'/progress'} element={<Progress/>}/>
-                <Route path={'/marketplace'} element={<Marketplace/>}/>
+                <Route path={'/marketplace/*'} element={<Marketplace/>}/>
             </Routes>
         </>
     )

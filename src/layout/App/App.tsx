@@ -10,11 +10,11 @@ function App() {
     return (
         <>
             <Routes>
-                <Route path={'/marketplace'} element={<Auth/>}/>
+                <Route path={'/'} element={<Auth/>}/>
                 <Route path={'/singup'} element={<SingUp/>}/>
                 <Route path={'/confirmed'} element={<Confirmed/>}/>
                 <Route path={'/progress'} element={<Progress/>}/>
-                <Route path={'/*'} element={<Marketplace/>}/>
+                <Route path={'/marketplace'} element={<Marketplace/>}/>
             </Routes>
         </>
     )

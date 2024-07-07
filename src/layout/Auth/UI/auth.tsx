@@ -1,16 +1,18 @@
-import {useForm} from "react-hook-form";
-import {yupResolver} from "@hookform/resolvers/yup";
-import {validationSchema} from "@validations/auth.ts";
 import {Flex} from "antd";
+import {NavLink, useNavigate} from "react-router-dom";
+import {useForm} from "react-hook-form";
+
+import {yupResolver} from "@hookform/resolvers/yup";
+import {setEmail} from "@redux/slices/singup.ts";
+import {useAddDispatch, useAppSelector} from "@redux/hooks.ts";
+
+import ButtonComponent from "@components/button/UI/button.tsx";
+import {IAuth} from "@layout/Auth/interface.ts";
+
+import {validationSchema} from "@validations/auth.ts";
+
 import styles from "./auth.module.scss";
 import authBackground from "@assets/images/authBackground.jpg";
-import ButtonComponent from "@components/button/UI/button.tsx";
-import {NavLink} from "react-router-dom";
-import {IAuth} from "@layout/Auth/interface.ts";
-import {useAddDispatch} from "@redux/hooks.ts";
-import {login} from "@redux/slices/singup.ts";
-import {useAppSelector} from "@redux/hooks.ts";
-import {useNavigate} from "react-router-dom";
 
 const Auth = () => {
     const form = useForm<IAuth>({
@@ -18,21 +20,13 @@ const Auth = () => {
     });
     const {register, formState: {errors, touchedFields}, handleSubmit} = form;
     const dispatch = useAddDispatch();
-    const {
-        email,
-        phone,
-        firstName,
-        lastName,
-        middleName,
-        isAuthenticated,
-        remember
-    } = useAppSelector(state => state.singUp);
+    const email =  useAppSelector(state => state.singUp.email);
     const navigate = useNavigate();
     const onSubmit = (data: IAuth) => {
-        dispatch(login(data))
-        console.log("form submit", data)
-        console.log(email, phone, firstName, lastName, middleName, isAuthenticated, remember)
-    }
+        dispatch(setEmail(data.email))
+        console.log("form submit", email)
+    };
+
     return (
         <section className={styles.content}>
             <section className={styles.auth}>
@@ -58,26 +52,12 @@ const Auth = () => {
                             />
                         </div>
 
-                        <div className={styles.field}>
-                            <label
-                                className={errors.phone ? `${styles.label} ${styles.error}` : `${styles.label}`}
-                                htmlFor="phone"
-                            >Номер телефона*</label>
-                            <input
-                                type="tel"
-                                id="phone"
-                                {...register('phone')}
-                                autoFocus={touchedFields.phone}
-                                className={styles.input}
-                                placeholder={"+90 553 368 73 69"}
-                            />
-                        </div>
                         <Flex vertical={false} gap={5}>
                             <input type={'checkbox'}/>
                             <label htmlFor={'remember'}>Запомнить меня</label>
                         </Flex>
                         <ButtonComponent text={'Авторизация'} onClick={()=> {
-                            navigate('/marketplace')
+                            navigate('/confirmed')
                         }}/>
                         <Flex gap={5}>
                             <p>Нету аккаунта?</p>

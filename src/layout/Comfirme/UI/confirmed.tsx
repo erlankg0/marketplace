@@ -1,6 +1,5 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-
 import type {GetProp} from 'antd';
 import {Flex, Input} from 'antd';
 import type {OTPProps} from 'antd/es/input/OTP';
@@ -9,33 +8,46 @@ import ButtonComponent from "@components/button/UI/button.tsx";
 import styles from "@layout/Auth/UI/auth.module.scss";
 import authBackground from "@assets/images/authBackground.jpg";
 import Timer from "@components/timer/UI/timer.tsx";
-
+import {activate_code, reSendCode} from "@network/auth/confirme.ts";
+import {useAppSelector} from "@redux/hooks.ts";
 
 const Confirmed = () => {
     const navigate = useNavigate();
-    const [code, setCode] = useState<string>();
+    const [code, setCode] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
     const [waiting, setWaiting] = useState<boolean>(true);
+    const email = useAppSelector(state => state.singUp.email);
 
-    const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        console.log(code)
-        if (code == '1111') {
-            navigate('/')
+    const handleActivateCode = async (inputCode: string) => {
+        try {
+            const response = await activate_code({email, code: inputCode});
+            console.log('Activation response:', response, code);
+            navigate('/marketplace');
             setError(false);
+        } catch (err) {
+            console.error('Activation error:', err);
+            setError(true);
         }
-        console.log(error)
-        setError(true)
-    }
+    };
+
     const onChange: GetProp<typeof Input.OTP, 'onChange'> = (text) => {
         console.log('onChange:', text);
         setCode(text);
+        if (text.length === 4) {
+            handleActivateCode(text);
+        }
     };
-    const handleResendCode = () => {
+
+    const handleResendCode = async () => {
         setWaiting(true);
-        // Логика для повторной отправки кода
-        console.log('Код отправлен снова');
+        try {
+            const response = await reSendCode(email);
+            console.log('Код отправлен снова:', response);
+        } catch (err) {
+            console.error('Ошибка при повторной отправке кода:', err);
+        }
     };
+
     const handleTimerReset = () => {
         setWaiting(false);
     };
@@ -43,24 +55,26 @@ const Confirmed = () => {
     const sharedProps: OTPProps = {
         onChange,
     };
+
     return (
         <section className={styles.content}>
             <section className={styles.auth}>
                 <div className={styles.auth__text}>
                     <h2 className={styles.auth__title}><strong>Регистрация</strong></h2>
-                    <p>Введите ваши ФИО и почту, чтобы войти в систему</p>
+                    <p>Введите код подтверждения, отправленный на вашу почту</p>
                 </div>
                 <i className={'line'}></i>
-                <form onSubmit={(event) => onSubmit(event)}>
+                <form onSubmit={(event) => event.preventDefault()}>
                     <Flex gap={"5rem"} justify={"center"} align={"center"} vertical={true}>
                         <Input.OTP
                             length={4}
                             style={{gap: '2rem', height: '8rem'}}
-                            onError={() => (<div>Error</div>)}
-                            {...sharedProps}/>
-                        <ButtonComponent text={'Отправить код ещё раз'} waiting={waiting} onClick={handleResendCode} />
+                            {...sharedProps}
+                        />
+                        {error && <div className={styles.error}>Неверный код. Пожалуйста, попробуйте снова.</div>}
+                        <ButtonComponent text={'Отправить код ещё раз'} waiting={waiting} onClick={handleResendCode}/>
                     </Flex>
-                    <Timer initialSeconds={60} onReset={handleTimerReset} />
+                    <Timer initialSeconds={60} onReset={handleTimerReset}/>
                 </form>
             </section>
             <section className={styles.intro} style={{backgroundImage: `url(${authBackground})`}}>
@@ -68,13 +82,14 @@ const Confirmed = () => {
                     <div className={styles.intro__logo}>
                         <p>ST</p>
                     </div>
-                    <text className={styles.intro__text}>
+                    <div className={styles.intro__text}>
                         <h1>SmartTale</h1>
                         <p>Мониторинг и управление швейным производством</p>
-                    </text>
+                    </div>
                 </div>
             </section>
         </section>
     )
-}
+};
+
 export default Confirmed;

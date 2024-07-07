@@ -1,4 +1,4 @@
 export interface IContacts {
     email: string,
-    phone?: string
+    phoneNumber?: string
 }

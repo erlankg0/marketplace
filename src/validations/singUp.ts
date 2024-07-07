@@ -7,7 +7,7 @@ export const ValidationSingUp = Yup.object().shape({
         .max(100, "Э почта должна быть меньше 100 символов")
         .email("Не правильная э почта")
         .required("Обязательное поле"),
-    phone: Yup.string()
+    phoneNumber: Yup.string()
         .matches(phoneRegex, "Неправильный номер телефона")
         .min(10, "Не правльной номер телефона <Мин 10 симоволов>")
         .max(15, "Не правльной номер телефона <Макс 15 симоволов>")
@@ -20,16 +20,9 @@ export const ValidationSingUp = Yup.object().shape({
         .min(3, "Имя Должна быть более 3 символов")
         .max(50, "Имя не можеть быть более 50 символов")
         .required("Объязательное поле"),
-    middleName: Yup.string()
+    patronymicName: Yup.string()
         .min(3, "Отчество Должна быть более 3 символов")
         .max(50, "Отчество не можеть быть более 50 символов")
         .required("Объязательное поле"),
-    password: Yup.string()
-        .min(3, "Отчество Должна быть более 3 символов")
-        .max(50, "Отчество не можеть быть более 50 символов")
-        .required("Объязательное поле"),
-    password_confirm: Yup.string()
-        .min(3, "Отчество Должна быть более 3 символов")
-        .max(50, "Отчество не можеть быть более 50 символов")
-        .required("Объязательное поле"),
+    remember: Yup.boolean().required('Объязательное поле').default(false)
 })

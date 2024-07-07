@@ -4,13 +4,10 @@ import {ISingUp} from "@interfaces/singup.ts";
 const initialState: ISingUp = {
     firstName: '',
     lastName: '',
-    middleName: '',
+    patronymicName: '',
     email: '',
-    phone: '',
+    phoneNumber: '',
     remember: false,
-    isAuthenticated: false,
-    password: '',
-    password_confirm: '',
 }
 
 const profileSlice = createSlice({
@@ -24,34 +21,31 @@ const profileSlice = createSlice({
             state.lastName = action.payload;
         },
         setMiddleName: (state, action: PayloadAction<string>) => {
-            state.middleName = action.payload;
+            state.patronymicName = action.payload;
         },
         setEmail: (state, action: PayloadAction<string>) => {
             state.email = action.payload;
         },
         setPhone: (state, action: PayloadAction<string>) => {
-            state.phone = action.payload;
+            state.phoneNumber = action.payload;
         },
         toggleRemember: (state) => {
             state.remember = !state.remember;
         },
-        login: (state, action: PayloadAction<Partial<ISingUp>>) => {
-            state.firstName = action.payload.firstName || '';
-            state.lastName = action.payload.lastName || '';
-            state.middleName = action.payload.middleName || '';
-            state.email = action.payload.email || '';
-            state.phone = action.payload.phone;
-            state.password = action.payload.password || '';
-            state.password_confirm = action.payload.password_confirm || '';
-            toggleRemember();
+        login: (state, action: PayloadAction<ISingUp>) => {
+            state.firstName = action.payload.firstName;
+            state.lastName = action.payload.lastName;
+            state.patronymicName = action.payload.patronymicName;
+            state.email = action.payload.email;
+            state.phoneNumber = action.payload.phoneNumber;
+            state.remember = action.payload.remember; // Or set it to true if you want to enable it during login
         },
         logout: (state) => {
-            state.isAuthenticated = false;
             state.firstName = '';
             state.lastName = '';
-            state.middleName = '';
+            state.patronymicName = '';
             state.email = '';
-            state.phone = '';
+            state.phoneNumber = '';
             state.remember = false;
         }
     }

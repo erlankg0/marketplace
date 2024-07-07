@@ -1,9 +1,9 @@
-import {instanse} from "../network.ts";
+import {instance} from "../network.ts";
 
 export const changePassword = () => {
-    return instanse.post('/account/change_password')
+    return instance.post('/account/change_password')
 }
 
 export const losePassword = (email: string) => {
-    return instanse.post('/account/lose_password', {email: email})
+    return instance.post('/account/lose_password', {email: email})
 }

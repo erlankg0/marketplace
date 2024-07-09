@@ -43,8 +43,8 @@ const UploadImage: React.FC<IUploadImages> = ({
                     height: "100%",
                     textAlign: "center",
                     backgroundColor: "#E5EFFD",
-                    borderRadius: "1rem"
-                }}>+ Добавить файл
+                    borderRadius: ".4rem"
+                }}><p style={{color: '#1F5199', fontSize: '1.2rem', lineHeight: '1.7rem', fontWeight: '500'}}>+ Добавить файл</p>
                 </div>
             </div>
         </button>

@@ -56,11 +56,12 @@ const SingUp = () => {
 
     const onSubmit = (data: IRegister) => {
         dispatch(login(data));
+        handleSignUp();
+
     };
 
     useEffect(() => {
         console.log(email, phoneNumber, firstName, lastName, patronymicName, remember);
-        handleSignUp();
     }, [handleSignUp]);
 
     return (

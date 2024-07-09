@@ -1,4 +1,5 @@
 export interface IAuth {
     accessToken: string,
-    refreshToken: string
+    refreshToken: string,
+    isAuthorized: boolean
 }

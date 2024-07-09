@@ -13,19 +13,44 @@ import {validationSchema} from "@validations/auth.ts";
 
 import styles from "./auth.module.scss";
 import authBackground from "@assets/images/authBackground.jpg";
+import {useEffect} from "react";
+import {singIn} from "@network/auth/auth.ts";
 
 const Auth = () => {
     const form = useForm<IAuth>({
         resolver: yupResolver(validationSchema),
     });
-    const {register, formState: {errors, touchedFields}, handleSubmit} = form;
+
+    const {register, getValues, formState: {errors, touchedFields}, handleSubmit, watch} = form;
     const dispatch = useAddDispatch();
-    const email =  useAppSelector(state => state.singUp.email);
     const navigate = useNavigate();
-    const onSubmit = (data: IAuth) => {
-        dispatch(setEmail(data.email))
-        console.log("form submit", email)
+    const isAuthorized = useAppSelector(state => state.auth.isAuthorized);
+
+    const handleAuthorization = async (email: string) => {
+        try {
+            const response = await singIn(email); // Исправление функции
+            console.log(response);
+            navigate('/confirmed');
+        } catch (error) {
+            console.error('Authorization error:', error);
+        }
+    }
+
+    const onSubmit = () => {
+        const email = getValues('email');
+        handleAuthorization(email);
+        dispatch(setEmail(emailValue));
     };
+
+    const emailValue = watch('email'); // Использование watch для отслеживания изменений email
+
+    useEffect(() => {
+        console.log(emailValue);
+        localStorage.setItem('email', emailValue)
+        if(isAuthorized){
+            navigate('/marketplace')
+        }
+    }, [emailValue, dispatch]);
 
     return (
         <section className={styles.content}>
@@ -56,9 +81,7 @@ const Auth = () => {
                             <input type={'checkbox'}/>
                             <label htmlFor={'remember'}>Запомнить меня</label>
                         </Flex>
-                        <ButtonComponent text={'Авторизация'} onClick={()=> {
-                            navigate('/confirmed')
-                        }}/>
+                        <ButtonComponent text={'Авторизация'}/>
                         <Flex gap={5}>
                             <p>Нету аккаунта?</p>
                             <NavLink className={'link'} to="/singup">Регистрация</NavLink>

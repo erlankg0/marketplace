@@ -1,5 +1,7 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {useAddDispatch} from "@redux/hooks.ts";
+
 import type {GetProp} from 'antd';
 import {Flex, Input} from 'antd';
 import type {OTPProps} from 'antd/es/input/OTP';
@@ -9,21 +11,32 @@ import styles from "@layout/Auth/UI/auth.module.scss";
 import authBackground from "@assets/images/authBackground.jpg";
 import Timer from "@components/timer/UI/timer.tsx";
 import {activate_code, reSendCode} from "@network/auth/confirme.ts";
-import {useAppSelector} from "@redux/hooks.ts";
+import {login, setAccessToken, setRefreshToken} from "@redux/slices/auth.ts";
 
 const Confirmed = () => {
     const navigate = useNavigate();
     const [code, setCode] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
     const [waiting, setWaiting] = useState<boolean>(true);
-    const email = useAppSelector(state => state.singUp.email);
+    const email = localStorage.getItem('email');
+    const dispatch = useAddDispatch();
+    
+    const handleAuthorization = (accessToken: string, refreshToken: string) => {
+        console.log('Dispatching setAccessToken and setRefreshToken'); // Логируем вызов dispatch
 
+        dispatch(setAccessToken(accessToken));
+        dispatch(setRefreshToken(refreshToken));
+        dispatch(login());
+    }
     const handleActivateCode = async (inputCode: string) => {
         try {
-            const response = await activate_code({email, code: inputCode});
-            console.log('Activation response:', response, code);
-            navigate('/marketplace');
-            setError(false);
+            if (email && email.length > 1) {
+                const response = await activate_code({email, code: inputCode});
+                console.log('Activation response:', code);
+                handleAuthorization(response.data.accessToken, response.data.refreshToken);
+                navigate('/');
+                setError(false);
+            }
         } catch (err) {
             console.error('Activation error:', err);
             setError(true);
@@ -41,8 +54,10 @@ const Confirmed = () => {
     const handleResendCode = async () => {
         setWaiting(true);
         try {
-            const response = await reSendCode(email);
-            console.log('Код отправлен снова:', response);
+            if (email) {
+                const response = await reSendCode(email);
+                console.log('Код отправлен снова:', response);
+            }
         } catch (err) {
             console.error('Ошибка при повторной отправке кода:', err);
         }

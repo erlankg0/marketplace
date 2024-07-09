@@ -8,8 +8,9 @@ import {IProfile} from "@layout/Profile/interface.ts";
 import Ads from "@components/ads/UI/ads.tsx";
 import ButtonComponent from "@components/button/UI/button.tsx";
 import Modal from "@components/modal/UI/modal.tsx";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import Alert from "@components/alert/UI/alert.tsx";
+import {getProfile} from "@network/profile/profile.ts";
 
 const Profile = () => {
     const form = useForm<IProfile>({resolver: yupResolver(validateProfile)});
@@ -19,7 +20,9 @@ const Profile = () => {
     const onSubmit = (data: IProfile) => {
         console.log(data);
     }
-
+    useEffect(() => {
+        getProfile().then((res) => console.log(res)).catch((er) => console.log(er))
+    },[])
     return (
         <section className={styles.profile}>
             <Ads/>

@@ -1,0 +1,51 @@
+.admin {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+    max-width: 20rem;
+  }
+
+  &__title {
+    font-size: 2.4rem;
+    line-height: 2.2rem;
+  }
+
+  &__description {
+    color: rgba(black, 0.5);
+    font-size: 1.4rem;
+    line-height: 1.7rem;
+  }
+
+  &__created {
+    background-color: #E8E8E8;
+    border-radius: .8rem;
+    padding: .4rem 1.6rem;
+    font-size: 1.4rem;
+    line-height: 2.2rem;
+    text-align: center;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem 0;
+}

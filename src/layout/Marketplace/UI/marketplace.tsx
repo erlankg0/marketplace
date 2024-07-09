@@ -80,7 +80,7 @@ const Marketplace = () => {
                     <Route path={'/add-order'} element={<Ads/>}/>
                     <Route path={'/current-orders'} element={<Monitoring/>}/>
                     <Route path={'/history-orders'} element={<History setModalActive={setModalActive}/>}/>
-                    <Route path={'/organization'} element={<Organization/>}/>
+                    <Route path={'/organization/*'} element={<Organization/>}/>
                 </Routes>
                 <Modal
                     active={modalActive}

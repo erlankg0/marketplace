@@ -3,12 +3,14 @@ import {Route, Routes} from "react-router-dom";
 import Admin from "@layout/Organization/admin/UI/admin.tsx";
 import {IOrganization} from "@layout/Organization/interface.ts";
 import React from "react";
+import Add from "@layout/Organization/employers/add/UI/add.tsx";
 
 const Organization: React.FC<IOrganization> = ({setModalActive}) => {
     return (
         <Routes>
             <Route path={'/create'} element={<Create/>}/>
             <Route path={'/admin'} element={<Admin setModalActive={setModalActive}/>}/>
+            <Route path={'/add-employer'} element={<Add/>}/>
         </Routes>
     )
 }

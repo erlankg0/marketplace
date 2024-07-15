@@ -1,5 +1,4 @@
 import styles from "./profile.module.scss";
-import person from "@assets/icon/person.svg";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {validateProfile} from "@validations/profile.ts";
@@ -8,9 +7,10 @@ import {IProfile} from "@layout/Profile/interface.ts";
 import Ads from "@components/ads/UI/ads.tsx";
 import ButtonComponent from "@components/button/UI/button.tsx";
 import Modal from "@components/modal/UI/modal.tsx";
-import {useState, useEffect} from "react";
+import {useEffect, useState} from "react";
 import Alert from "@components/alert/UI/alert.tsx";
 import {getProfile} from "@network/profile/profile.ts";
+import Person from "@components/person/UI/person.tsx";
 
 const Profile = () => {
     const form = useForm<IProfile>({resolver: yupResolver(validateProfile)});
@@ -22,20 +22,12 @@ const Profile = () => {
     }
     useEffect(() => {
         getProfile().then((res) => console.log(res)).catch((er) => console.log(er))
-    },[])
+    }, [])
     return (
         <section className={styles.profile}>
             <Ads/>
             <section className={styles.profile__content}>
-                <div className={styles.profile__head}>
-                    <div className={styles.profile__image}>
-                        <img src={person} alt={'user image'}/>
-                    </div>
-                    <div className={styles.profile__detail}>
-                        <p className={styles.profile__name}>Эрлан Абдраимов</p>
-                        <p className={styles.profile__change} onClick={() => setModal(!modal)}>Изменить фото профиля</p>
-                    </div>
-                </div>
+                <Person fullName={'Эрлан Абдраимов'} module={modal} setModal={setModal}/>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className={styles.form}>
                         <h2 className={styles.form__title}>Личные Данные</h2>

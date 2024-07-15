@@ -14,7 +14,7 @@ import {validationSchema} from "@validations/auth.ts";
 import styles from "./auth.module.scss";
 import authBackground from "@assets/images/authBackground.jpg";
 import {useEffect} from "react";
-import {singIn} from "@network/auth/auth.ts";
+import {signIn} from "@network/auth/auth.ts";
 
 const Auth = () => {
     const form = useForm<IAuth>({
@@ -28,11 +28,11 @@ const Auth = () => {
 
     const handleAuthorization = async (email: string) => {
         try {
-            const response = await singIn(email); // Исправление функции
+            const response = await signIn(email); // Исправление функции
             console.log(response);
             navigate('/confirmed');
         } catch (error) {
-            console.error('Authorization error:', error);
+            console.error('Authorization error:', );
         }
     }
 
@@ -47,7 +47,7 @@ const Auth = () => {
     useEffect(() => {
         console.log(emailValue);
         localStorage.setItem('email', emailValue)
-        if(isAuthorized){
+        if (isAuthorized) {
             navigate('/marketplace')
         }
     }, [emailValue, dispatch]);

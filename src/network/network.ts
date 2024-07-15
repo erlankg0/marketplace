@@ -1,14 +1,14 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const instance = axios.create({
-    baseURL: 'http://142.93.104.229:8808',
+    baseURL: 'http://142.93.104.229:8800',
     headers: {
         Accept: '*/*',
-        "Content-Type": 'application/json'
-    }
-})
+        "Content-Type": "application/json",
+    },
+});
 
-// Интерспетор для добавления Access тоена к каждому запросу
+// Интерспетор для добавления Access токена к каждому запросу
 instance.interceptors.request.use((config) => {
     const token = localStorage.getItem('accessToken');
     if (token) {
@@ -17,9 +17,9 @@ instance.interceptors.request.use((config) => {
     return config;
 }, error => {
     return Promise.reject(error)
-})
+});
 
-// Интерсептор дляо обработки ответа и обновления AccessToken при необхоидмости
+// Интерсептор для обработки ответа и обновления AccessToken при необходимости
 instance.interceptors.response.use(
     response => response,
     async error => {
@@ -29,7 +29,7 @@ instance.interceptors.response.use(
             const refreshToken = localStorage.getItem('refreshToken');
             if (refreshToken) {
                 try {
-                    const { data } = await instance.post(`/auth/refresh?refreshToken=${refreshToken}`, { token: refreshToken });
+                    const {data} = await instance.post(`/accounts/auth/refresh?refreshToken=${refreshToken}`, {token: refreshToken});
                     localStorage.setItem('accessToken', data.accessToken);
                     instance.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
                     return instance(originalRequest);

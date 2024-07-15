@@ -10,5 +10,5 @@ export const singUp = (data: IRegister) => {
         phoneNumber,
         patronymicName
     }
-    return instance.post('/auth/register', payload)
+    return instance.post('/accounts/auth/register', payload)
 }

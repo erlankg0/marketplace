@@ -40,6 +40,7 @@ const Admin: React.FC<IOrganization> = ({setModalActive}) => {
     ];
     return (
         <section className={styles.admin}>
+
             <div className={styles.admin__header}>
                 <Logo/>
                 <div className={styles.admin__info}>

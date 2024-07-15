@@ -13,8 +13,8 @@ import History from "@layout/MonitoringHistory/UI/monitoring.tsx";
 import Profile from "@layout/Profile/UI/profile.tsx";
 import Organization from "@layout/Organization/organization/UI/organization.tsx";
 
-import {useState} from "react";
-import {Route, Routes} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Route, Routes, useLocation} from "react-router-dom";
 
 import styles from "./marketplace.module.scss";
 
@@ -26,10 +26,14 @@ import shopping from "@assets/icon/shopping.svg"
 const Marketplace = () => {
     const [modalActive, setModalActive] = useState<boolean>(false)
     const [logoutModalActive, setLogoutModalActive] = useState<boolean>(false); // Состояние нового модального окна для подтверждения выхода
+    const [organizations, setOrganizations] = useState<boolean>(false);
     const handleLogout = () => {
         setLogoutModalActive(true); // Показать модальное окно для подтверждения выхода при нажатии на кнопку выхода
     };
-
+    const params = useLocation();
+    useEffect(() => {
+        setOrganizations(params.pathname.split('/').includes('organization'));
+    }, [params]);
     return (
         <main className={styles.body}>
             <aside className={styles.aside}>
@@ -67,6 +71,15 @@ const Marketplace = () => {
 
 
                     <div className={'line'}></div>
+
+                    {organizations && (
+                        <Dropdown icon={shopping} title={'Организация'} tabs={[
+                            {title: 'Админ', url: 'organization/admin'}, {
+                                title: 'сотрудники',
+                                url: 'organization/add-employer'
+                            }
+                        ]}/>
+                    )}
                 </div>
                 <Logout active={!modalActive} onClick={handleLogout}/>
             </aside>
@@ -80,7 +93,7 @@ const Marketplace = () => {
                     <Route path={'/add-order'} element={<Ads/>}/>
                     <Route path={'/current-orders'} element={<Monitoring/>}/>
                     <Route path={'/history-orders'} element={<History setModalActive={setModalActive}/>}/>
-                    <Route path={'/organization/*'} element={<Organization/>}/>
+                    <Route path={'/organization/*'} element={<Organization setModalActive={setModalActive}/>}/>
                 </Routes>
                 <Modal
                     active={modalActive}

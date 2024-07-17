@@ -69,3 +69,10 @@
   gap: 1rem;
   justify-content: space-between;
 }
+
+input[type="checkbox"]:checked {
+  border-color: #4CAF50 !important; /* Зеленая рамка */
+  accent-color: #FFCC00 !important; /* Зеленый фон */
+  padding: .3rem;
+  color: #0085FF !important;
+}

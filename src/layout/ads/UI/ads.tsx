@@ -3,8 +3,8 @@ import SelectButton from "@components/button/UI/selectButton.tsx";
 import styles from "./ads.module.scss";
 import Equipment from "@layout/equipment/UI/equipment.tsx";
 import Order from "@layout/order/UI/order.tsx";
-import Button from "@components/button/UI/button.tsx";
 import Service from "@layout/service/UI/service.tsx";
+import Create from "@components/create/UI/create.tsx";
 
 const Ads = () => {
     const [selectedButton, setSelectedButton] = useState<'equipment' | 'order' | 'service'>('equipment');
@@ -16,26 +16,10 @@ const Ads = () => {
         setCount(count + 1)
     }
     return (
-        <div>
+        <>
             {count < 1 ?
                 (
-                    <div className={styles.content}>
-                        <p>🙂</p>
-                        <div className={styles.content__body}>
-                            <div className={styles.content__text}>
-                                <p className={styles.content__title}>Хмм...</p>
-                                <p className={styles.content__title}>У вас еще нет объявлений </p>
-                            </div>
-                            <p className={styles.content__description}>
-                                Давайте создадим объявление
-                                и разместим на маркетплейсе
-                            </p>
-                            <div className={styles.content__button}>
-                                <Button onClick={handleIncrement} text={'Создать'}/>
-                            </div>
-                        </div>
-
-                    </div>
+                    <Create count={count} increment={handleIncrement}/>
                 ) :
                 (
                     <>
@@ -68,7 +52,7 @@ const Ads = () => {
                     </>
                 )}
 
-        </div>
+        </>
     )
 }
 

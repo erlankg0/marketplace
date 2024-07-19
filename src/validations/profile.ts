@@ -8,12 +8,12 @@ const nameValidation = Yup.string()
 
 export const validateProfile = Yup.object().shape({
     name: nameValidation,
-    lastName: nameValidation,
-    middleName: nameValidation,
+    surname: nameValidation,
+    patronymic: nameValidation,
     email: Yup.string()
         .email('Неверный формат email')
         .required('Объязательное'),
-    phone: Yup.string()
+    phoneNumber: Yup.string()
         .matches(/^[0-9]+$/, 'Только цифры')
         .min(10, 'Минимум 10 символов')
         .max(15, 'Максимум 15 символов')

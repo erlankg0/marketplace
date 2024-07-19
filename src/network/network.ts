@@ -1,15 +1,15 @@
 import axios from 'axios';
 
 export const instance = axios.create({
-    baseURL: 'http://142.93.104.229:8800',
+    baseURL: 'https://smarttailor.xyz/api/',
     headers: {
         Accept: '*/*',
-        "Content-Type": "application/json",
     },
 });
-
+//
 // Интерспетор для добавления Access токена к каждому запросу
 instance.interceptors.request.use((config) => {
+    console.log(localStorage.getItem('accessToken'))
     const token = localStorage.getItem('accessToken');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -29,7 +29,7 @@ instance.interceptors.response.use(
             const refreshToken = localStorage.getItem('refreshToken');
             if (refreshToken) {
                 try {
-                    const {data} = await instance.post(`/accounts/auth/refresh?refreshToken=${refreshToken}`, {token: refreshToken});
+                    const {data} = await instance.post(`auth/refresh-token?refreshToken${refreshToken}`, {token: refreshToken});
                     localStorage.setItem('accessToken', data.accessToken);
                     instance.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
                     return instance(originalRequest);

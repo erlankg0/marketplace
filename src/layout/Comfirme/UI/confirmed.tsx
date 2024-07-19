@@ -20,7 +20,7 @@ const Confirmed = () => {
     const [waiting, setWaiting] = useState<boolean>(true);
     const email = localStorage.getItem('email');
     const dispatch = useAddDispatch();
-    
+
     const handleAuthorization = (accessToken: string, refreshToken: string) => {
         console.log('Dispatching setAccessToken and setRefreshToken'); // Логируем вызов dispatch
 
@@ -28,6 +28,10 @@ const Confirmed = () => {
         dispatch(setRefreshToken(refreshToken));
         dispatch(login());
     }
+    // const handleAccessToken = (token: string) => {
+    //     dispatch(setAccessToken(token));
+    //     dispatch(login());
+    // }
     const handleActivateCode = async (inputCode: string) => {
         try {
             if (email && email.length > 1) {

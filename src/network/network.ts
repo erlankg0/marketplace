@@ -6,7 +6,7 @@ export const instance = axios.create({
         Accept: '*/*',
     },
 });
-//
+
 // Интерспетор для добавления Access токена к каждому запросу
 instance.interceptors.request.use((config) => {
     console.log(localStorage.getItem('accessToken'))

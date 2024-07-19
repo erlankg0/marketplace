@@ -115,7 +115,7 @@ const Profile = () => {
                     <div style={{display: "flex", flexDirection: "column", gap: "5rem"}}>
                         <div className={'line'}></div>
                         <div style={{alignSelf: "end"}}>
-                            <ButtonComponent text={'Изменить данные'} onClick={() => undefined}/>
+                            <ButtonComponent text={'Изменить данные'}/>
                         </div>
                     </div>
                 </form>

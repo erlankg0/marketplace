@@ -1,4 +1,7 @@
 import axios from 'axios';
+import {logout} from "@network/auth/auth.ts";
+import {useAddDispatch} from "@redux/hooks.ts";
+import {logout as logoutRedux} from "@redux/slices/auth.ts"
 
 export const instance = axios.create({
     baseURL: 'https://smarttailor.xyz/api/',
@@ -36,6 +39,9 @@ instance.interceptors.response.use(
                 } catch (err) {
                     console.error('Refresh token is invalid:', err);
                     // Логика для выхода пользователя или обновления токенов
+                    const dispatch = useAddDispatch();
+                    dispatch(logoutRedux());
+                    logout()
                 }
             }
         }

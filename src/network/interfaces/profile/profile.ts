@@ -16,3 +16,7 @@ export interface IEditProfile {
     patronymic: string,
     phoneNumber: string
 }
+
+export interface IUploadPhoto {
+    file: string
+}

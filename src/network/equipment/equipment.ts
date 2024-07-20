@@ -1,5 +1,5 @@
 import {instance} from "@network/network.ts";
 
-const getAllEquipment = ()=>{
-    return instance.get('')
+export const getAllEquipment = () => {
+    return instance.get('equipment/get-all-equipments');
 }

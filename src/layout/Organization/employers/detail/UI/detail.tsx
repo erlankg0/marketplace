@@ -44,7 +44,7 @@ const DetailEmployees: React.FC<IOrganization> = ({setModalActive}) => {
         <section className={styles.detail}>
             <div className={styles.detail__header}>
                 <Left/>
-                <Person fullName={'Эрлан Абдраимов'} module={modal} setModal={setModal}/>
+                <Person image={''} fullName={'Эрлан Абдраимов'} module={modal} setModal={setModal}/>
                 <div className={'row'}>
                     <SelectButton
                         text="Текущие заказы"

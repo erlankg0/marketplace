@@ -114,6 +114,7 @@ const Equipment = () => {
                     previewImage={previewImage}
                     fileList={fileList}
                     setFileList={setFileList}
+                    multiple={true}
                 />
             </div>
             <p className={styles.form__title}>Контактная информация</p>

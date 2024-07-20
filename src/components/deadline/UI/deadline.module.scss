@@ -1,0 +1,16 @@
+.deadline {
+  display: flex;
+  align-self: center;
+  padding: 1rem;
+  width: 100%;
+  text-align: center;
+  background-color: #E8E8E8;
+  border-radius: 1rem;
+
+  &__text {
+    font-size: 1.4rem;
+    line-height: 2.2rem;
+    color: black;
+    text-align: center;
+  }
+}

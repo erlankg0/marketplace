@@ -1,5 +1,5 @@
 .button {
-  background-color: white;
+  background-color: transparent;
   padding: 1rem;
   text-align: center;
   border: solid black .05rem;
@@ -9,6 +9,7 @@
   line-height: 2.4rem;
   min-width: 7rem;
   align-self: center;
+  cursor: pointer;
 
   &.action {
     background-color: #FFCC00;

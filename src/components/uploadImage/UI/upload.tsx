@@ -19,10 +19,9 @@ const UploadImage: React.FC<IUploadImages> = ({
                                                   setFileList,
                                                   fileList,
                                                   previewOpen,
-                                                  setPreviewOpen
+                                                  setPreviewOpen,
+                                                  multiple = false // Add a prop to specify if multiple files can be uploaded
                                               }) => {
-
-
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj as FileType);
@@ -32,19 +31,22 @@ const UploadImage: React.FC<IUploadImages> = ({
         setPreviewOpen(true);
     };
 
-    const handleChange: UploadProps['onChange'] = ({fileList: newFileList}) =>
+    const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
         setFileList(newFileList);
 
     const uploadButton = (
-        <button style={{border: 0, background: 'none'}} type="button">
-            <div style={{padding: "1rem"}}>
+        <button style={{ border: 0, background: 'none' }} type="button">
+            <div style={{ padding: "1rem" }}>
                 <div style={{
                     width: "100%",
                     height: "100%",
                     textAlign: "center",
                     backgroundColor: "#E5EFFD",
-                    borderRadius: "1rem"
-                }}>+ Добавить файл
+                    borderRadius: ".4rem"
+                }}>
+                    <p style={{ color: '#1F5199', fontSize: '1.2rem', lineHeight: '1.7rem', fontWeight: '500' }}>
+                        + Добавить файл
+                    </p>
                 </div>
             </div>
         </button>
@@ -61,13 +63,14 @@ const UploadImage: React.FC<IUploadImages> = ({
                 fileList={fileList}
                 onPreview={handlePreview}
                 onChange={handleChange}
-                customRequest={({onSuccess}) => onSuccess?.("ok")}
+                customRequest={({ onSuccess }) => onSuccess?.("ok")}
+                multiple={multiple} // Allow multiple file uploads
             >
-                {fileList.length >= 8 ? null : uploadButton}
+                {fileList.length >= (multiple ? 8 : 1) ? null : uploadButton}
             </Upload>
             {previewImage && (
                 <Image
-                    wrapperStyle={{display: 'none'}}
+                    wrapperStyle={{ display: 'none' }}
                     preview={{
                         visible: previewOpen,
                         onVisibleChange: (visible) => setPreviewOpen(visible),

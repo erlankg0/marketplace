@@ -16,7 +16,7 @@ const Header = () => {
         <header className={styles.header}>
             <div className={styles.header__text}>
                 <p className={styles.breads}>{pathNames}</p>
-                <text className={'title'}>Оборудования</text>
+                <p className={'title'}>Оборудования</p>
             </div>
             <div className={styles.header__form}>
                 <Search/>

@@ -1,10 +1,22 @@
 export interface IProfile {
     email: string,
-    firstName: string,
+    name: string,
     id: number,
-    imageLink: string | null,
-    lastName: string,
-    patronymicName: string,
+    imagePath: string | null,
+    surname: string,
+    patronymic: string,
     phoneNumber: string,
-    subscribed: string
+    hasSubscription: boolean,
+    isOrganization: boolean,
+}
+
+export interface IEditProfile {
+    name: string,
+    surname: string,
+    patronymic: string,
+    phoneNumber: string
+}
+
+export interface IUploadPhoto {
+    file: string
 }

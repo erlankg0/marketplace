@@ -210,6 +210,7 @@ const Order = () => {
                     previewImage={previewImage}
                     fileList={fileList}
                     setFileList={setFileList}
+                    multiple={true}
                 />
             </div>
             <p className={styles.form__title}>Контактаця информация</p>

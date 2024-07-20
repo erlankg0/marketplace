@@ -1,7 +1,7 @@
 export interface IProfile {
     name: string;
-    lastName: string;
-    middleName: string;
+    surname: string;
+    patronymic: string;
     email: string;
-    phone: string;
+    phoneNumber: string;
 }

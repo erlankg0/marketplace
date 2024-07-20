@@ -5,10 +5,10 @@ export const singUp = (data: IRegister) => {
     const {email, lastName, firstName, patronymicName, phoneNumber} = data;
     const payload = {
         email,
-        lastName,
-        firstName,
+        surname: lastName,
+        name: firstName,
         phoneNumber,
-        patronymicName
+        patronymic: patronymicName
     }
-    return instance.post('/auth/register', payload)
+    return instance.post('/auth/sign-up', payload)
 }

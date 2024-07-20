@@ -1,0 +1,51 @@
+.person {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+
+  &__head {
+    display: flex;
+    flex-direction: row;
+    gap: 1.2rem;
+  }
+
+  &__image {
+    background-color: #FFCC00;
+    width: 7rem;
+    height: 7rem;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+
+    & > img {
+      object-position: center;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+  }
+
+  &__detail {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    align-self: center;
+  }
+
+  &__name {
+    font-size: 2rem;
+    line-height: 2.3rem;
+  }
+
+  &__change {
+    font-size: 1.6rem;
+    line-height: 2rem;
+    text-decoration: underline;
+    color: rgba(black, .5);
+    cursor: pointer;
+  }
+
+}

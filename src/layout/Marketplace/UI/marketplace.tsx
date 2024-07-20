@@ -4,9 +4,14 @@ import Dropdown from "@components/dropdown/UI/dropdown.tsx";
 import Logout from "@components/logout/UI/logout.tsx";
 import Header from "@components/header/UI/header.tsx";
 import Modal from "@components/modal/UI/modal.tsx";
+import CardModal from "@components/cardModal/UI/cardModal.tsx";
 
 import Cards from "@layout/Cards/UI/cards.tsx";
 import Ads from "@layout/ads/UI/ads.tsx";
+import Monitoring from "@layout/Monitoring/UI/monitoring.tsx";
+import History from "@layout/MonitoringHistory/UI/monitoring.tsx";
+import Profile from "@layout/Profile/UI/profile.tsx";
+import Organization from "@layout/Organization/organization/UI/organization.tsx";
 
 import {useState} from "react";
 import {Route, Routes} from "react-router-dom";
@@ -16,10 +21,7 @@ import styles from "./marketplace.module.scss";
 import person from "@assets/icon/person.svg"
 import clipboard from "@assets/icon/clipboard.svg"
 import shopping from "@assets/icon/shopping.svg"
-import Monitoring from "@layout/Monitoring/UI/monitoring.tsx";
-import History from "@layout/MonitoringHistory/UI/monitoring.tsx";
-import CardModal from "@components/cardModal/UI/cardModal.tsx";
-import Profile from "@layout/Profile/UI/profile.tsx";
+import Nav from "@components/Nav/UI/nav.tsx";
 
 
 const Marketplace = () => {
@@ -66,6 +68,15 @@ const Marketplace = () => {
 
 
                     <div className={'line'}></div>
+
+                    <Nav url={'organization'} title={"Организация"} icon={shopping}/>
+                    <Nav url={'organization/admin'} title={"Админ"} icon={shopping}/>
+                    <Nav url={'organization/add-employer'} title={"Персонал"} icon={shopping}/>
+                    <Nav url={'organization/list-employer'} title={"Персонал Таблица"} icon={shopping}/>
+                    <Nav url={'organization/detail-employer'} title={"Персонал Детали"} icon={shopping}/>
+                    <Nav url={'organization/appointment'} title={"Персонал Должность"} icon={shopping}/>
+
+
                 </div>
                 <Logout active={!modalActive} onClick={handleLogout}/>
             </aside>
@@ -77,14 +88,15 @@ const Marketplace = () => {
                     <Route path={'/'} element={<Cards setActiveModal={setModalActive}/>}/>
                     <Route path={'/order'} element={<Cards setActiveModal={setModalActive}/>}/>
                     <Route path={'/add-order'} element={<Ads/>}/>
-                    <Route path={'current-orders'} element={<Monitoring/>}/>
+                    <Route path={'/current-orders'} element={<Monitoring/>}/>
                     <Route path={'/history-orders'} element={<History setModalActive={setModalActive}/>}/>
+                    <Route path={'/organization/*'} element={<Organization setModalActive={setModalActive}/>}/>
                 </Routes>
                 <Modal
                     active={modalActive}
                     setModalActive={setModalActive}
                     component={CardModal}
-                    componentProps={{ setModal: setModalActive, setAlert: setLogoutModalActive , price: '1000'}}
+                    componentProps={{setModal: setModalActive, setAlert: setLogoutModalActive, price: '1000'}}
                 />
                 <Modal
                     active={logoutModalActive}

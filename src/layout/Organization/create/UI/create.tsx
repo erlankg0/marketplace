@@ -18,7 +18,7 @@ const Create = () => {
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const onSubmit = (data: ICreate) => {
-        console.log(data);
+        console.log(data, fileList);
         // не работает так как есть ещё image
     }
     return (
@@ -34,6 +34,7 @@ const Create = () => {
                             previewImage={previewImage}
                             fileList={fileList}
                             setFileList={setFileList}
+                            multiple={false}
                         />
                     </div>
                     <div className={styles.form__content}>

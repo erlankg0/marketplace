@@ -13,27 +13,24 @@ import History from "@layout/MonitoringHistory/UI/monitoring.tsx";
 import Profile from "@layout/Profile/UI/profile.tsx";
 import Organization from "@layout/Organization/organization/UI/organization.tsx";
 
-import {useEffect, useState} from "react";
-import {Route, Routes, useLocation} from "react-router-dom";
+import {useState} from "react";
+import {Route, Routes} from "react-router-dom";
 
 import styles from "./marketplace.module.scss";
 
 import person from "@assets/icon/person.svg"
 import clipboard from "@assets/icon/clipboard.svg"
 import shopping from "@assets/icon/shopping.svg"
+import Nav from "@components/Nav/UI/nav.tsx";
 
 
 const Marketplace = () => {
     const [modalActive, setModalActive] = useState<boolean>(false)
     const [logoutModalActive, setLogoutModalActive] = useState<boolean>(false); // Состояние нового модального окна для подтверждения выхода
-    const [organizations, setOrganizations] = useState<boolean>(false);
     const handleLogout = () => {
         setLogoutModalActive(true); // Показать модальное окно для подтверждения выхода при нажатии на кнопку выхода
     };
-    const params = useLocation();
-    useEffect(() => {
-        setOrganizations(params.pathname.split('/').includes('organization'));
-    }, [params]);
+
     return (
         <main className={styles.body}>
             <aside className={styles.aside}>
@@ -72,14 +69,14 @@ const Marketplace = () => {
 
                     <div className={'line'}></div>
 
-                    {organizations && (
-                        <Dropdown icon={shopping} title={'Организация'} tabs={[
-                            {title: 'Админ', url: 'organization/admin'}, {
-                                title: 'сотрудники',
-                                url: 'organization/add-employer'
-                            }
-                        ]}/>
-                    )}
+                    <Nav url={'organization'} title={"Организация"} icon={shopping}/>
+                    <Nav url={'organization/admin'} title={"Админ"} icon={shopping}/>
+                    <Nav url={'organization/add-employer'} title={"Персонал"} icon={shopping}/>
+                    <Nav url={'organization/list-employer'} title={"Персонал Таблица"} icon={shopping}/>
+                    <Nav url={'organization/detail-employer'} title={"Персонал Детали"} icon={shopping}/>
+                    <Nav url={'organization/appointment'} title={"Персонал Должность"} icon={shopping}/>
+
+
                 </div>
                 <Logout active={!modalActive} onClick={handleLogout}/>
             </aside>

@@ -1,5 +1,5 @@
 export interface ICreate {
-    image: string,
+    image?: string,
     title: string,
     description: string
 }

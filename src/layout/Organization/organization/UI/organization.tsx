@@ -11,7 +11,7 @@ import AddAppointment from "@layout/Organization/appointment/add/UI/add.tsx";
 const Organization: React.FC<IOrganization> = ({setModalActive}) => {
     return (
         <Routes>
-            <Route path={'/create'} element={<Create/>}/>
+            <Route path={'/'} element={<Create/>}/>
             <Route path={'/admin'} element={<Admin setModalActive={setModalActive}/>}/>
             <Route path={'/add-employer'} element={<Add/>}/>
             <Route path={'/list-employer'} element={<ListEmployers/>}/>

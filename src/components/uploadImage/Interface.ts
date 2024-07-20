@@ -7,4 +7,5 @@ export interface IUploadImages {
     setPreviewImage: (image: string) => void,
     fileList: UploadFile[],
     setFileList: (file: UploadFile[]) => void,
+    multiple: boolean
 }

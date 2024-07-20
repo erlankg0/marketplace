@@ -19,6 +19,10 @@ instance.interceptors.request.use((config) => {
     }
     return config;
 }, error => {
+    // Логика для выхода пользователя или обновления токенов
+    const dispatch = useAddDispatch();
+    dispatch(logoutRedux());
+    logout()
     return Promise.reject(error)
 });
 

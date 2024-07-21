@@ -75,7 +75,7 @@ const Marketplace = () => {
                     <Nav url={'organization/list-employer'} title={"Персонал Таблица"} icon={shopping}/>
                     <Nav url={'organization/detail-employer'} title={"Персонал Детали"} icon={shopping}/>
                     <Nav url={'organization/appointment'} title={"Персонал Должность"} icon={shopping}/>
-
+                    <Nav url={'organization/history-employer'} title={'История'} icon={shopping}/>
 
                 </div>
                 <Logout active={!modalActive} onClick={handleLogout}/>

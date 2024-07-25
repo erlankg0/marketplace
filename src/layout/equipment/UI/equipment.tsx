@@ -1,7 +1,5 @@
 import UploadImage from "@components/uploadImage/UI/upload.tsx";
 import ButtonComponent from "@components/button/UI/button.tsx";
-import Modal from "@components/modal/UI/modal.tsx";
-import Alert from "@components/alert/UI/alert.tsx";
 import SelectButton from "@components/button/UI/selectButton.tsx";
 
 import {useState} from "react";
@@ -12,10 +10,10 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import styles from "@layout/ads/UI/ads.module.scss";
 import {IADS} from "@layout/ads/interface.ts";
 
-import {validationADS} from "@validations/ads.ts";
+import {validationEquipment} from "@validations/ads.ts";
 
 const Equipment = () => {
-    const form = useForm<IADS>({resolver: yupResolver(validationADS)});
+    const form = useForm<IADS>({resolver: yupResolver(validationEquipment)});
     const {register, formState: {errors}, handleSubmit} = form;
 
     // images upload
@@ -25,16 +23,7 @@ const Equipment = () => {
 
     const [selectedButton, setSelectedButton] = useState<'phone' | 'email'>('phone');
 
-    const [error, setError] = useState<boolean>(false)
-    const handleToggle = () => {
-        setError(!error);
-    }
     const onSubmit = (data: IADS) => {
-        if (Object.keys(errors).length > 0) {
-            setError(true);
-            return;
-        }
-        setError(false)
         console.log("form submit", data);
         console.log(fileList)
     };
@@ -43,7 +32,7 @@ const Equipment = () => {
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
             <p className={styles.form__title}>Информация об оборудовании</p>
             <div className={styles.form__field}>
-                <div className={styles.form__input}>
+                <div className={errors.title ? `${styles.input__error} ${styles.form__input}` : styles.form__input}>
                     <label htmlFor="title" className={styles.label}>
                         Название <div
                         className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
@@ -59,7 +48,7 @@ const Equipment = () => {
                 <p className={styles.form__info}>максимум 250 символов, минимум 5</p>
             </div>
             <div className={styles.form__field}>
-                <div className={styles.form__input}>
+                <div className={errors.description ? `${styles.input__error} ${styles.form__input}` : styles.form__input}>
                     <label htmlFor="description" className={styles.label}>
                         Описание <div
                         className={errors.description ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
@@ -75,7 +64,7 @@ const Equipment = () => {
                 <p className={styles.form__info}>максимум 1000 символов, минимум 5</p>
             </div>
             <div className={styles.form__field}>
-                <div className={styles.form__input}>
+                <div className={errors.count ? `${styles.input__error} ${styles.form__input}` : styles.form__input}>
                     <label htmlFor="count" className={styles.label}>
                         Количество <div
                         className={errors.count ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
@@ -91,7 +80,7 @@ const Equipment = () => {
                 </div>
             </div>
             <div className={styles.form__field}>
-                <div className={styles.form__input}>
+                <div className={errors.price ? `${styles.input__error} ${styles.form__input}` : styles.form__input}>
                     <label htmlFor="price" className={styles.label}>
                         Стоимость <div
                         className={errors.price ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
@@ -131,10 +120,10 @@ const Equipment = () => {
                 />
             </div>
             <div className={styles.form__field}>
-                <div className={styles.form__input}>
+                <div className={errors[selectedButton] ? `${styles.input__error} ${styles.form__input}` : styles.form__input}>
                     <label htmlFor={selectedButton} className={styles.label}>
                         {selectedButton == 'phone' ? 'Номер телефеона' : 'Почта'} <div
-                        className={errors.phone ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
+                        className={errors[selectedButton] ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
                     </label>
                     <input
                         type={selectedButton == 'phone' ? 'tel' : 'email'}
@@ -147,15 +136,8 @@ const Equipment = () => {
             </div>
             <div className={'line'}></div>
             <div className={styles.form__button}>
-                <ButtonComponent onClick={handleToggle} text={'Разместить Объявления'}/>
+                <ButtonComponent text={'Разместить Объявления'}/>
             </div>
-            <Modal
-                active={error}
-                setModalActive={handleToggle}
-                component={Alert} // Передача компонента модального окна для подтверждения выхода
-                componentProps={{forgot: true, setModalActive: handleToggle,}}
-            />
-
         </form>
     );
 };

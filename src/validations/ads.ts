@@ -1,22 +1,39 @@
 import * as Yup from "yup";
 
-export const validationADS = Yup.object().shape({
+export const validationOrder = Yup.object({
     title: Yup.string()
-        .max(250, "масимум 250 символов")
-        .min(5, "миниум 5 символов")
-        .required("Объязательное поле"),
+        .max(250, "Максимум 250 символов")
+        .min(5, "Минимум 5 символов")
+        .required("Обязательное поле"),
     description: Yup.string()
-        .max(1000, "масимум 1000 символов")
-        .min(5, "миниум 5 символов")
-        .required("Объязательное поле"),
-    count: Yup.number()
-        .min(1, "минимальное количество 1")
-        .required("Объязательное поле"),
-    price: Yup.string()
-        .required("Объязательное поле"),
-    phone: Yup.string()
-        .min(5, "Не правльной номер телефона <Мин 10 симоволов>")
-        .max(15, "Не правльной номер телефона <Макс 15 симоволов>"),
-    email: Yup.string()
-        .email("Заполните Почту")
+        .max(1000, "Максимум 1000 символов")
+        .min(5, "Минимум 5 символов")
+        .required("Обязательное поле"),
+    price: Yup.number().positive('Стоимость должна быть положительной').required('Обязательное поле'),
+})
+
+export const validationService = Yup.object().shape({
+    name: Yup.string().max(250, "Максимум 250 символов")
+        .min(5, "Минимум 5 символов")
+        .required("Обязательное поле"),
+    description: Yup.string().max(1000, "Максимум 1000 символов")
+        .min(5, "Минимум 5 символов")
+        .required("Обязательное поле"),
+    price: Yup.number().positive('Стоимость должна быть положительной').required('Обязательное поле'),
+    contactInfo: Yup.string().required("Обязательное поле"),
+
+})
+
+export const validationEquipment = Yup.object().shape({
+    title: Yup.string()
+        .max(250, "Максимум 250 символов")
+        .min(5, "Минимум 5 символов")
+        .required("Обязательное поле"),
+    description: Yup.string()
+        .max(1000, "Максимум 1000 символов")
+        .min(5, "Минимум 5 символов")
+        .required("Обязательное поле"),
+    price: Yup.number().positive('Стоимость должна быть положительной').required('Обязательное поле'),
+    count: Yup.number().positive('Количество должна быть положительной').required('Обязательное поле'),
+
 })

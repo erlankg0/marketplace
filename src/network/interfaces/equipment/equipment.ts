@@ -1,13 +1,13 @@
 export interface IEquipment {
-    equipmentId: number,
-    equipmentPhotoUrl: string,
     name: string,
+    description: string,
+    quantity: number,
     price: number,
-    authorImageUrl: string,
-    authorFullName: string,
-    description: string
+    contactInfo: string,
+    photos: File[]
 }
 
 export interface IEquipments {
     equipments: IEquipment[],
 }
+

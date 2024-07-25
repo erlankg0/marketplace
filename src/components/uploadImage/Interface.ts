@@ -5,7 +5,7 @@ export interface IUploadImages {
     setPreviewOpen: (open: boolean) => void,
     previewImage: string,
     setPreviewImage: (image: string) => void,
-    fileList: UploadFile[],
-    setFileList: (file: UploadFile[]) => void,
+    fileList: UploadFile<File>[],
+    setFileList: (file: UploadFile<File>[]) => void,
     multiple: boolean
 }

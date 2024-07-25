@@ -20,6 +20,7 @@ const Change: React.FC = () => {
             const formData = new FormData();
             formData.append('file', file); // Ensure 'file' is the correct key expected by your backend
             console.log(formData)
+            console.log(file)
             try {
                 await postImageProfile(formData);
                 console.log("File uploaded successfully");

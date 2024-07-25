@@ -2,25 +2,34 @@ import UploadImage from "@components/uploadImage/UI/upload.tsx";
 import ButtonComponent from "@components/button/UI/button.tsx";
 
 import {useState} from "react";
-import {Select, UploadFile, Tag} from "antd";
+import {Select, Tag, UploadFile} from "antd";
 import {DownOutlined} from '@ant-design/icons';
 
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 
 import styles from "@layout/ads/UI/ads.module.scss";
-import {validationADS} from "@validations/ads.ts";
-import {IADS} from "@layout/ads/interface.ts";
+import {validationOrder} from "@validations/ads.ts";
+import {IOrder, ISize} from "@layout/ads/interface.ts";
 import {CustomTagProps} from 'rc-select/lib/BaseSelect';
 import DateSelect from "@components/date/UI/date.tsx";
+import SelectButton from "@components/button/UI/selectButton.tsx";
+import Alert from "@components/alert/UI/alert.tsx";
+import Modal from "@components/modal/UI/modal.tsx";
+import {postOrder} from "@network/order/order.ts";
 
-const MAX_COUNT = 3;
+const MAX_COUNT = 10;
 
 
 const Order = () => {
-    const form = useForm<IADS>({resolver: yupResolver(validationADS)})
+    const [selectedButton, setSelectedButton] = useState<'phone' | 'email'>('phone');
+
+    const form = useForm<IOrder>({
+        resolver: yupResolver(validationOrder),
+    });
     const {register, formState: {errors, touchedFields}, handleSubmit} = form
     const [date, setDate] = useState("");
+    const [error, setError] = useState<boolean>(false)
 
     // images upload
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -28,6 +37,7 @@ const Order = () => {
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     // Select Values
     const [selectSize, setSelectSize] = useState<string[]>([]);
+    const [item, setItem] = useState<ISize[]>([])
     const [selectCategory, setSelectCategory] = useState<'Цифры' | 'Буквы'>('Цифры')
     const sizes = {
         'Цифры': [
@@ -49,6 +59,11 @@ const Order = () => {
     }
     const handleChangeSize = (values: string[]) => {
         setSelectSize(values);
+        console.log(values.map((item) => (item)))
+        const items: ISize[] = values.map((item): ISize => {
+            return {size: item, quantity: 1}
+        })
+        setItem(items)
     };
     const handleChangeCategory = (value: 'Цифры' | 'Буквы') => {
         setSelectCategory(value);
@@ -71,21 +86,58 @@ const Order = () => {
         </>
     );
 
-    const handleTagClose = (tag: string) => {
+    const handleToggle = () => {
+        setError(!error);
+    }
+
+    const handleTagClose = (tag: string, quantity?: number) => {
         const updatedSelect = selectSize.filter(item => item !== tag);
         setSelectSize(updatedSelect);
+        const updatedSize: ISize[] = item.filter((item) => {
+            if (item.size == tag) {
+                return {item: item.size, quantity: quantity}
+            }
+            return {item: item.size, quantity: 1}
+        })
+        setItem(updatedSize)
     };
 
 
-    const onSubmit = (data: IADS) => {
-        console.log("form submit", data)
+    const onSubmit = (data: IOrder) => {
+        console.log("form submit", data, item, fileList)
+        const contactInfo: string = data.email ? data.email : data.phone ? data.phone : '';
+        // const photos = fileList.map((image) => image.thumbUrl);
+        const orderData = {
+            name: data.title,
+            description: data.description,
+            photos: fileList.map((image) => image.thumbUrl),
+            contactInfo: contactInfo,
+            price: data.price,
+            items: [
+                ...item
+            ]
+
+        }
+        console.log(orderData)
+        console.log(date)
+        const formData = new FormData();
+        formData.append("name", data.title);
+        formData.append("description", data.description.trim());
+        formData.append('contactInfo', contactInfo);
+        formData.append('price', `${data.price}`)
+        // formData.append("photos", photos.join(','));
+        formData.append('items', item.join(','))
+        formData.append('dateOfExecution', date)
+        postOrder(formData);
+        console.log(formData)
     }
+
 
     return (
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
             <p className={styles.form__title}>Информация об оборудовании</p>
             <div className={styles.form__field}>
-                <div className={styles.form__input}>
+                <div className={errors.title ? `${styles.input__error} ${styles.form__input}` : styles.form__input}>
                     <label
                         htmlFor="title"
                         className={styles.label}
@@ -104,12 +156,13 @@ const Order = () => {
                 <p className={styles.form__info}>максимум 250 символов, минимум 5</p>
             </div>
             <div className={styles.form__field}>
-                <div className={styles.form__input}>
+                <div
+                    className={errors.description ? `${styles.input__error} ${styles.form__input}` : styles.form__input}>
                     <label
                         htmlFor="description"
                         className={styles.label}
                     >Описание <div
-                        className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
+                        className={errors.description ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
                     </label>
                     <textarea
                         id="description"
@@ -166,14 +219,18 @@ const Order = () => {
             </div>
             <div>
                 <div>
-                    {selectSize.map((tag) => (
+                    {item.map((tag) => (
                         <Tag
-                            key={tag} // Теперь в качестве ключа используется само значение тега
+                            key={tag.size} // Теперь в качестве ключа используется само значение тега
                             closable={true}
-                            onClose={() => handleTagClose(tag)} // Обработчик закрытия Tag
+                            onClose={() => handleTagClose(tag.size)} // Обработчик закрытия Tag
                             className={styles.tag}
                         >
-                            {tag}
+                            {(
+                                <div className={styles.tag__row}>
+                                    {tag.size}
+                                    <input className={styles.tag__input} type={'number'} value={tag.quantity}/>
+                                </div>)}
                         </Tag>
                     ))}
                 </div>
@@ -181,7 +238,7 @@ const Order = () => {
             </div>
 
             <div className={styles.form__field}>
-                <div className={styles.form__input}>
+                <div className={errors.price ? `${styles.input__error} ${styles.form__input}` : styles.form__input}>
                     <label
                         htmlFor="price"
                         className={styles.label}
@@ -214,21 +271,33 @@ const Order = () => {
                 />
             </div>
             <p className={styles.form__title}>Контактаця информация</p>
+            <div className={styles.row}>
+                <SelectButton
+                    text="Номер телефона"
+                    action={selectedButton == 'phone'}
+                    onClickAction={() => setSelectedButton('phone')}
+                />
+                <SelectButton
+                    text="Почта"
+                    action={selectedButton == 'email'}
+                    onClickAction={() => setSelectedButton('email')}
+                />
+            </div>
             <div className={styles.form__field}>
-                <div className={styles.form__input}>
-                    <label
-                        htmlFor="title"
-                        className={styles.label}
-                    >Название <div
-                        className={errors.title ? `${styles.label__star} ${styles.error}` : styles.error}>*</div>
+                <div
+                    className={errors[selectedButton] ? `${styles.input__error} ${styles.form__input}` : styles.form__input}>
+                    <label htmlFor={selectedButton} className={styles.label}>
+                        {selectedButton == 'phone' ? 'Номер телефеона' : 'Почта'}
+                        <div
+                            className={errors[selectedButton] ? `${styles.label__star} ${styles.error}` : styles.error}>*
+                        </div>
                     </label>
                     <input
-                        type="text"
-                        id="title"
-                        {...register('phone')}
-                        autoFocus={touchedFields.phone}
+                        type={selectedButton == 'phone' ? 'tel' : 'email'}
+                        id={selectedButton}
+                        {...register(selectedButton)}
                         className={styles.input}
-                        placeholder={"+996 xxx xxx xxx"}
+                        placeholder={selectedButton == 'phone' ? '+996 ххх ххх ххх' : 'marketing@utopiaworld.com.tr'}
                     />
                 </div>
             </div>
@@ -236,6 +305,12 @@ const Order = () => {
             <div className={styles.form__button}>
                 <ButtonComponent text={'Разместить Объявления'}/>
             </div>
+            <Modal
+                active={error}
+                setModalActive={handleToggle}
+                component={Alert} // Передача компонента модального окна для подтверждения выхода
+                componentProps={{forgot: true, setModalActive: handleToggle,}}
+            />
         </form>
     )
 }

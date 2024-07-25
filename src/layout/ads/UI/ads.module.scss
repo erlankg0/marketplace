@@ -61,6 +61,11 @@
   font-size: 1.6rem;
   line-height: 2.4rem;
   color: black;
+
+  &__error{
+    border: solid 1px red;
+    border-radius: 1rem;
+  }
 }
 
 .textarea {
@@ -78,6 +83,24 @@
   line-height: 1.6rem;
   padding: .5rem;
   background-color: white !important;
+
+  &__row {
+    width: 5rem;
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+    align-items: center;
+    justify-items: center;
+  }
+
+  &__input {
+    border-radius: .4rem;
+    border: solid 1px rgba(black, .3);
+    width: 100%;
+    cursor: text;
+    text-align: center;
+
+  }
 }
 
 .category {

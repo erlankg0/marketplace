@@ -1,18 +1,8 @@
-export interface IADS {
-    title: string,
-    description: string,
-    count: number | 0,
-    price: number,
-    phone?: string,
-    email?: string
-}
-
 export interface IOrder {
-    title: string;
+    name: string;
     description: string;
     price: number;
-    phone?: string,
-    email?: string,
+    contactInfo: string
 }
 
 

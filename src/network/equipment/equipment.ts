@@ -33,3 +33,16 @@ export const buyEquipment = async (id: number) => {
         throw error
     }
 }
+export const postEquipment = async (data: FormData) => {
+    try {
+        const response = await instance.post('equipment/add-equipment', data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            }
+        });
+        return response.data
+    } catch (error) {
+        console.error(error);
+        throw error
+    }
+}

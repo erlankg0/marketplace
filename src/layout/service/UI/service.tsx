@@ -9,13 +9,13 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import styles from "@layout/ads/UI/ads.module.scss";
 import {IService} from "@layout/service/service.ts";
 
-import {validationService} from "@validations/ads.ts";
+import {validationServiceOrOrder} from "@validations/ads.ts";
 import {postService} from "@network/service/service.ts";
 import {UploadFile} from "antd";
 
 
 const Service = () => {
-    const form = useForm<IService>({resolver: yupResolver(validationService)});
+    const form = useForm<IService>({resolver: yupResolver(validationServiceOrOrder)});
     const {register, formState: {errors}, handleSubmit} = form;
     // images upload
     const [previewOpen, setPreviewOpen] = useState(false);

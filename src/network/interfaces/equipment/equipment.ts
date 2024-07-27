@@ -11,3 +11,7 @@ export interface IEquipments {
     equipments: IEquipment[],
 }
 
+export interface IEquipmentsPost {
+    equipmentDto: string,
+    photos: object[];
+}

@@ -1,3 +1,5 @@
-export interface IEquipment {
-    setSelectedButton: (data: string) => void,
+import {IService} from "@layout/service/service.ts";
+
+export interface IEquipment extends IService {
+    quantity: number
 }

@@ -1,8 +1,9 @@
 import axios from 'axios';
-import {logout} from "@network/auth/auth.ts";
-import {useAddDispatch} from "@redux/hooks.ts";
-import {logout as logoutRedux} from "@redux/slices/auth.ts"
+import { logout } from "@network/auth/auth.ts";
+import store from "@redux/store"; // Import the Redux store directly
+import { logout as logoutRedux } from "@redux/slices/auth.ts"
 
+// Create axios instance
 export const instance = axios.create({
     baseURL: 'https://smarttailor.xyz/api/',
     headers: {
@@ -10,43 +11,53 @@ export const instance = axios.create({
     },
 });
 
-// Интерспетор для добавления Access токена к каждому запросу
+// Interceptor to add Access token to every request
 instance.interceptors.request.use((config) => {
-    console.log(localStorage.getItem('accessToken'))
     const token = localStorage.getItem('accessToken');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
 }, error => {
-    // Логика для выхода пользователя или обновления токенов
-    const dispatch = useAddDispatch();
-    dispatch(logoutRedux());
-    logout()
-    return Promise.reject(error)
+    return Promise.reject(error);
 });
 
-// Интерсептор для обработки ответа и обновления AccessToken при необходимости
+// Function to handle logout
+const handleLogout = () => {
+    store.dispatch(logoutRedux());
+    logout();
+};
+
+// Function to refresh token
+const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) {
+        throw new Error('No refresh token available');
+    }
+    try {
+        const { data } = await instance.post('auth/refresh-token', { token: refreshToken });
+        localStorage.setItem('accessToken', data.accessToken);
+        return data.accessToken;
+    } catch (err) {
+        console.error('Refresh token is invalid:', err);
+        handleLogout();
+        throw err;
+    }
+};
+
+// Interceptor to handle response and refresh AccessToken if needed
 instance.interceptors.response.use(
     response => response,
     async error => {
         const originalRequest = error.config;
         if (error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
-            const refreshToken = localStorage.getItem('refreshToken');
-            if (refreshToken) {
-                try {
-                    const {data} = await instance.post(`auth/refresh-token?refreshToken${refreshToken}`, {token: refreshToken});
-                    localStorage.setItem('accessToken', data.accessToken);
-                    instance.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
-                    return instance(originalRequest);
-                } catch (err) {
-                    console.error('Refresh token is invalid:', err);
-                    // Логика для выхода пользователя или обновления токенов
-                    const dispatch = useAddDispatch();
-                    dispatch(logoutRedux());
-                    logout()
-                }
+            try {
+                const newAccessToken = await refreshAccessToken();
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                return instance(originalRequest);
+            } catch (err) {
+                return Promise.reject(err);
             }
         }
         return Promise.reject(error);

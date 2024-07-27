@@ -61,10 +61,7 @@ const Marketplace = () => {
                     <div className={'line'}></div>
 
                     <Dropdown icon={shopping} title={'Маркетплейс'}
-                              tabs={[{title: "Оборудования", url: ""}, {
-                                  title: "Заказы",
-                                  url: 'order'
-                              }, {title: 'Разместить заказ', url: 'add-order'}]}/>
+                              tabs={[{title: "Оборудования", url: "equipments"}, {title: "Заказы", url: 'order'}, {title: "Услуги", url: "services"}, {title: 'Разместить заказ', url: 'add-order'}]}/>
 
 
                     <div className={'line'}></div>
@@ -85,7 +82,7 @@ const Marketplace = () => {
                 <div className={'line'}></div>
                 <Routes>
                     <Route path={'/profile'} element={<Profile/>}/>
-                    <Route path={'/'} element={<Cards setActiveModal={setModalActive}/>}/>
+                    <Route path={'/equipments'} element={<Cards setActiveModal={setModalActive}/>}/>
                     <Route path={'/order'} element={<Cards setActiveModal={setModalActive}/>}/>
                     <Route path={'/add-order'} element={<Ads/>}/>
                     <Route path={'/current-orders'} element={<Monitoring/>}/>

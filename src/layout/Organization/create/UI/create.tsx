@@ -7,6 +7,7 @@ import UploadImage from "@components/uploadImage/UI/upload.tsx";
 import {useState} from "react";
 import {Flex, UploadFile} from "antd";
 import ButtonComponent from "@components/button/UI/button.tsx";
+import {createOrganization} from "@network/organization/admin.ts";
 
 const Create = () => {
     const form = useForm<ICreate>({
@@ -20,6 +21,12 @@ const Create = () => {
     const onSubmit = (data: ICreate) => {
         console.log(data, fileList);
         // не работает так как есть ещё image
+        const formData = new FormData();
+        formData.append('organization', JSON.stringify(data))
+        fileList.forEach(image=> {
+            formData.append('image', image.originFileObj as File)
+        })
+        createOrganization(formData)
     }
     return (
         <section>
@@ -44,15 +51,15 @@ const Create = () => {
                                 <label
                                     className={styles.field__label}
                                     htmlFor={'title'}>Название организации <span
-                                    className={errors.title ? styles.field__error : ''}>*</span>
+                                    className={errors.name ? styles.field__error : ''}>*</span>
                                 </label>
                                 <input
                                     className={styles.field__input}
                                     placeholder={'Азиатские акулы'}
-                                    {...register('title')}
+                                    {...register('name')}
                                     id={'title'}
                                     maxLength={250}
-                                    autoFocus={touchedFields.title}
+                                    autoFocus={touchedFields.name}
                                 />
                             </div>
                             <p className={styles.field__helper}>максимум 250 символов, минимум 5 символов</p>

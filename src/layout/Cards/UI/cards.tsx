@@ -1,23 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./cards.module.scss";
 import Card from "@components/card/UI/card.tsx";
-import { ICards } from "@layout/Cards/interface.ts";
-import { getAllEquipment } from "@network/equipment/equipment.ts";
-import { useLocation } from "react-router";
-import { getAllServices } from "@network/service/service.ts";
-import { getAllOrders } from "@network/order/order.ts";
-import { IServiceData } from "@network/interfaces/response/service.ts";
-import { IOrderData } from "@network/interfaces/response/order.ts";
-import { IEquipmentData } from "@network/interfaces/response/equipments.ts";
+import {ICards} from "@layout/Cards/interface.ts";
+import {getAllEquipment} from "@network/equipment/equipment.ts";
+import {getAllServices} from "@network/service/service.ts";
+import {getAllOrders} from "@network/order/order.ts";
+import {IServiceData} from "@network/interfaces/response/service.ts";
+import {IOrderData} from "@network/interfaces/response/order.ts";
+import {IEquipmentData} from "@network/interfaces/response/equipments.ts";
 
 export interface Response<T> {
     data: T;
 }
 
-type Item = IServiceData | IOrderData | IEquipmentData;
+export type Item = IServiceData | IOrderData | IEquipmentData;
 
-const Cards: React.FC<ICards> = ({ setActiveModal }) => {
-    const path = useLocation().pathname.split('/').pop() as string;
+const Cards: React.FC<ICards> = ({ setActiveModal, url}) => {
     const [items, setItems] = useState<Item[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -36,19 +34,20 @@ const Cards: React.FC<ICards> = ({ setActiveModal }) => {
                     break;
                 default:
                     response = await getAllEquipment();
+                    break;
             }
             setItems(response.data);
         } catch (err) {
-            console.error('Error fetching items:', err); // Log the full error for debugging
+            console.error('Error fetching items:', err);
             setError('An error occurred while fetching data.');
         } finally {
             setLoading(false);
         }
-    };
+    }
 
     useEffect(() => {
-        handleGetItems(path);
-    }, [path]);
+        handleGetItems(url);
+    }, [url]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -60,8 +59,8 @@ const Cards: React.FC<ICards> = ({ setActiveModal }) => {
 
     return (
         <section className={styles.cards}>
-            {items.map((item) => (
-                <Card key={item.name} setActiveModal={setActiveModal} />
+            {items && items.map(item => (
+                <Card category={url} key={item.name} data={item} setActiveModal={setActiveModal} />
             ))}
         </section>
     );

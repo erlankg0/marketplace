@@ -1,4 +1,5 @@
-export interface ICard {
+export interface ICard<T> {
     setActiveModal: (active: boolean) => void,
-    price?: string
+    data: T,
+    category?: string;
 }

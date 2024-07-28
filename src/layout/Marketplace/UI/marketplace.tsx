@@ -22,6 +22,7 @@ import person from "@assets/icon/person.svg"
 import clipboard from "@assets/icon/clipboard.svg"
 import shopping from "@assets/icon/shopping.svg"
 import Nav from "@components/Nav/UI/nav.tsx";
+import {useLocation} from "react-router";
 
 
 const Marketplace = () => {
@@ -30,6 +31,7 @@ const Marketplace = () => {
     const handleLogout = () => {
         setLogoutModalActive(true); // Показать модальное окно для подтверждения выхода при нажатии на кнопку выхода
     };
+    const path = useLocation().pathname.split('/').pop() as string;
 
     return (
         <main className={styles.body}>
@@ -61,7 +63,7 @@ const Marketplace = () => {
                     <div className={'line'}></div>
 
                     <Dropdown icon={shopping} title={'Маркетплейс'}
-                              tabs={[{title: "Оборудования", url: "equipments"}, {title: "Заказы", url: 'order'}, {title: "Услуги", url: "services"}, {title: 'Разместить заказ', url: 'add-order'}]}/>
+                              tabs={[{title: "Оборудования", url: ""}, {title: "Заказы", url: 'order'}, {title: "Услуги", url: "services"}, {title: 'Разместить заказ', url: 'add-order'}]}/>
 
 
                     <div className={'line'}></div>
@@ -82,8 +84,9 @@ const Marketplace = () => {
                 <div className={'line'}></div>
                 <Routes>
                     <Route path={'/profile'} element={<Profile/>}/>
-                    <Route path={'/equipments'} element={<Cards setActiveModal={setModalActive}/>}/>
-                    <Route path={'/order'} element={<Cards setActiveModal={setModalActive}/>}/>
+                    <Route path={'/'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>
+                    <Route path={'/order'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>
+                    <Route path={'/services'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>
                     <Route path={'/add-order'} element={<Ads/>}/>
                     <Route path={'/current-orders'} element={<Monitoring/>}/>
                     <Route path={'/history-orders'} element={<History setModalActive={setModalActive}/>}/>

@@ -1,7 +1,4 @@
 import axios from 'axios';
-import { logout } from "@network/auth/auth.ts";
-import store from "@redux/store"; // Import the Redux store directly
-import { logout as logoutRedux } from "@redux/slices/auth.ts"
 
 // Create axios instance
 export const instance = axios.create({
@@ -22,11 +19,6 @@ instance.interceptors.request.use((config) => {
     return Promise.reject(error);
 });
 
-// Function to handle logout
-const handleLogout = () => {
-    store.dispatch(logoutRedux());
-    logout();
-};
 
 // Function to refresh token
 const refreshAccessToken = async () => {
@@ -35,12 +27,13 @@ const refreshAccessToken = async () => {
         throw new Error('No refresh token available');
     }
     try {
-        const { data } = await instance.post('auth/refresh-token', { token: refreshToken });
+        console.log('log')
+        const {data} = await instance.post(`auth/refresh-token?refreshToken=${refreshToken}`);
         localStorage.setItem('accessToken', data.accessToken);
+        console.log(data.accessToken)
         return data.accessToken;
     } catch (err) {
         console.error('Refresh token is invalid:', err);
-        handleLogout();
         throw err;
     }
 };
@@ -52,6 +45,7 @@ instance.interceptors.response.use(
         const originalRequest = error.config;
         if (error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
+            console.log('refresh')
             try {
                 const newAccessToken = await refreshAccessToken();
                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;

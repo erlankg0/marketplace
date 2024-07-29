@@ -1,5 +1,6 @@
 export interface ICard<T> {
-    setActiveModal: (active: boolean) => void,
+    modal?: boolean,
+    setModal?: () => void,
     data: T,
-    category?: string;
+    category: 'order' | 'equipment' | 'services' | string,
 }

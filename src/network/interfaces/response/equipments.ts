@@ -1,6 +1,6 @@
 export interface IEquipmentData {
-    equipmentId: number,
-    equipmentPhotoUrl: string,
+    id: number,
+    equipmentImageUrl: string,
     name: string,
     price: number,
     authorImageUrl: string,

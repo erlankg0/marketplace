@@ -1,11 +1,9 @@
-export interface IServiceData{
+export interface IData{
     id: number,
-    imagePath: string,
+    equipmentImageUrl: string,
     name: string,
     description: string,
     price: number,
-    authorImagePath: string,
-    authorName: string,
-    authorSurname: string,
-    patronymic: string
+    authorImageUrl: string,
+    authorFullName: string,
 }

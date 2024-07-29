@@ -1,11 +1,11 @@
 import styles from "./modal.module.scss";
-import { IModal } from "@components/modal/interface";
+import {IModal} from "@components/modal/interface";
 import closeImage from "@assets/icon/close.svg";
 
-const Modal = <T extends object>({ active, setModalActive, component: Component, componentProps }: IModal<T>) => {
+const Modal = <T extends object>({active, setModalActive, component: Component, componentProps}: IModal<T>) => {
     return (
         <div className={active ? `${styles.modal} ${styles.active}` : styles.modal}
-             onClick={() => setModalActive(false)}>
+             onClick={() => setModalActive()}>
 
             <div className={styles.modal__content} onClick={event => event.stopPropagation()}>
                 <div className={styles.modal__content__header}>
@@ -13,7 +13,7 @@ const Modal = <T extends object>({ active, setModalActive, component: Component,
                         src={closeImage}
                         alt="close button"
                         className={styles.modal__closeButton}
-                        onClick={() => setModalActive(false)}
+                        onClick={() => setModalActive()}
                     />
                 </div>
                 <Component {...componentProps} />

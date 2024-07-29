@@ -25,9 +25,9 @@ const Equipment = () => {
 
     const onSubmit = async (data: IEquipment) => {
         const formData = new FormData();
-        formData.append('equipmentDto', JSON.stringify(data));
+        formData.append('equipment', JSON.stringify(data));
         fileList.forEach((file) => {
-            formData.append('photos', file.originFileObj as File)
+            formData.append('images', file.originFileObj as File)
         })
         try {
             const response = await postEquipment(formData);

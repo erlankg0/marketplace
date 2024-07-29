@@ -16,7 +16,7 @@ export const postService = async (data: FormData) => {
 
 export const getAllServices = async (pageNo: number = 0, pageSize: number = 16) => {
     try {
-        const response = await instance.get(`service?pageNo=${pageNo}&pageSize=${pageSize}`);
+        const response = await instance.get(`service/get-all-services?pageNumber=${pageNo}&pageSize=${pageSize}`);
         return response.data
     } catch (error) {
         console.error(error);

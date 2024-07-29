@@ -5,17 +5,15 @@ import {ICards} from "@layout/Cards/interface.ts";
 import {getAllEquipment} from "@network/equipment/equipment.ts";
 import {getAllServices} from "@network/service/service.ts";
 import {getAllOrders} from "@network/order/order.ts";
-import {IServiceData} from "@network/interfaces/response/service.ts";
-import {IOrderData} from "@network/interfaces/response/order.ts";
-import {IEquipmentData} from "@network/interfaces/response/equipments.ts";
+import {IData} from "@network/interfaces/response/service.ts";
 
 export interface Response<T> {
     data: T;
 }
 
-export type Item = IServiceData | IOrderData | IEquipmentData;
+export type Item = IData;
 
-const Cards: React.FC<ICards> = ({ setActiveModal, url}) => {
+const Cards: React.FC<ICards> = ({url}) => {
     const [items, setItems] = useState<Item[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -36,7 +34,7 @@ const Cards: React.FC<ICards> = ({ setActiveModal, url}) => {
                     response = await getAllEquipment();
                     break;
             }
-            setItems(response.data);
+            setItems(response.data)
         } catch (err) {
             console.error('Error fetching items:', err);
             setError('An error occurred while fetching data.');
@@ -46,7 +44,7 @@ const Cards: React.FC<ICards> = ({ setActiveModal, url}) => {
     }
 
     useEffect(() => {
-        handleGetItems(url);
+        handleGetItems(url).then(r => console.log(r));
     }, [url]);
 
     if (loading) {
@@ -59,9 +57,11 @@ const Cards: React.FC<ICards> = ({ setActiveModal, url}) => {
 
     return (
         <section className={styles.cards}>
-            {items && items.map(item => (
-                <Card category={url} key={item.name} data={item} setActiveModal={setActiveModal} />
-            ))}
+            {items ? items.map(item => (
+                <Card category={url} key={item.name} data={item}/>
+            )):(
+                <h1>Ничего нету</h1>
+            )}
         </section>
     );
 };

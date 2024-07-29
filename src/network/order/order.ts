@@ -1,8 +1,8 @@
 import {instance} from "@network/network.ts";
 
-export const getAllOrders = async () => {
+export const getAllOrders = async (pageNumber: number = 0, pageSize: number = 18) => {
     try {
-        const response = await instance.get('order/get-all-orders');
+        const response = await instance.get(`order/get-all-orders?pageNumber=${pageNumber}&pageSize=${pageSize}`);
         return response.data
     } catch (error) {
         console.error(error);

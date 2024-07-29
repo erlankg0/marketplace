@@ -26,9 +26,9 @@ const Service = () => {
 
     const onSubmit = async (data: IService) => {
         const formData = new FormData();
-        formData.append('dto', JSON.stringify(data));
+        formData.append('service', JSON.stringify(data));
         fileList.forEach((file) => {
-            formData.append('photos', file.originFileObj as File)
+            formData.append('images', file.originFileObj as File)
         })
         try {
             const response = await postService(formData);

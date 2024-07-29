@@ -1,12 +1,12 @@
 import {instance} from "@network/network.ts";
 
-export const getAllEquipment = () => {
-    return instance.get('equipment/get-all-equipments');
+export const getAllEquipment = (pageNo: number = 0, pageSize: number = 18) => {
+    return instance.get(`equipment/get-all-equipments?pageNumber=${pageNo}&pageSize=${pageSize}`);
 }
 
 export const getEquipmentById = async (id: number) => {
     try {
-        const response = await instance.get(`equipment/get-by-id/${id}`)
+        const response = await instance.get(`equipment/get-equipment-detailed/${id}`)
         return response.data
     } catch (error) {
         console.error(error);

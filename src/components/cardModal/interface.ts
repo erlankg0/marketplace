@@ -1,5 +1,5 @@
 export interface ICardModal {
-    setAlert?: (active: boolean) => void,
     setModal: (active: boolean) => void,
-    price?: string,
+    id: number,
+    category: 'order' | 'equipment' | 'services' | string;
 }

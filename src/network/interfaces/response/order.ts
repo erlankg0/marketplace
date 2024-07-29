@@ -1,5 +1,5 @@
 export interface IOrderData {
-    orderId: number,
+    id: number,
     orderPhotoUrl: string,
     name: string,
     orderDescription: string,

@@ -30,7 +30,8 @@ const refreshAccessToken = async () => {
         console.log('log')
         const {data} = await instance.post(`auth/refresh-token?refreshToken=${refreshToken}`);
         localStorage.setItem('accessToken', data.accessToken);
-        console.log(data.accessToken)
+        localStorage.setItem('refreshToken', data.refreshToken)
+        console.log(data)
         return data.accessToken;
     } catch (err) {
         console.error('Refresh token is invalid:', err);

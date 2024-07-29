@@ -11,6 +11,7 @@ import Monitoring from "@layout/Monitoring/UI/monitoring.tsx";
 import History from "@layout/MonitoringHistory/UI/monitoring.tsx";
 import Profile from "@layout/Profile/UI/profile.tsx";
 import Organization from "@layout/Organization/organization/UI/organization.tsx";
+import HistoryList from "@layout/Profile/history/UI/history.tsx";
 
 import {useState} from "react";
 import {Route, Routes} from "react-router-dom";
@@ -20,7 +21,8 @@ import styles from "./marketplace.module.scss";
 import person from "@assets/icon/person.svg"
 import clipboard from "@assets/icon/clipboard.svg"
 import shopping from "@assets/icon/shopping.svg"
-import Nav from "@components/Nav/UI/nav.tsx";
+import organization from "@assets/icon/organization.svg";
+
 import {useLocation} from "react-router";
 
 
@@ -45,33 +47,49 @@ const Marketplace = () => {
                     <div className={'line'}></div>
 
                     <Dropdown icon={person} title={'Личный кабинет'}
-                              tabs={[{title: "Профиль", url: "profile"}, {
-                                  title: "Заказы",
-                                  url: 'order'
-                              }, {title: 'Разместить заказ', url: 'add-order'}]}/>
+                              tabs={
+                                  [
+                                      {title: "Профиль", url: "profile"},
+                                      {title: "Мои объявления", url: 'self-ads'},
+                                      {title: 'Мои покупки', url: 'self-buys'},
+                                      {title: 'История заказов', url: 'profiles/history-orders'}
+                                  ]
+                              }/>
 
                     <div className={'line'}></div>
 
                     <Dropdown icon={clipboard} title={'Заказы'}
-                              tabs={[{title: "Текущие заказы", url: "current-orders"}, {
-                                  title: "История заказов",
-                                  url: 'history-orders'
-                              }]}/>
+                              tabs={
+                                  [
+                                      {title: "Текущие заказы", url: "current-orders"},
+                                      {title: "История заказов", url: 'marketplace/history-orders'}
+                                  ]
+                              }/>
 
 
                     <div className={'line'}></div>
 
                     <Dropdown icon={shopping} title={'Маркетплейс'}
-                              tabs={[{title: "Оборудования", url: "equipment"}, {title: "Заказы", url: 'order'}, {title: "Услуги", url: "services"}, {title: 'Разместить заказ', url: 'add-order'}]}/>
+                              tabs={
+                                  [
+                                      {title: "Оборудования", url: "equipment"},
+                                      {title: "Заказы", url: 'order'},
+                                      {title: "Услуги", url: "services"},
+                                      {title: 'Разместить заказ', url: 'add-order'}
+                                  ]
+                              }/>
                     <div className={'line'}></div>
 
-                    <Nav url={'organization'} title={"Организация"} icon={shopping}/>
-                    <Nav url={'organization/admin'} title={"Админ"} icon={shopping}/>
-                    <Nav url={'organization/add-employer'} title={"Персонал"} icon={shopping}/>
-                    <Nav url={'organization/list-employer'} title={"Персонал Таблица"} icon={shopping}/>
-                    <Nav url={'organization/detail-employer'} title={"Персонал Детали"} icon={shopping}/>
-                    <Nav url={'organization/appointment'} title={"Персонал Должность"} icon={shopping}/>
-                    <Nav url={'organization/history-employer'} title={'История'} icon={shopping}/>
+                    <Dropdown icon={organization} title={'Оргазаниция'}
+                              tabs={
+                                  [
+                                      {title: "Админ", url: "organization/admin"},
+                                      {title: "Сотрудники", url: 'organization/add-employer'},
+                                      {title: "Должность", url: "organization/appointment"},
+                                      {title: 'История', url: "organization/history-employer"}
+                                  ]
+                              }/>
+                    <div className={'line'}></div>
 
                 </div>
                 <Logout active={!modalActive} onClick={handleLogout}/>
@@ -81,6 +99,7 @@ const Marketplace = () => {
                 <div className={'line'}></div>
                 <Routes>
                     <Route path={'/profile'} element={<Profile/>}/>
+                    <Route path={'/profiles/history-orders'} element={<HistoryList/>}/>
                     <Route path={'/equipment'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>
                     <Route path={'/order'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>
                     <Route path={'/services'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>

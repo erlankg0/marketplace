@@ -229,8 +229,8 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                 </div>
             </div>
             <Modal open={buy} footer={<></>} centered={true}
-                   bodyStyle={{display: 'flex', justifyContent: 'center', alignItems: 'center', maxWidth: '30rem'}}>
-                <Alert setModalActive={handleCloseModal} success={true}/>
+                   bodyStyle={{display: 'flex', justifyContent: 'center', alignItems: 'center', maxWidth: '30rem', margin: '0 auto'}}>
+                <Alert setModalActive={handleCloseModal} buy={true}/>
             </Modal>
         </section>
     );

@@ -1,18 +1,25 @@
-import {useEffect, useState} from "react";
-import styles from "./profile.module.scss";
+// react hooks - react forms
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {validateProfile} from "@validations/profile.ts";
-import {IProfile} from "@layout/Profile/interface.ts";
-import {IEditProfile} from "@network/interfaces/profile/profile.ts";
+import {useEffect, useState} from "react";
+
 import Ads from "@components/ads/UI/ads.tsx";
 import ButtonComponent from "@components/button/UI/button.tsx";
 import Modal from "@components/modal/UI/modal.tsx";
 import Alert from "@components/alert/UI/alert.tsx";
-import {getProfile, putProfile} from "@network/profile/profile.ts";
 import Person from "@components/person/UI/person.tsx";
+
 import {useAddDispatch, useAppSelector} from "@redux/hooks.ts";
 import {setProfile} from "@redux/slices/profile.ts";
+
+
+import {IProfile} from "@layout/Profile/interface.ts";
+import {IEditProfile} from "@network/interfaces/profile/profile.ts";
+import {getProfile, putProfile} from "@network/profile/profile.ts";
+
+import {validateProfile} from "@validations/profile.ts";
+
+import styles from "./profile.module.scss";
 
 const Profile = () => {
     const form = useForm<IProfile>({resolver: yupResolver(validateProfile)});
@@ -21,6 +28,7 @@ const Profile = () => {
     const [success, setSuccess] = useState<boolean>(false);
     const profile = useAppSelector(state => state.profile);
     const dispatch = useAddDispatch();
+
 
     const handlePutProfile = async (data: IEditProfile) => {
         console.log(data)
@@ -33,14 +41,14 @@ const Profile = () => {
         }
     };
 
-    const onSubmit = (data: IProfile) => {
+    const onSubmit = async (data: IProfile) => {
         const profileData = {
             phoneNumber: data.phoneNumber,
             name: data.name,
             surname: data.surname,
             patronymic: data.patronymic
         };
-        handlePutProfile(profileData);
+        await handlePutProfile(profileData);
         console.log(profileData);
     };
 
@@ -66,7 +74,7 @@ const Profile = () => {
 
     return (
         <section className={styles.profile}>
-            <Ads/>
+            {!profile.hasSubscription ? (<p>aa</p>) : (<Ads/>)}
             <section className={styles.profile__content}>
                 <Person image={profile.imagePath} fullName={`${profile.name} ${profile.surname} ${profile.patronymic}`}
                         module={modal} setModal={setModal}/>

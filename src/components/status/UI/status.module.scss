@@ -1,0 +1,31 @@
+.status {
+  text-align: center;
+  padding: .8rem 1.6rem;
+  font-size: 1.4rem;
+  line-height: 1.7rem;
+  font-weight: 500;
+  border-radius: 1rem;
+  color: black;
+  width: 50%;
+  max-width: 12rem;
+
+  &__send {
+    background-color: #FFD9A1;
+  }
+
+  &__done {
+    background-color: #E6FFA1;
+  }
+
+  &__processing {
+    background-color: #C5E6FF;
+  }
+
+  &__waiting {
+    background-color: #C3FFFB;
+  }
+
+  &__cheсking {
+    background-color: #C3FFFB;
+  }
+}

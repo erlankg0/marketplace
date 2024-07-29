@@ -1,4 +1,5 @@
 import styles from "./list.module.scss";
+import {NavLink} from "react-router-dom";
 
 const ListEmployers = () => {
     return (
@@ -20,7 +21,7 @@ const ListEmployers = () => {
 
                         <tr className={styles.table__column}>
                             <td className={`${styles.table__title} ${styles.table__paragraph}`}>
-                                Олейников Кирилл Кириллович
+                                <NavLink to={'detail-employer'}>Олейников Кирилл Кириллович</NavLink>
                             </td>
                         </tr>
 

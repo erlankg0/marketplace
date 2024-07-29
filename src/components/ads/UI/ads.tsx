@@ -1,11 +1,20 @@
 import styles from "./ads.module.scss";
 import gift from "@assets/icon/gift.png";
 import ButtonAds from "@components/button/UI/buttonAds.tsx";
+import {postSendSubscriptionRequest} from "@network/profile/profile.ts";
 
 const Ads = () => {
-    const handleOnClick = ()=>{
-        console.log('click');
+
+    const handleSendSubscribe = async () => {
+        try {
+            const response = await postSendSubscriptionRequest();
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+        }
     }
+
+
     return (
         <section className={styles.ads}>
             <div>
@@ -18,7 +27,7 @@ const Ads = () => {
                 <p className={styles.ads__description}>С вами свяжется наш администратор 😉</p>
             </div>
 
-            <ButtonAds onClick={handleOnClick} text={'Отправить запрос на подписку'}/>
+            <ButtonAds onClick={handleSendSubscribe} text={'Отправить запрос на подписку'}/>
         </section>
     )
 }

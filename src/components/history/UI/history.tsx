@@ -39,7 +39,6 @@ const HistoryCard: React.FC<IHistoryCard> = ({
                 <p className={styles.history__detail} onClick={handleSetModalActive}>Посмотреть детали</p>
             </div>
         </div>
-
     )
 }
 

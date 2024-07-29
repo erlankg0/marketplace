@@ -26,3 +26,6 @@ export const postImageProfile = async (formData: FormData) => {
     return response.data;
 }
 
+export const postSendSubscriptionRequest =   ()=>{
+    return instance.post('app-user/send-subscription-request')
+}

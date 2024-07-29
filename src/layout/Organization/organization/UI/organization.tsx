@@ -16,7 +16,7 @@ const Organization: React.FC<IOrganization> = ({setModalActive}) => {
             <Route path={'/admin'} element={<Admin setModalActive={setModalActive}/>}/>
             <Route path={'/add-employer'} element={<Add/>}/>
             <Route path={'/list-employer'} element={<ListEmployers/>}/>
-            <Route path={'/detail-employer'} element={<DetailEmployees setModalActive={setModalActive}/>}/>
+            <Route path={'admin/detail-employer'} element={<DetailEmployees setModalActive={setModalActive}/>}/>
             <Route path={'/appointment'} element={<AddAppointment/>}/>
             <Route path={'/history-employer'} element={<History setModalActive={setModalActive}/>}/>
         </Routes>

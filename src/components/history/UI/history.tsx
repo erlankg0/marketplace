@@ -9,6 +9,8 @@ const HistoryCard: React.FC<IHistoryCard> = ({
                                                  description,
                                                  date,
                                                  image,
+                                                 myAds,
+                                                 type
                                              }) => {
 
     const handleSetModalActive = () => {
@@ -16,6 +18,15 @@ const HistoryCard: React.FC<IHistoryCard> = ({
             setModalActive(true)
         }
     };
+    const dates = new Date(date);
+
+    // Format the date to '30 июля 2024'
+    const formattedDate = dates.toLocaleDateString('ru-RU', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+
 
     return (
         <div className={styles.history}>
@@ -23,19 +34,30 @@ const HistoryCard: React.FC<IHistoryCard> = ({
                 <img className={styles.history__image} src={image} alt={'card image'}/>
             </div>
             <div className={styles.history__text}>
-                <div className={styles.history__price}>
-                    <p>{price}</p>
-                    <p>сом</p>
-                </div>
+                {myAds ? (
+                    <div className={styles.history__price}>
+                        {type == 'EQUIPMENT' && (
+                            <p className={styles.history__equipment}>Оборудования</p>
+                        )}
+                        {type == 'SERVICE' && (
+                            <p className={styles.history__service}>Услуги</p>
+                        )}
+                        {type == 'ORDER' && (
+                            <p className={styles.history__service}>Заказы</p>
+                        )}
+                    </div>
+                ) : (
+                    <div className={styles.history__price}>
+                        <p>{price}</p>
+                        <p>сом</p>
+                    </div>
+                )}
+
                 <p className={styles.history__title}>{title}</p>
                 <p className={styles.history__description}>{description}</p>
             </div>
             <div className={styles.history__time}>
-                <p className={styles.history__date}>{`${date.toLocaleDateString('ru-Ru', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                })}`}</p>
+                <p className={styles.history__date}>{`${formattedDate}`}</p>
                 <p className={styles.history__detail} onClick={handleSetModalActive}>Посмотреть детали</p>
             </div>
         </div>

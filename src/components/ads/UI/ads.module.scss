@@ -6,6 +6,16 @@
   border-radius: 1rem;
   padding: 0 1rem;
 
+  &__flex {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    background-color: #FFCC00;
+    border-radius: 1rem;
+    padding: 1rem;
+    width: 25rem;
+  }
+
   &__image {
     object-fit: cover;
     object-position: center;
@@ -21,6 +31,17 @@
   &__description {
     font-size: 1.7rem;
     line-height: 2.55rem;
+  }
+
+  &__title {
+    font-size: 1.7rem;
+    line-height: 2.55rem;
+  }
+
+  &__date {
+    font-size: 1.4rem;
+    line-height: 2.1rem;
+    color: rgba(black, .5);
   }
 
 }

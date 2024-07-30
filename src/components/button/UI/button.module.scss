@@ -4,25 +4,37 @@
   background-color: $blue;
   border-radius: 1rem;
   border: none;
-
   padding: 2rem;
   width: 100%;
-
   text-align: center;
   color: $white;
-
   font-weight: 700;
   font-size: 1.4rem;
-
-  transition: all .3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 
   &:active {
-    transform: translateY(.5rem);
+    transform: translateY(0.5rem);
+  }
+
+  &.waiting {
+    background-color: transparent !important;
+    color: black;
+    border: solid 0.1rem black;
+    cursor: not-allowed;
+
+    .loader {
+      border: 0.2rem solid $white;
+      border-top: 0.2rem solid $blue;
+      border-radius: 50%;
+      width: 2rem;
+      height: 2rem;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
   }
 }
 
-.waiting{
-  background-color: transparent !important;
-  color: black;
-  border: solid .1rem black;
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

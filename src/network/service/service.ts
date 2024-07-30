@@ -2,7 +2,7 @@ import {instance} from "@network/network.ts";
 
 export const postService = async (data: FormData) => {
     try {
-        const response = await instance.post('service/add', data, {
+        const response = await instance.post('service/add-service', data, {
             headers: {
                 "Content-Type": "multipart/form-data",
             }

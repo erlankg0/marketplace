@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
-import styles from "./cardModal.module.scss";
-import Seller from "@components/seller/UI/seller.tsx";
 
+import {Modal} from "antd";
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {FreeMode, Navigation, Pagination, Thumbs} from 'swiper/modules';
 import SwiperCore from "swiper";
@@ -11,15 +10,16 @@ import 'swiper/css/pagination';
 import 'swiper/css/thumbs';
 import {Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react';
 
+import Alert from "@components/alert/UI/alert.tsx";
+import Seller from "@components/seller/UI/seller.tsx";
 import {ICardModal} from "@components/cardModal/interface.ts";
+import {ISize} from "@layout/ads/interface.ts";
+
 import {getByIdOrder} from "@network/order/order.ts";
 import {getServiceById} from "@network/service/service.ts";
 import {getEquipmentById} from "@network/equipment/equipment.ts";
-import {ISize} from "@layout/ads/interface.ts";
-import nitka from "@assets/images/nitki.jpg";
-import ni from "@assets/images/nitki02.jpg";
-import Alert from "@components/alert/UI/alert.tsx";
-import {Modal} from "antd";
+import {buyEquipment} from "@network/equipment/equipment.ts";
+import styles from "./cardModal.module.scss";
 
 SwiperCore.use([Navigation, Pagination, Thumbs, FreeMode]);
 
@@ -44,9 +44,12 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
     const [item, setItem] = useState<DetailItem | undefined>(undefined);
     const [buy, setBuy] = useState<boolean>(false);
 
-    const handleBuy = () => {
+    const handleBuy = async () => {
         setBuy(true);
         setModal(false);
+
+        const response = await buyEquipment(id);
+        console.log(response);
     };
 
     const handleCloseModal = () => {
@@ -123,7 +126,7 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
         return <div>Error: {error}</div>;
     }
 
-    const slides: string[] = item ? item.images : [ni, nitka];
+    const slides: string[] | undefined = item && item.images;
 
     return (
         <section className={styles.card}>
@@ -136,7 +139,7 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                             modules={[Navigation, Pagination, Thumbs, FreeMode]}
                             className="main-swiper"
                         >
-                            {item?.images.map((slide, index) => (
+                            {slides && slides.map((slide, index) => (
                                 <SwiperSlide key={index}>
                                     <img className={`${styles.card__slide} ${styles.card__image}`} src={slide}
                                          alt={`Slide ${index}`}/>
@@ -154,7 +157,7 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                             modules={[Thumbs, FreeMode]}
                             className="thumbs-swiper"
                         >
-                            {slides.map((slide, index) => (
+                            {slides && slides.map((slide, index) => (
                                 <SwiperSlide key={index}>
                                     <img className={styles.card__slider} src={slide} alt={`Thumb ${index}`}/>
                                 </SwiperSlide>
@@ -229,7 +232,13 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                 </div>
             </div>
             <Modal open={buy} footer={<></>} centered={true}
-                   bodyStyle={{display: 'flex', justifyContent: 'center', alignItems: 'center', maxWidth: '30rem', margin: '0 auto'}}>
+                   bodyStyle={{
+                       display: 'flex',
+                       justifyContent: 'center',
+                       alignItems: 'center',
+                       maxWidth: '30rem',
+                       margin: '0 auto'
+                   }}>
                 <Alert setModalActive={handleCloseModal} buy={true}/>
             </Modal>
         </section>

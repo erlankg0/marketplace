@@ -8,8 +8,8 @@
   padding: 1.6rem;
 
   &__icon {
-    width: 100%;
-    height: 100%;
+    width: 7.5rem;
+    height: 7.5rem;
     border-radius: 1rem;
   }
 
@@ -72,5 +72,24 @@
     color: #8E8E93;
     cursor: pointer;
   }
+
+  &__equipment, &__order, &__service {
+    font-size: 1.4rem;
+    line-height: 2rem;
+    font-weight: 400;
+  }
+
+  &__equipment {
+    color: #34C759 !important;
+  }
+
+  &__order {
+    color: #0085FF !important;
+  }
+
+  &__service{
+    color: #FF9500 !important;
+  }
+
 
 }

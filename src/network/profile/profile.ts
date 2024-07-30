@@ -26,6 +26,17 @@ export const postImageProfile = async (formData: FormData) => {
     return response.data;
 }
 
-export const postSendSubscriptionRequest =   ()=>{
+export const postSendSubscriptionRequest = () => {
     return instance.post('app-user/send-subscription-request')
+}
+
+export const myAds = async (pageNo: number = 0, pageSize: number = 18) => {
+    try {
+        const response = await instance.get(`account/my-advertisements/${pageNo}/${pageSize}`);
+        console.log(response);
+        return response;
+    } catch (error) {
+        console.error("Error fetching ads:", error);
+        throw error;
+    }
 }

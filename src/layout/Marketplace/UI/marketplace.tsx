@@ -24,6 +24,7 @@ import shopping from "@assets/icon/shopping.svg"
 import organization from "@assets/icon/organization.svg";
 
 import {useLocation} from "react-router";
+import MyADS from "@layout/Profile/myads/UI/myads.tsx";
 
 
 const Marketplace = () => {
@@ -100,6 +101,7 @@ const Marketplace = () => {
                 <Routes>
                     <Route path={'/profile'} element={<Profile/>}/>
                     <Route path={'/profiles/history-orders'} element={<HistoryList/>}/>
+                    <Route path={'/self-ads'} element={<MyADS/>}/>
                     <Route path={'/equipment'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>
                     <Route path={'/order'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>
                     <Route path={'/services'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>

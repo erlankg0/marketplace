@@ -17,6 +17,11 @@ export interface IEditProfile {
     phoneNumber: string
 }
 
-export interface IUploadPhoto {
-    file: string
+export interface IMyAds {
+    createdAt: Date,
+    description: string,
+    id: number,
+    imagePath: string,
+    name: string,
+    type: 'SERVICE' | 'EQUIPMENT' | 'ORDER',
 }

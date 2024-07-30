@@ -9,16 +9,18 @@ export const instance = axios.create({
 });
 
 // Interceptor to add Access token to every request
-instance.interceptors.request.use((config) => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+instance.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
     }
-    return config;
-}, error => {
-    return Promise.reject(error);
-});
-
+);
 
 // Function to refresh token
 const refreshAccessToken = async () => {
@@ -27,12 +29,9 @@ const refreshAccessToken = async () => {
         throw new Error('No refresh token available');
     }
     try {
-        console.log('log')
-        const {data} = await instance.post(`auth/refresh-token?refreshToken=${refreshToken}`);
-        localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken)
-        console.log(data)
-        return data.accessToken;
+        const response = await axios.post(`https://smarttailor.xyz/api/auth/refresh-token?refreshToken=${refreshToken}`);
+        localStorage.setItem('accessToken', response.data.accessToken);
+        return response.data.accessToken;
     } catch (err) {
         console.error('Refresh token is invalid:', err);
         throw err;
@@ -41,17 +40,18 @@ const refreshAccessToken = async () => {
 
 // Interceptor to handle response and refresh AccessToken if needed
 instance.interceptors.response.use(
-    response => response,
-    async error => {
+    (response) => response,
+    async (error) => {
         const originalRequest = error.config;
-        if (error.response.status === 401 && !originalRequest._retry) {
+
+        if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
-            console.log('refresh')
             try {
                 const newAccessToken = await refreshAccessToken();
                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
                 return instance(originalRequest);
             } catch (err) {
+                // Optionally handle refresh token expiration here, e.g., redirect to login
                 return Promise.reject(err);
             }
         }

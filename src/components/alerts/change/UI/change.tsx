@@ -24,6 +24,7 @@ const Change: React.FC = () => {
             try {
                 await postImageProfile(formData);
                 console.log("File uploaded successfully");
+                setError('')
             } catch (error) {
                 console.error("Error uploading file", error);
                 setError("Failed to upload the file. Please try again.");

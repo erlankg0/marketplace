@@ -11,7 +11,7 @@ export const getAllOrders = async (pageNumber: number = 0, pageSize: number = 18
 }
 export const getByIdOrder = async (id: number) => {
     try {
-        const response = await instance.get(`order/get-by-id/${id}`);
+        const response = await instance.get(`order/get-order-detailed/${id}`);
         return response.data
     } catch (error) {
         console.error(error)
@@ -35,4 +35,12 @@ export const postOrder = async (formData: FormData) => {
         }
     });
     return response.data;
+}
+export const requestToExecuteOrderById = async (id: number) => {
+    try {
+        const response = await instance.post(`order/send-request-to-execute-order/${id}`);
+        return response.data;
+    } catch (error) {
+        throw `Error: ${error}`;
+    }
 }

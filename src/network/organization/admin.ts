@@ -7,3 +7,12 @@ export const createOrganization = (formData: FormData) => {
         }
     });
 }
+
+export const getOrganization = async () => {
+    try {
+        const response = await instance.get('organization');
+        return response
+    } catch (error) {
+        throw `Error: ${error}`
+    }
+}

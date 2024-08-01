@@ -1,4 +1,4 @@
-export const formatDate = (dateString: string): string => {
+export const formatDate = (dateString: string| Date): string => {
     // Define an array for month names in Russian
     const monthNames = [
         'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',

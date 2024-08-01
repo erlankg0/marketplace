@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-
 import {Modal} from "antd";
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {FreeMode, Navigation, Pagination, Thumbs} from 'swiper/modules';
@@ -10,15 +9,14 @@ import 'swiper/css/pagination';
 import 'swiper/css/thumbs';
 import {Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react';
 
-import Alert from "@components/alert/UI/alert.tsx";
-import Seller from "@components/seller/UI/seller.tsx";
-import {ICardModal} from "@components/cardModal/interface.ts";
-import {ISize} from "@layout/ads/interface.ts";
-
-import {getByIdOrder} from "@network/order/order.ts";
-import {getServiceById} from "@network/service/service.ts";
-import {getEquipmentById} from "@network/equipment/equipment.ts";
-import {buyEquipment} from "@network/equipment/equipment.ts";
+import Alert from "@components/alert/UI/alert";
+import Seller from "@components/seller/UI/seller";
+import {ICardModal} from "@components/cardModal/interface";
+import {ISize} from "@layout/ads/interface";
+import {getByIdOrder, requestToExecuteOrderById} from "@network/order/order";
+import {getServiceById} from "@network/service/service";
+import {getEquipmentById, buyEquipment} from "@network/equipment/equipment";
+import {formatDate} from "@utils/formDate";
 import styles from "./cardModal.module.scss";
 
 SwiperCore.use([Navigation, Pagination, Thumbs, FreeMode]);
@@ -48,8 +46,28 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
         setBuy(true);
         setModal(false);
 
-        const response = await buyEquipment(id);
-        console.log(response);
+        try {
+            switch (category) {
+                case 'order':
+                    await requestToExecuteOrderById(id);
+                    setBuy(true)
+                    break;
+                case 'equipment':
+                    await buyEquipment(id)
+                    setBuy(true)
+
+                    break;
+                default:
+                    setBuy(false)
+                    break;
+            }
+
+        } catch (err) {
+            console.error('Error purchasing equipment:', err);
+            setError('An error occurred while processing the purchase.');
+        } finally {
+            setBuy(false);
+        }
     };
 
     const handleCloseModal = () => {
@@ -61,6 +79,7 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
             setLoading(true);
             setError(null);
             let response;
+
             switch (category) {
                 case 'order':
                     response = await getByIdOrder(id);
@@ -72,16 +91,16 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                         price: response.price,
                         contactInfo: response.contactInfo,
                         date: response.dateOfExecution,
-                        orderItems: response.orderItems,
                         authorImage: response.authorImage,
-                        authorName: response.fullName,
+                        authorName: response.authorFullName,
+                        orderItems: response.orderItems,
                     });
                     break;
                 case 'services':
                     response = await getServiceById(id);
                     setItem({
                         id: response.id,
-                        images: response.imagesPaths,
+                        images: response.serviceImages,
                         name: response.name,
                         description: response.description,
                         price: response.price,
@@ -90,7 +109,7 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                         authorName: `${response.authorName} ${response.authorSurname} ${response.patronymic}`,
                     });
                     break;
-                default:
+                case 'equipment':
                     response = await getEquipmentById(id);
                     setItem({
                         id: response.id,
@@ -105,6 +124,8 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                         authorName: response.fullName,
                     });
                     break;
+                default:
+                    throw new Error('Invalid category');
             }
         } catch (err) {
             console.error('Error fetching items:', err);
@@ -126,27 +147,25 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
         return <div>Error: {error}</div>;
     }
 
-    const slides: string[] | undefined = item && item.images;
+    const slides: string[] | undefined = item?.images;
 
     return (
         <section className={styles.card}>
             <div className={styles.card__gallery}>
                 <div className={styles.card__slide}>
-                    <div>
-                        <Swiper
-                            loop={true}
-                            thumbs={{swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null}}
-                            modules={[Navigation, Pagination, Thumbs, FreeMode]}
-                            className="main-swiper"
-                        >
-                            {slides && slides.map((slide, index) => (
-                                <SwiperSlide key={index}>
-                                    <img className={`${styles.card__slide} ${styles.card__image}`} src={slide}
-                                         alt={`Slide ${index}`}/>
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    </div>
+                    <Swiper
+                        loop={true}
+                        thumbs={{swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null}}
+                        modules={[Navigation, Pagination, Thumbs, FreeMode]}
+                        className="main-swiper"
+                    >
+                        {slides && slides.map((slide, index) => (
+                            <SwiperSlide key={index}>
+                                <img className={`${styles.card__slide} ${styles.card__image}`} src={slide}
+                                     alt={`Slide ${index}`}/>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
                     <div className={styles.card__slides}>
                         <Swiper
                             onSwiper={setThumbsSwiper}
@@ -171,9 +190,9 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                     <p className={styles.card__bread}>Маркетплейс/Инвентарь</p>
                     <div className={styles.row}>
                         <h3 className={styles.card__title}>{item?.name}</h3>
-                        {item?.date && <p className={styles.time}> Срок: {item.date.getDate()}</p>}
+                        {item?.date && <p className={styles.time}> Срок: {formatDate(item.date)}</p>}
                     </div>
-                    <p className={styles.card__price}>{`${item?.price || ''}`} сом</p>
+                    <p className={styles.card__price}>{`${item?.price || ''} сом`}</p>
                 </div>
                 <div className={styles.card__text}>
                     <div className={'line'}></div>
@@ -193,6 +212,13 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                                         Контакты Авторов
                                     </div>
                                 </Tab>
+                                {item?.orderItems && (
+                                    <Tab>
+                                        <div className={styles.content__tag}>
+                                            Размеры
+                                        </div>
+                                    </Tab>
+                                )}
                             </TabList>
                             <TabIndicator mt='-1rem' width="fit-content" height='1px' bg='#000000' borderRadius='1px'/>
                             <TabPanels>
@@ -206,21 +232,44 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                                 <TabPanel>
                                     <div className={styles.content}>
                                         {item?.contactInfo.includes('@') ? (
-                                            <a href="tel:+9965505557222" className={styles.content__text}>
-                                                Телефон: +996 550 555 7222
+                                            <a href={`mailto:${item.contactInfo}`} className={styles.content__text}>
+                                                Э-почта: {item.contactInfo}
                                             </a>
                                         ) : (
-                                            <a href="mailto:marketing@smarttrade.com.kg"
-                                               className={styles.content__text}>
-                                                Э-почта: marketing@smarttrade.com.kg
+                                            <a href={`tel:${item?.contactInfo}`} className={styles.content__text}>
+                                                Телефон: {item?.contactInfo}
                                             </a>
                                         )}
                                     </div>
                                 </TabPanel>
+                                {item?.orderItems && (
+                                    <TabPanel>
+                                        <div className={styles.content}>
+                                            <ul className={'column'}>
+                                                {item?.orderItems.map((orderItem, index) => (
+                                                    <li className={'row'} key={index}>
+                                                        <div>
+                                                            <p className={styles.content__text}>{index + 1}</p>
+                                                        </div>
+                                                        <div className={'row'}>
+                                                            <p className={styles.content__text}>
+                                                                Size: {orderItem.size}
+                                                            </p>
+                                                            <p className={styles.content__text}>
+                                                                Quantity: {orderItem.quantity}
+                                                            </p>
+                                                        </div>
+
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </TabPanel>
+                                )}
                             </TabPanels>
                         </Tabs>
                         {item?.quantity && (
-                            <p className={styles.content__count}>В наличие: <strong>{item?.quantity || ''}</strong></p>
+                            <p className={styles.content__count}>В наличии: <strong>{item.quantity}</strong></p>
                         )}
                     </div>
                     <button
@@ -231,7 +280,7 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                     </button>
                 </div>
             </div>
-            <Modal open={buy} footer={<></>} centered={true}
+            <Modal open={buy} footer={null} centered={true}
                    bodyStyle={{
                        display: 'flex',
                        justifyContent: 'center',

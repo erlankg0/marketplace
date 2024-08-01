@@ -1,7 +1,7 @@
 import {instance} from "@network/network.ts";
 
-export const getAllEquipment = (pageNo: number = 0, pageSize: number = 18) => {
-    return instance.get(`equipment/get-all-equipments?pageNumber=${pageNo}&pageSize=${pageSize}`);
+export const getAllEquipment = (pageNo: number = 0, pageSize: number = 18) =>  {
+    return instance.get(`equipment/get-all-equipments?pageNumber=${pageNo}&pageSize=${pageSize}`).then(response=> response.data);
 }
 
 export const getEquipmentById = async (id: number) => {

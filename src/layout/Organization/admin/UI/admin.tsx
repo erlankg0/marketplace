@@ -7,6 +7,7 @@ import {IHistoryCard} from "@components/history/interface.ts";
 import image from "@assets/images/nitki.jpg";
 import {IOrganization} from "@layout/Organization/interface.ts";
 import ListEmployers from "@layout/Organization/employers/list/UI/list.tsx";
+import {getOrganization} from "@network/organization/admin.ts";
 
 const Admin: React.FC<IOrganization> = ({setModalActive}) => {
     const [selectedButton, setSelectedButton] = useState<'current' | 'done' | 'staffers'>('current');
@@ -20,6 +21,18 @@ const Admin: React.FC<IOrganization> = ({setModalActive}) => {
         }
     }, []);
 
+    const handleGetOrganization = async () => {
+        try {
+            const data = await getOrganization();
+            console.log(data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        handleGetOrganization();
+    })
     const handleButtonClick = (button: 'current' | 'done' | 'staffers') => {
         setSelectedButton(button);
         localStorage.setItem(LOCAL_STORAGE_KEY, button);

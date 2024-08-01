@@ -52,6 +52,8 @@ instance.interceptors.response.use(
                 return instance(originalRequest);
             } catch (err) {
                 // Optionally handle refresh token expiration here, e.g., redirect to login
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
                 return Promise.reject(err);
             }
         }

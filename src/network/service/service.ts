@@ -26,7 +26,7 @@ export const getAllServices = async (pageNo: number = 0, pageSize: number = 16) 
 
 export const getServiceById = async (id: number) => {
     try {
-        const response = await instance.get(`service/${id}`);
+        const response = await instance.get(`service/get-service-detailed/${id}`);
         return response.data;
     } catch (error) {
         console.error(error);

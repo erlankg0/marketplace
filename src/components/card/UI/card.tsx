@@ -12,7 +12,7 @@ const Card: React.FC<ICard<IData>> = ({data, category}) => {
 
     return (
         <div className={styles.card}>
-            <img className={styles.card__image} src={data.equipmentImageUrl} alt="Card Image"/>
+            <img className={styles.card__image} src={data.imageUrl} alt="Card Image"/>
             <div className={styles.card__content}>
                 <div className={styles.card__text}>
                     <div className={styles.card__title}>

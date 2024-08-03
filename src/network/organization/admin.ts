@@ -10,9 +10,16 @@ export const createOrganization = (formData: FormData) => {
 
 export const getOrganization = async () => {
     try {
-        const response = await instance.get('organization');
-        return response
+        return await instance.get('organization')
     } catch (error) {
         throw `Error: ${error}`
+    }
+}
+
+export const sendInvitation = async (formData: FormData) => {
+    try {
+        return await instance.post('organization/send-invitation', formData);
+    } catch (error) {
+        throw `Error: ${error}`;
     }
 }

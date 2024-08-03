@@ -31,6 +31,7 @@ const Dropdown: React.FC<IDropdown> = ({tabs, icon, title}) => {
                 <ul className={styles.dropdown__list}>
                     {tabs.map((tab) => <li className={styles.dropdown__list_text}>
                         <NavLink
+                            key={tab.url}
                             to={tab.url}
                             className={({isActive, isPending}) =>
                                 isPending ? "" : isActive ? styles.active : ""

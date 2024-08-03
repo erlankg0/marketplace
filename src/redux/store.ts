@@ -4,12 +4,14 @@ import singUp from "@redux/slices/singup.ts";
 import auth from "@redux/slices/auth.ts";
 import profile from "@redux/slices/profile.ts";
 import equipment from "@redux/slices/equipments.ts";
+import search from "@redux/slices/search.ts";
 
 const rootReducer = combineReducers({
     singUp,
     auth,
     profile,
-    equipment
+    equipment,
+    search,
 })
 
 const store = configureStore({

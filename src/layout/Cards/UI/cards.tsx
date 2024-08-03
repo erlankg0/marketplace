@@ -6,11 +6,13 @@ import {getAllEquipment} from "@network/equipment/equipment";
 import {getAllServices} from "@network/service/service";
 import {getAllOrders} from "@network/order/order";
 import {IData} from "@network/interfaces/response/service";
+import {useAppSelector} from "@redux/hooks.ts";
 
-const Cards: React.FC<ICards> = ({ url }) => {
+const Cards: React.FC<ICards> = ({url}) => {
     const [items, setItems] = useState<IData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const searchText = useAppSelector(state => state.search.text);
 
     const handleGetItems = async (url: string) => {
         try {
@@ -26,13 +28,20 @@ const Cards: React.FC<ICards> = ({ url }) => {
                     response = await getAllServices();
                     break;
                 case 'equipment':
+                    if (searchText) {
+                        console.log(searchText);
+                    } else {
+                        response = await getAllEquipment();
+                        console.log(response)
+                    }
                     response = await getAllEquipment();
                     break;
                 default:
                     throw new Error('Invalid URL');
             }
-
-            setItems(response);
+            if (response){
+                setItems(response);
+            }
         } catch (err) {
             console.error('Error fetching items:', err);
             setError('An error occurred while fetching data.');
@@ -60,7 +69,7 @@ const Cards: React.FC<ICards> = ({ url }) => {
     return (
         <section className={styles.cards}>
             {items.map(item => (
-                <Card category={url} key={item.name} data={item} />
+                <Card category={url} key={item.id} data={item}/>
             ))}
         </section>
     );

@@ -1,20 +1,32 @@
 import styles from "@layout/Organization/styles/styles.module.scss";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {useForm} from "react-hook-form";
+import {useForm, Controller} from "react-hook-form";
 import {validationEmployers} from "@validations/employers.ts";
 import {IEmployer} from "@interfaces/employers.ts";
 import {Flex, Select} from "antd";
 import ButtonComponent from "@components/button/UI/button.tsx";
+import {sendInvitation} from "@network/organization/admin.ts";
 
 const Add = () => {
     const form = useForm<IEmployer>({
         resolver: yupResolver(validationEmployers)
-    })
-    const {register, handleSubmit, formState: {errors}} = form;
+    });
+    const {register, handleSubmit, control, formState: {errors}} = form;
+
     const onSubmit = (data: IEmployer) => {
         console.log(data);
-    }
-
+        const formData = new FormData();
+        const body = {
+            surname: data.lastName,
+            name: data.firstName,
+            patronymic: data.patronymicName,
+            email: data.email,
+            phoneNumber: data.phoneNumber,
+            position: "Администратор"
+        }
+        formData.append('employee', JSON.stringify(body));
+        sendInvitation(formData);
+    };
 
     return (
         <section>
@@ -27,9 +39,7 @@ const Add = () => {
                             <div className={styles.field}>
                                 <label htmlFor={'firstName'} className={styles.field__label}>
                                     Имя
-                                    <span
-                                        className={errors.firstName ? styles.field__error : ''}>*
-                                     </span>
+                                    <span className={errors.firstName ? styles.field__error : ''}>*</span>
                                 </label>
                                 <input
                                     {...register('firstName')}
@@ -41,9 +51,7 @@ const Add = () => {
                             <div className={styles.field}>
                                 <label htmlFor={'lastName'} className={styles.field__label}>
                                     Фамилия
-                                    <span
-                                        className={errors.firstName ? styles.field__error : ''}>*
-                                     </span>
+                                    <span className={errors.lastName ? styles.field__error : ''}>*</span>
                                 </label>
                                 <input
                                     {...register('lastName')}
@@ -103,17 +111,21 @@ const Add = () => {
                                 <label htmlFor={'appointment'} className={styles.field__label}>Должность
                                     <span className={errors.appointment ? styles.field__error : ''}>*</span>
                                 </label>
-                                <Select
-                                    maxCount={1}
-                                    placeholder={'Должность сотрудника'}
-                                    options={[
-                                        {value: '1', label: 'Швея'},
-                                        {value: '2', label: 'Закройщик'},
-                                        {value: '3', label: 'Утюжник'},
-                                        {value: '4', label: 'Технолог'},
-                                    ]}
-                                    {...register('appointment')}
-                                    id={'appointment'}
+                                <Controller
+                                    name="appointment"
+                                    control={control}
+                                    render={({field}) => (
+                                        <Select
+                                            {...field}
+                                            options={[
+                                                {value: '1', label: 'Швея'},
+                                                {value: '2', label: 'Закройщик'},
+                                                {value: '3', label: 'Утюжник'},
+                                                {value: '4', label: 'Технолог'},
+                                            ]}
+                                            placeholder={'Должность сотрудника'}
+                                        />
+                                    )}
                                 />
                             </div>
                         </div>
@@ -127,7 +139,7 @@ const Add = () => {
                 </Flex>
             </form>
         </section>
-    )
-}
+    );
+};
 
-export default Add
+export default Add;

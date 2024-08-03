@@ -44,3 +44,11 @@ export const requestToExecuteOrderById = async (id: number) => {
         throw `Error: ${error}`;
     }
 }
+
+export const getOrganizationOrders = async () => {
+    try {
+        return await instance.get('order/organization-orders')
+    } catch (error) {
+        throw `Error: ${error}`;
+    }
+}

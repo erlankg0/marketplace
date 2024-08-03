@@ -8,10 +8,14 @@ import image from "@assets/images/nitki.jpg";
 import {IOrganization} from "@layout/Organization/interface.ts";
 import ListEmployers from "@layout/Organization/employers/list/UI/list.tsx";
 import {getOrganization} from "@network/organization/admin.ts";
+import {IOrganizationData} from "@network/interfaces/organization/organization.tsx";
+import {formatDate} from "@utils/formDate.ts";
+import Create from "@layout/Organization/create/UI/create.tsx";
+import {getOrganizationOrders} from "@network/order/order.ts";
 
 const Admin: React.FC<IOrganization> = ({setModalActive}) => {
     const [selectedButton, setSelectedButton] = useState<'current' | 'done' | 'staffers'>('current');
-
+    const [organization, setOrganization] = useState<IOrganizationData>();
     const LOCAL_STORAGE_KEY = 'adminComponentSelectedButton';
 
     useEffect(() => {
@@ -24,7 +28,8 @@ const Admin: React.FC<IOrganization> = ({setModalActive}) => {
     const handleGetOrganization = async () => {
         try {
             const data = await getOrganization();
-            console.log(data);
+            setOrganization(data.data);
+            return data;
         } catch (error) {
             console.error(error);
         }
@@ -32,7 +37,8 @@ const Admin: React.FC<IOrganization> = ({setModalActive}) => {
 
     useEffect(() => {
         handleGetOrganization();
-    })
+        getOrganizationOrders();
+    }, [])
     const handleButtonClick = (button: 'current' | 'done' | 'staffers') => {
         setSelectedButton(button);
         localStorage.setItem(LOCAL_STORAGE_KEY, button);
@@ -67,60 +73,68 @@ const Admin: React.FC<IOrganization> = ({setModalActive}) => {
     ];
 
     return (
-        <section className={styles.admin}>
-            <div className={styles.admin__header}>
-                <Logo/>
-                <div className={styles.admin__info}>
-                    <h1 className={styles.admin__title}>SmartTrade</h1>
-                    <p className={styles.admin__description}>Мониторинг и управление швейным производством</p>
-                </div>
-                <div>
-                    <p className={styles.admin__created}>Создан 10 апреля 2024</p>
-                </div>
-            </div>
-            <div>
-                <div className={styles.row}>
-                    <SelectButton
-                        text="Текущие заказы"
-                        action={selectedButton === 'current'}
-                        onClickAction={() => handleButtonClick('current')}
-                    />
-                    <SelectButton
-                        text="Завершенные заказы"
-                        action={selectedButton === 'done'}
-                        onClickAction={() => handleButtonClick('done')}
-                    />
-                    <SelectButton
-                        text="Список сотрудников"
-                        action={selectedButton === 'staffers'}
-                        onClickAction={() => handleButtonClick('staffers')}
-                    />
-                </div>
+        <>
+            {organization ? (
+                <section className={styles.admin}>
+                    <div className={styles.admin__header}>
+                        <Logo/>
+                        <div>
+                            <img src={organization.imagePath}/>
+                        </div>
+                        <div className={styles.admin__info}>
+                            <h1 className={styles.admin__title}>{organization.name}</h1>
+                            <p className={styles.admin__description}>{organization.description}</p>
+                        </div>
+                        <div>
+                            <p className={styles.admin__created}>Создан: {formatDate(organization.createdAt)}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div className={styles.row}>
+                            <SelectButton
+                                text="Текущие заказы"
+                                action={selectedButton === 'current'}
+                                onClickAction={() => handleButtonClick('current')}
+                            />
+                            <SelectButton
+                                text="Завершенные заказы"
+                                action={selectedButton === 'done'}
+                                onClickAction={() => handleButtonClick('done')}
+                            />
+                            <SelectButton
+                                text="Список сотрудников"
+                                action={selectedButton === 'staffers'}
+                                onClickAction={() => handleButtonClick('staffers')}
+                            />
+                        </div>
 
-                <div className={styles.column}>
-                    {selectedButton === 'done' && (
-                        <>
-                            {data.map((history, index) => (
-                                <HistoryCard key={index} {...history} />
-                            ))}
-                        </>
-                    )}
+                        <div className={styles.column}>
+                            {selectedButton === 'done' && (
+                                <>
+                                    {data.map((history, index) => (
+                                        <HistoryCard key={index} {...history} />
+                                    ))}
+                                </>
+                            )}
 
-                    {selectedButton === 'current' && (
-                        <>
-                            {data.map((history, index) => (
-                                <HistoryCard key={index} {...history} />
-                            ))}
-                        </>
-                    )}
+                            {selectedButton === 'current' && (
+                                <>
+                                    {data.map((history, index) => (
+                                        <HistoryCard key={index} {...history} />
+                                    ))}
+                                </>
+                            )}
 
-                    {selectedButton === 'staffers' && (
-                        <ListEmployers/>
-                    )}
+                            {selectedButton === 'staffers' && (
+                                <ListEmployers/>
+                            )}
 
-                </div>
-            </div>
-        </section>
+                        </div>
+                    </div>
+                </section>
+            ) : (<Create/>)}
+
+        </>
     );
 }
 

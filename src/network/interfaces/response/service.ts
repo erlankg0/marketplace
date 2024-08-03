@@ -1,6 +1,6 @@
 export interface IData{
     id: number,
-    equipmentImageUrl: string,
+    imageUrl: string,
     name: string,
     description: string,
     price: number,

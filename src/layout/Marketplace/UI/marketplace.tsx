@@ -47,7 +47,7 @@ const Marketplace = () => {
 
                     <div className={'line'}></div>
 
-                    <Dropdown icon={person} title={'Личный кабинет'}
+                    <Dropdown key={'profile'} icon={person} title={'Личный кабинет'}
                               tabs={
                                   [
                                       {title: "Профиль", url: "profile"},
@@ -59,7 +59,7 @@ const Marketplace = () => {
 
                     <div className={'line'}></div>
 
-                    <Dropdown icon={clipboard} title={'Заказы'}
+                    <Dropdown key={'orders'} icon={clipboard} title={'Заказы'}
                               tabs={
                                   [
                                       {title: "Текущие заказы", url: "current-orders"},
@@ -70,7 +70,7 @@ const Marketplace = () => {
 
                     <div className={'line'}></div>
 
-                    <Dropdown icon={shopping} title={'Маркетплейс'}
+                    <Dropdown key={'marketplace'} icon={shopping} title={'Маркетплейс'}
                               tabs={
                                   [
                                       {title: "Оборудования", url: "equipment"},
@@ -81,7 +81,7 @@ const Marketplace = () => {
                               }/>
                     <div className={'line'}></div>
 
-                    <Dropdown icon={organization} title={'Оргазаниция'}
+                    <Dropdown key={'organization'} icon={organization} title={'Оргазаниция'}
                               tabs={
                                   [
                                       {title: "Админ", url: "organization/admin"},

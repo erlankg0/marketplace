@@ -4,5 +4,7 @@ export interface IButton {
     action?: boolean,
     onClickAction?: () => void,
     onClick?: () => void,
-    waiting?: boolean
+    waiting?: boolean,
+    color?: string,
+    type?: "submit" | 'button',
 }

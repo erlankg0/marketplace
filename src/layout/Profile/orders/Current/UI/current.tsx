@@ -1,11 +1,11 @@
 import SelectButton from "@components/button/UI/selectButton.tsx";
 import {useEffect, useState} from "react";
-import styles from "./myads.module.scss";
+import styles from "./current.module.scss";
 import {myAds} from "@network/profile/profile.ts";
 import {IMyAds} from "@network/interfaces/profile/profile.ts";
 import HistoryCard from "@components/history/UI/history.tsx";
 
-const MyADS = () => {
+const CurrentOrders = () => {
     const [selectedButton, setSelectedButton] = useState<'ALL' | 'ORDER' | 'SERVICE' | 'EQUIPMENT'>('ALL');
     const [items, setItems] = useState<IMyAds[]>([]);
     const LOCAL_STORAGE_KEY = 'myAdsListSelectedButton';
@@ -74,12 +74,14 @@ const MyADS = () => {
                         {
                             handleFilterItems().map(item => (
                                     <HistoryCard
+                                        id={item.id}
                                         type={item.type}
                                         myAds={true}
                                         date={item.createdAt}
                                         title={item.name}
                                         description={item.description}
                                         image={item.imagePath}
+                                        category={item.type}
                                     />
                                 )
                             )
@@ -106,4 +108,4 @@ const MyADS = () => {
         </section>
     )
 }
-export default MyADS;
+export default CurrentOrders;

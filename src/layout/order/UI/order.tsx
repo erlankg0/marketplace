@@ -6,7 +6,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 
 import styles from "@layout/ads/UI/ads.module.scss";
 import {validationServiceOrOrder} from "@validations/ads.ts";
-import {IOrder, ISize} from "@layout/ads/interface.ts";
+import {IOrder, ISize} from "@network/interfaces/order/order.ts";
 import {CustomTagProps} from 'rc-select/lib/BaseSelect';
 import DateSelect from "@components/date/UI/date.tsx";
 import SelectButton from "@components/button/UI/selectButton.tsx";

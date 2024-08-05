@@ -29,7 +29,7 @@ const Dropdown: React.FC<IDropdown> = ({tabs, icon, title}) => {
             </div>
             {isOpen && (
                 <ul className={styles.dropdown__list}>
-                    {tabs.map((tab) => <li className={styles.dropdown__list_text}>
+                    {tabs.map((tab) => <li key={tab.url} className={styles.dropdown__list_text}>
                         <NavLink
                             key={tab.url}
                             to={tab.url}

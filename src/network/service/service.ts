@@ -36,10 +36,18 @@ export const getServiceById = async (id: number) => {
 
 export const deleteService = async (id: number) => {
     try {
-        const response = await instance.delete(`service/delete/${id}`);
+        const response = await instance.delete(`service/delete-service/${id}`);
         return response.data;
     } catch (error) {
         console.error(error);
         throw error
+    }
+}
+
+export const hideService = async (id: number) => {
+    try {
+        return await instance.get(`service/hide/${id}`)
+    } catch (error) {
+        throw `Error: ${error}`;
     }
 }

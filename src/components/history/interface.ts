@@ -8,4 +8,6 @@ export interface IHistoryCard {
     date: Date,
     myAds?: boolean,
     type?: 'SERVICE' | 'EQUIPMENT' | 'ORDER',
+    id?: number,
+    category?: 'ORDER' | 'SERVICE' | 'EQUIPMENT'| undefined,
 }

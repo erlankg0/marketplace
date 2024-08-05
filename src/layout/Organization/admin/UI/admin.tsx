@@ -77,10 +77,13 @@ const Admin: React.FC<IOrganization> = ({setModalActive}) => {
             {organization ? (
                 <section className={styles.admin}>
                     <div className={styles.admin__header}>
-                        <Logo/>
-                        <div>
-                            <img src={organization.imagePath}/>
-                        </div>
+                        {!organization.imagePath ? (
+                            <Logo/>
+                        ) : (
+                            <div className={styles.admin__logo}>
+                                <img src={organization.imagePath}/>
+                            </div>
+                        )}
                         <div className={styles.admin__info}>
                             <h1 className={styles.admin__title}>{organization.name}</h1>
                             <p className={styles.admin__description}>{organization.description}</p>

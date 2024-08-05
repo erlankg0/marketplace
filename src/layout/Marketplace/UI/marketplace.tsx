@@ -24,8 +24,8 @@ import shopping from "@assets/icon/shopping.svg"
 import organization from "@assets/icon/organization.svg";
 
 import {useLocation} from "react-router";
-import MyADS from "@layout/Profile/myads/UI/myads.tsx";
-
+import CurrentOrders from "@layout/Profile/orders/Current/UI/current.tsx";
+import DetailOrder from "@layout/Profile/orders/Detail/UI/detail.tsx";
 
 const Marketplace = () => {
     const [modalActive, setModalActive] = useState<boolean>(false)
@@ -101,7 +101,8 @@ const Marketplace = () => {
                 <Routes>
                     <Route path={'/profile'} element={<Profile/>}/>
                     <Route path={'/profiles/history-orders'} element={<HistoryList/>}/>
-                    <Route path={'/self-ads'} element={<MyADS/>}/>
+                    <Route path={'/self-ads'} element={<CurrentOrders/>}/>
+                    <Route path={'/self-detail/:id/:category'} element={<DetailOrder/>}/>
                     <Route path={'/equipment'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>
                     <Route path={'/order'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>
                     <Route path={'/services'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>

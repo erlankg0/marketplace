@@ -25,3 +25,10 @@ export interface IMyAds {
     name: string,
     type: 'SERVICE' | 'EQUIPMENT' | 'ORDER',
 }
+
+export interface IDetailAds {
+    name: string,
+    description: string,
+    price: number,
+    contactInfo: string
+}

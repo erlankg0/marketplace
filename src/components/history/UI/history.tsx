@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./history.module.scss";
 import {IHistoryCard} from "@components/history/interface.ts";
+import {NavLink} from "react-router-dom";
 
 const HistoryCard: React.FC<IHistoryCard> = ({
                                                  setModalActive,
@@ -10,7 +11,9 @@ const HistoryCard: React.FC<IHistoryCard> = ({
                                                  date,
                                                  image,
                                                  myAds,
-                                                 type
+                                                 type,
+                                                 id,
+                                                 category
                                              }) => {
 
     const handleSetModalActive = () => {
@@ -58,7 +61,10 @@ const HistoryCard: React.FC<IHistoryCard> = ({
             </div>
             <div className={styles.history__time}>
                 <p className={styles.history__date}>{`${formattedDate}`}</p>
-                <p className={styles.history__detail} onClick={handleSetModalActive}>Посмотреть детали</p>
+                {id && category ? (
+                    <NavLink className={styles.history__detail} to={`/marketplace/self-detail/${id}/${category}`}>Посмотреть
+                        детали</NavLink>
+                ) : (<p className={styles.history__detail} onClick={handleSetModalActive}>Посмотреть детали</p>)}
             </div>
         </div>
     )

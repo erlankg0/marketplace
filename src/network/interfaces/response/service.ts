@@ -6,4 +6,5 @@ export interface IData{
     price: number,
     authorImageUrl: string,
     authorFullName: string,
+    images?: string[],
 }

@@ -18,7 +18,6 @@ export const getByIdOrder = async (id: number) => {
         throw error;
     }
 }
-
 export const deleteOrderById = async (id: number) => {
     try {
         const response = await instance.delete(`order/delete-order/${id}`)
@@ -28,6 +27,15 @@ export const deleteOrderById = async (id: number) => {
         throw error
     }
 }
+
+export const hideOrder = async (id: number) => {
+    try {
+        return await instance.get(`order/hide/${id}`)
+    } catch (error) {
+        throw `Error: ${error}`
+    }
+}
+
 export const postOrder = async (formData: FormData) => {
     const response = await instance.post('order/add-order', formData, {
         headers: {

@@ -3,8 +3,16 @@ import success from "@assets/emoji/sucess.jpeg";
 import ButtonComponent from "@components/button/UI/button.tsx";
 import {IAlert} from "@components/alert/interface.ts";
 import React from "react";
+import {useNavigate} from "react-router-dom";
 
 const Subscribe: React.FC<IAlert> = ({setModalActive}) => {
+    const navigate = useNavigate();
+    const handleSuccess = () => {
+        setModalActive(false);
+        navigate(-1);
+
+    }
+
     return (
         <div className={styles.subscribe}>
             <div className={styles.subscribe__head}>
@@ -21,7 +29,7 @@ const Subscribe: React.FC<IAlert> = ({setModalActive}) => {
                 </div>
             </div>
             <div className={styles.subscribe__footer}>
-                <ButtonComponent onClick={()=> setModalActive(false)} text={'Понятно!'}/>
+                <ButtonComponent onClick={() => handleSuccess()} text={'Понятно!'}/>
             </div>
         </div>
 

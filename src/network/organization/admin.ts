@@ -10,7 +10,7 @@ export const createOrganization = (formData: FormData) => {
 
 export const getOrganization = async () => {
     try {
-        return await instance.get('organization')
+        return await instance.get('organization/get-organization-detailed')
     } catch (error) {
         throw `Error: ${error}`
     }

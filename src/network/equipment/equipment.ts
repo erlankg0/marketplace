@@ -4,10 +4,10 @@ export const getAllEquipment = (pageNo: number = 0, pageSize: number = 18) => {
     return instance.get(`equipment/get-all-equipments?pageNumber=${pageNo}&pageSize=${pageSize}`).then(response => response.data);
 }
 
-export const getEquipmentById = async (id: number) => {
+export const getEquipmentById = async (id: number| string) => {
     try {
         const response = await instance.get(`equipment/get-equipment-detailed/${id}`)
-        return response.data.advertisement
+        return response.data
     } catch (error) {
         console.error(error);
         throw error

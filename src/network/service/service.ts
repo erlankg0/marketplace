@@ -24,7 +24,7 @@ export const getAllServices = async (pageNo: number = 0, pageSize: number = 16) 
     }
 }
 
-export const getServiceById = async (id: number) => {
+export const getServiceById = async (id: number | string) => {
     try {
         const response = await instance.get(`service/get-service-detailed/${id}`);
         return response.data;

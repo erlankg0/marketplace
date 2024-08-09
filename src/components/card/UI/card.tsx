@@ -19,7 +19,7 @@ const Card: React.FC<ICard<IData>> = ({data, category}) => {
                         <p className={styles.title}>{data.name}</p>
                         <p className={styles.price}>{data.price} сом</p>
                     </div>
-                    <Seller fullName={''} image={''}/>
+                    <Seller fullName={data.authorFullName} image={data.authorImageUrl}/>
                     <p className={styles.description}>
                         {data.description}
                     </p>

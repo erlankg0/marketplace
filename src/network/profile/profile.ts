@@ -32,7 +32,7 @@ export const postSendSubscriptionRequest = () => {
 
 export const myAds = async (pageNo: number = 0, pageSize: number = 18) => {
     try {
-        const response = await instance.get(`account/my-advertisements/${pageNo}/${pageSize}`);
+        const response = await instance.get(`account/my-advertisements?pageNumber=${pageNo}&pageSize=${pageSize}`);
         console.log(response);
         return response;
     } catch (error) {

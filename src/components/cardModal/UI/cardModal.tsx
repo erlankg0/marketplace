@@ -12,7 +12,7 @@ import {Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/
 import Alert from "@components/alert/UI/alert";
 import Seller from "@components/seller/UI/seller";
 import {ICardModal} from "@components/cardModal/interface";
-import {ISize} from "@layout/ads/interface";
+import {ISize} from "@network/interfaces/order/order.ts";
 import {getByIdOrder, requestToExecuteOrderById} from "@network/order/order";
 import {getServiceById} from "@network/service/service";
 import {getEquipmentById, buyEquipment} from "@network/equipment/equipment";
@@ -20,6 +20,11 @@ import {formatDate} from "@utils/formDate";
 import styles from "./cardModal.module.scss";
 
 SwiperCore.use([Navigation, Pagination, Thumbs, FreeMode]);
+
+interface ICandidates {
+    name: string,
+    description: string
+}
 
 interface DetailItem {
     id: number;
@@ -33,6 +38,7 @@ interface DetailItem {
     authorImage: string;
     orderItems?: ISize[];
     quantity?: number;
+    orderCandidates?: ICandidates[],
 }
 
 const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
@@ -65,8 +71,6 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
         } catch (err) {
             console.error('Error purchasing equipment:', err);
             setError('An error occurred while processing the purchase.');
-        } finally {
-            setBuy(false);
         }
     };
 
@@ -94,10 +98,14 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                         authorImage: response.authorImage,
                         authorName: response.authorFullName,
                         orderItems: response.orderItems,
+                        orderCandidates: response.orderCandidates,
                     });
+                    console.log({...response})
                     break;
                 case 'services':
                     response = await getServiceById(id);
+                    console.log(response);
+
                     setItem({
                         id: response.id,
                         images: response.serviceImages,
@@ -105,27 +113,31 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                         description: response.description,
                         price: response.price,
                         contactInfo: response.contactInfo,
-                        authorImage: response.authorImagePath,
-                        authorName: `${response.authorName} ${response.authorSurname} ${response.patronymic}`,
+                        authorImage: response.authorImage,
+                        authorName: response.authorFullName,
+                        orderCandidates: response?.orderCandidates,
                     });
                     break;
                 case 'equipment':
                     response = await getEquipmentById(id);
-                    setItem({
-                        id: response.id,
-                        images: response.equipmentImages,
-                        name: response.name,
-                        description: response.description,
-                        price: response.price,
-                        contactInfo: response.contactInfo,
-                        date: response.dateOfExecution,
-                        orderItems: response.orderItems,
-                        authorImage: response.authorImage,
-                        authorName: response.fullName,
-                    });
+                    if (response) {
+                        setItem({
+                            id: response.id,
+                            images: response.equipmentImages,
+                            name: response.name,
+                            description: response.description,
+                            price: response.price,
+                            contactInfo: response.contactInfo,
+                            date: response.dateOfExecution,
+                            orderItems: response.orderItems,
+                            authorImage: response.authorImage,
+                            authorName: response.authorFullName,
+                            quantity: response.quantity
+                        });
+                    }
                     break;
                 default:
-                    throw new Error('Invalid category');
+                    new Error('Invalid category');
             }
         } catch (err) {
             console.error('Error fetching items:', err);
@@ -136,7 +148,7 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
     };
 
     useEffect(() => {
-        handleGetData();
+        handleGetData()
     }, [id, category]);
 
     if (loading) {
@@ -197,7 +209,7 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                 <div className={styles.card__text}>
                     <div className={'line'}></div>
                     <div>
-                        <Seller fullName={item?.authorName || ''} image={item?.authorImage || ''}/>
+                        <Seller fullName={item?.authorName} image={item?.authorImage}/>
                     </div>
                     <div className={styles.content}>
                         <Tabs position='relative' variant='unstyled'>

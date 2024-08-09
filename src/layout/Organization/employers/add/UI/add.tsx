@@ -3,15 +3,40 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import {useForm, Controller} from "react-hook-form";
 import {validationEmployers} from "@validations/employers.ts";
 import {IEmployer} from "@interfaces/employers.ts";
-import {Flex, Select} from "antd";
+import {Flex, Modal, Select} from "antd";
 import ButtonComponent from "@components/button/UI/button.tsx";
 import {sendInvitation} from "@network/organization/admin.ts";
+import {getAllPosition} from "@network/position/position.ts";
+import {useEffect, useState} from "react";
+import {IPosition} from "@network/interfaces/position/position.ts";
+import Alert from "@components/alert/UI/alert.tsx";
 
 const Add = () => {
     const form = useForm<IEmployer>({
         resolver: yupResolver(validationEmployers)
     });
     const {register, handleSubmit, control, formState: {errors}} = form;
+    const [positions, setPositions] = useState<IPosition[]>([]);
+    const [success, setSuccess] = useState<boolean>(false); // Состояние нового модального окна для подтверждения выхода
+
+    const handleToggleModal = () => {
+        setSuccess(!success);
+    }
+
+    useEffect(() => {
+        const handleGetPositions = async () => {
+            try {
+                const response = await getAllPosition();
+                console.log(positions);
+                setPositions(response.data)
+                handleToggleModal();
+            } catch {
+                setPositions([])
+                handleToggleModal();
+            }
+        }
+        handleGetPositions();
+    }, [])
 
     const onSubmit = (data: IEmployer) => {
         console.log(data);
@@ -117,12 +142,10 @@ const Add = () => {
                                     render={({field}) => (
                                         <Select
                                             {...field}
-                                            options={[
-                                                {value: '1', label: 'Швея'},
-                                                {value: '2', label: 'Закройщик'},
-                                                {value: '3', label: 'Утюжник'},
-                                                {value: '4', label: 'Технолог'},
-                                            ]}
+                                            options={[...positions.map(position => ({
+                                                value: position.positionName,
+                                                label: position.positionName
+                                            }))]}
                                             placeholder={'Должность сотрудника'}
                                         />
                                     )}
@@ -138,6 +161,16 @@ const Add = () => {
                     </div>
                 </Flex>
             </form>
+            <Modal open={success} footer={null} centered={true}
+                   bodyStyle={{
+                       display: 'flex',
+                       justifyContent: 'center',
+                       alignItems: 'center',
+                       maxWidth: '30rem',
+                       margin: '0 auto'
+                   }}>
+                <Alert setModalActive={handleToggleModal} success={success}/>
+            </Modal>
         </section>
     );
 };

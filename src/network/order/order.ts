@@ -9,7 +9,7 @@ export const getAllOrders = async (pageNumber: number = 0, pageSize: number = 18
         throw error;
     }
 }
-export const getByIdOrder = async (id: number) => {
+export const getByIdOrder = async (id: number | string) => {
     try {
         const response = await instance.get(`order/get-order-detailed/${id}`);
         return response.data

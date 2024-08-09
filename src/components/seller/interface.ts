@@ -1,4 +1,4 @@
 export interface ISeller {
-    fullName: string,
-    image: string
+    fullName?: string,
+    image?: string
 }

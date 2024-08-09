@@ -92,12 +92,14 @@ const CurrentOrders = () => {
                         {
                             handleFilterItems(selectedButton).map(item => (
                                     <HistoryCard
+                                        id={item.id}
                                         type={item.type}
                                         myAds={true}
                                         date={item.createdAt}
                                         title={item.name}
                                         description={item.description}
                                         image={item.imagePath}
+                                        category={item.type}
                                     />
                                 )
                             )

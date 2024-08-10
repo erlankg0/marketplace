@@ -1,7 +1,7 @@
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useEffect, useState} from "react";
-import {UploadFile} from "antd";
+import {Modal, UploadFile} from "antd";
 
 import UploadImage from "@components/uploadImage/UI/upload.tsx";
 import SelectButton from "@components/button/UI/selectButton.tsx";
@@ -10,12 +10,13 @@ import styles from "@layout/ads/UI/ads.module.scss";
 
 import {validationServiceOrOrder} from "@validations/ads.ts";
 import {useParams} from "react-router";
-import {deleteOrderById, getByIdOrder, hideOrder} from "@network/order/order.ts";
+import {deleteOrderById, getByIdOrder, hideOrder, postAssignOrganizationToOrder} from "@network/order/order.ts";
 import {IData} from "@network/interfaces/response/service.ts";
 import {deleteService, getServiceById, hideService} from "@network/service/service.ts";
 import {deleteEquipment, getEquipmentById, hideEquipment} from "@network/equipment/equipment.ts";
 import {IDetailAds} from "@network/interfaces/profile/profile.ts";
 import {useNavigate} from "react-router-dom";
+import Alert from "@components/alert/UI/alert.tsx";
 
 const DetailOrder = () => {
     const [data, setData] = useState<IData>();
@@ -35,6 +36,11 @@ const DetailOrder = () => {
     const [selectedCategory, setSelectedCategory] = useState<'equipment' | 'order' | 'service'>('equipment');
     const LOCAL_STORAGE_KEY = `myOrderDetail`;
 
+    const [success, setSuccess] = useState<boolean>(false); // Состояние нового модального окна для подтверждения выхода
+
+    const handleToggleModal = () => {
+        setSuccess(!success);
+    }
     const handleSelectCategory = (category: 'equipment' | 'order' | 'service') => {
         setSelectedCategory(category);
         localStorage.setItem(LOCAL_STORAGE_KEY, category);
@@ -55,7 +61,7 @@ const DetailOrder = () => {
             if (id) {
                 switch (category) {
                     case 'ORDER':
-                        response = await getByIdOrder(+id);
+                        response = await getByIdOrder(+id, true);
                         break;
                     case 'SERVICE':
                         response = await getServiceById(+id);
@@ -74,11 +80,9 @@ const DetailOrder = () => {
                     price: response.price,
                 });
             } else {
-                throw new Error('Error: Ошибка нету такого ID');
+                new Error('Error: Ошибка нету такого ID');
             }
-            console.log(response);
         } catch (err) {
-            console.error('Error fetching items:', err);
             setError('An error occurred while fetching data.');
         } finally {
             setLoading(false);
@@ -99,13 +103,12 @@ const DetailOrder = () => {
                         await deleteEquipment(+id);
                         break;
                     default:
-                        throw new Error('Invalid URL');
+                        new Error('Invalid URL');
                 }
             } else {
-                throw new Error('Error: Ошибка нету такого ID');
+                new Error('Error: Ошибка нету такого ID');
             }
         } catch (err) {
-            console.error('Error fetching items:', err);
             setError('An error occurred while fetching data.');
         } finally {
             navigate(-1);
@@ -126,10 +129,10 @@ const DetailOrder = () => {
                         await hideEquipment(+id);
                         break;
                     default:
-                        throw new Error('Invalid URL');
+                        new Error('Invalid URL');
                 }
             } else {
-                throw new Error('Error: Ошибка нету такого ID');
+                new Error('Error: Ошибка нету такого ID');
             }
         } catch (err) {
             console.error('Error fetching items:', err);
@@ -139,9 +142,19 @@ const DetailOrder = () => {
         }
     }
 
+    const handleAssignOrder = async (id: string | number, organizationName: string) => {
+        try {
+            await postAssignOrganizationToOrder(id, organizationName);
+            setSuccess(true); // Открыть модальное окно после успешной отправки
+            setTimeout(() => setSuccess(false), 3000); // Закрыть модальное окно через 3 секунды
+        } catch (error) {
+            setError(`Error: ${error}`);
+        }
+    };
+
+
     useEffect(() => {
         handleGetItem();
-        console.info(data);
     }, []);
 
 
@@ -159,6 +172,7 @@ const DetailOrder = () => {
 
     return (
         <section className={'column'}>
+            <h2>Статус: {data?.orderStatus} </h2>
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
                 <p className={styles.form__title}>Тип объявления</p>
                 <div className={'row'}>
@@ -276,6 +290,31 @@ const DetailOrder = () => {
                     </div>
                 </div>
                 <div className={'line'}></div>
+                <div className={styles.cadidates}>
+                    {data?.orderCandidates ? (
+                        <ul className={styles.cadidates}>
+                            <p className={styles.cadidates__title}>Кандидаты</p>
+                            {data.orderCandidates.map((cadidates) => (
+                                <li key={cadidates.name}>
+                                    <h3>Организация</h3>
+                                    <div className={styles.cadidates__row}>
+                                        <div className={'column'}>
+                                            <p className={styles.cadidates__name}>Названия: {cadidates.name}</p>
+                                            <p className={styles.cadidates__name}>Описания: {cadidates.description}</p>
+                                        </div>
+                                        <div className={styles.form__button} style={{maxWidth: '100rem'}}>
+                                            <ButtonComponent
+                                                onClick={handleAssignOrder.bind(null, data.id, cadidates.name)}
+                                                type={'button'} text={'Принять'}/>
+                                        </div>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <h3>Нету кандиатов</h3>
+                    )}
+                </div>
                 <div className={styles.form__button}>
                     <div className={'row'}>
                         <ButtonComponent onClick={handleDeleteItem} type={'button'} color={'#FF3B30'} text={'Удалить'}/>
@@ -284,6 +323,16 @@ const DetailOrder = () => {
                     </div>
                 </div>
             </form>
+            <Modal open={success} footer={null} centered={true}
+                   bodyStyle={{
+                       display: 'flex',
+                       justifyContent: 'center',
+                       alignItems: 'center',
+                       maxWidth: '30rem',
+                       margin: '0 auto'
+                   }}>
+                <Alert setModalActive={handleToggleModal} success={success}/>
+            </Modal>
         </section>
     );
 }

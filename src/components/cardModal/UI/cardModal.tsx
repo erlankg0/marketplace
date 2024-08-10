@@ -21,10 +21,6 @@ import styles from "./cardModal.module.scss";
 
 SwiperCore.use([Navigation, Pagination, Thumbs, FreeMode]);
 
-interface ICandidates {
-    name: string,
-    description: string
-}
 
 interface DetailItem {
     id: number;
@@ -38,7 +34,6 @@ interface DetailItem {
     authorImage: string;
     orderItems?: ISize[];
     quantity?: number;
-    orderCandidates?: ICandidates[],
 }
 
 const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
@@ -98,7 +93,6 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                         authorImage: response.authorImage,
                         authorName: response.authorFullName,
                         orderItems: response.orderItems,
-                        orderCandidates: response.orderCandidates,
                     });
                     console.log({...response})
                     break;
@@ -115,7 +109,6 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                         contactInfo: response.contactInfo,
                         authorImage: response.authorImage,
                         authorName: response.authorFullName,
-                        orderCandidates: response?.orderCandidates,
                     });
                     break;
                 case 'equipment':

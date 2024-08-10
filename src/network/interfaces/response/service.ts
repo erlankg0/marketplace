@@ -1,4 +1,4 @@
-export interface IData{
+export interface IData {
     id: number,
     imageUrl: string,
     name: string,
@@ -7,4 +7,11 @@ export interface IData{
     authorImageUrl: string,
     authorFullName: string,
     images?: string[],
+    orderStatus: string,
+    orderCandidates?: ICandidates[],
+}
+
+export interface ICandidates {
+    name: string,
+    description: string
 }

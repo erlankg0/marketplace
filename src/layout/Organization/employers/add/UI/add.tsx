@@ -27,30 +27,32 @@ const Add = () => {
         const handleGetPositions = async () => {
             try {
                 const response = await getAllPosition();
-                console.log(positions);
-                setPositions(response.data)
-                handleToggleModal();
+                setPositions(response.data);
             } catch {
-                setPositions([])
-                handleToggleModal();
+                setPositions([]);
             }
         }
         handleGetPositions();
     }, [])
 
-    const onSubmit = (data: IEmployer) => {
-        console.log(data);
-        const formData = new FormData();
-        const body = {
-            surname: data.lastName,
-            name: data.firstName,
-            patronymic: data.patronymicName,
-            email: data.email,
-            phoneNumber: data.phoneNumber,
-            position: "Администратор"
+    const onSubmit = async (data: IEmployer) => {
+        try {
+            const formData = new FormData();
+            const body = {
+                surname: data.lastName,
+                name: data.firstName,
+                patronymic: data.patronymicName,
+                email: data.email,
+                phoneNumber: data.phoneNumber,
+                position: "Администратор"
+            };
+            formData.append('employee', JSON.stringify(body));
+            await sendInvitation(formData);
+
+            setSuccess(true); // Открыть модальное окно после успешной отправки
+        } catch (error) {
+            console.error('Ошибка при отправке приглашения:', error);
         }
-        formData.append('employee', JSON.stringify(body));
-        sendInvitation(formData);
     };
 
     return (

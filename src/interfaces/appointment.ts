@@ -6,10 +6,9 @@ export interface ICheckbox {
 
 export interface IAppointment {
     name: string,
-    id: string
 }
 
 export interface IAppointmentAddChange {
-    appointments: IAppointment[],
+    appointments: IAppointment,
     checkboxes: ICheckbox[],
 }

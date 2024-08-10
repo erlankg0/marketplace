@@ -9,8 +9,12 @@ export const getAllOrders = async (pageNumber: number = 0, pageSize: number = 18
         throw error;
     }
 }
-export const getByIdOrder = async (id: number | string) => {
+export const getByIdOrder = async (id: number | string, author?: boolean) => {
     try {
+        if (author) {
+            const response = await instance.get(`order/get-order-detailed-for-author/${id}`)
+            return response.data
+        }
         const response = await instance.get(`order/get-order-detailed/${id}`);
         return response.data
     } catch (error) {
@@ -18,6 +22,7 @@ export const getByIdOrder = async (id: number | string) => {
         throw error;
     }
 }
+
 export const deleteOrderById = async (id: number) => {
     try {
         const response = await instance.delete(`order/delete-order/${id}`)
@@ -58,5 +63,13 @@ export const getOrganizationOrders = async () => {
         return await instance.get('order/organization-orders')
     } catch (error) {
         throw `Error: ${error}`;
+    }
+}
+
+export const postAssignOrganizationToOrder = async (id: number | string, organizationName: string) => {
+    try {
+        return await instance.post(`order/assign-organization-to-order/${id}?organizationName=${organizationName}`)
+    } catch (error) {
+        throw `Error: ${error}`
     }
 }

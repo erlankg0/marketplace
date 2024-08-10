@@ -1,7 +1,25 @@
 import styles from "./list.module.scss";
 import {NavLink} from "react-router-dom";
+import {getEmployers} from "@network/employee/employee.ts";
+import {useEffect, useState} from "react";
+import {IEmployee} from "@network/interfaces/employee/employee.ts";
 
 const ListEmployers = () => {
+    const [employers, setEmployers] = useState<IEmployee[]>([])
+
+    const handleGetEmployers = () => {
+        try {
+            getEmployers().then(response=> setEmployers(response.data))
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    useEffect(() => {
+        handleGetEmployers();
+        return setEmployers([])
+    }, [])
+
     return (
         <section>
             <table className={styles.table}>
@@ -13,120 +31,52 @@ const ListEmployers = () => {
                     <th className={styles.table__th}>Должность</th>
                 </tr>
                 </thead>
-                <tbody className={styles.table__body}>
+                <>
+                    {employers.map((employer) => (
+                        <>
+                            <tbody className={styles.table__body}>
 
-                <tr className={styles.table__column}>
-                    <td>
-                        <tbody className={styles.table__body}>
+                            <tr className={styles.table__column}>
+                                <td>
+                                    <tbody className={styles.table__body}>
 
-                        <tr className={styles.table__column}>
-                            <td className={`${styles.table__title} ${styles.table__paragraph}`}>
-                                <NavLink to={'detail-employer'}>Олейников Кирилл Кириллович</NavLink>
-                            </td>
-                        </tr>
+                                    <tr className={styles.table__column}>
+                                        <td className={`${styles.table__title} ${styles.table__paragraph}`}>
+                                            <NavLink to={`detail-employer/${employer.id}`}>{employer.fullName}</NavLink>
+                                        </td>
+                                    </tr>
 
-                        <tr className={styles.table__column}>
-                            <td className={styles.table__paragraph}>
-                                era.ab.02@gmail.com
-                            </td>
-                        </tr>
+                                    <tr className={styles.table__column}>
+                                        <td className={styles.table__paragraph}>
+                                            {employer.email}
+                                        </td>
+                                    </tr>
 
-                        <tr className={styles.table__column}>
-                            <td>
-                                <ul>
-                                    <li className={`${styles.table__title} ${styles.table__paragraph}`}>Заказ №234</li>
-                                    <li className={`${styles.table__title} ${styles.table__paragraph}`}>Заказ №234</li>
-                                    <li className={`${styles.table__title} ${styles.table__paragraph}`}>Заказ №234</li>
-                                    <li className={`${styles.table__title} ${styles.table__paragraph}`}>Заказ №234</li>
-                                </ul>
-                            </td>
-                        </tr>
+                                    <tr className={styles.table__column}>
+                                        <td>
+                                            <ul>
+                                                {employer.orders.map((order) => (
+                                                    <li className={`${styles.table__title} ${styles.table__paragraph}`}>Заказ
+                                                        №{order}</li>
+                                                ))}
+                                            </ul>
+                                        </td>
+                                    </tr>
 
-                        <tr className={styles.table__column}>
-                            <td className={styles.table__paragraph}>
-                                Утюжник
-                            </td>
-                        </tr>
+                                    <tr className={styles.table__column}>
+                                        <td className={styles.table__paragraph}>
+                                            {employer.position}
+                                        </td>
+                                    </tr>
 
-                        </tbody>
-                    </td>
-                </tr>
-                </tbody>
+                                    </tbody>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </>
+                    ))}
 
-                <tbody className={styles.table__body}>
-                <tr className={styles.table__column}>
-                    <td>
-                        <tbody className={styles.table__body}>
-
-                        <tr className={styles.table__column}>
-                            <td className={`${styles.table__title} ${styles.table__paragraph}`}>
-                                Эрлан Абдраимов
-                            </td>
-                        </tr>
-
-                        <tr className={styles.table__column}>
-                            <td className={styles.table__paragraph}>
-                                era.ab.02@gmail.com
-                            </td>
-                        </tr>
-
-                        <tr className={styles.table__column}>
-                            <td>
-                                <ul>
-                                    <li className={`${styles.table__title} ${styles.table__paragraph}`}>Заказ №231</li>
-                                    <li className={`${styles.table__title} ${styles.table__paragraph}`}>Заказ №233</li>
-                                    <li className={`${styles.table__title} ${styles.table__paragraph}`}>Заказ №235</li>
-                                    <li className={`${styles.table__title} ${styles.table__paragraph}`}>Заказ №23</li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                        <tr className={styles.table__column}>
-                            <td className={styles.table__paragraph}>
-                                Швея
-                            </td>
-                        </tr>
-
-                        </tbody>
-                    </td>
-                </tr>
-                </tbody>
-
-                <tbody className={styles.table__body}>
-                <tr className={styles.table__column}>
-                    <td>
-                        <tbody className={styles.table__body}>
-
-                        <tr className={styles.table__column}>
-                            <td className={`${styles.table__title} ${styles.table__paragraph}`}>
-                                Даниель Абдраимов
-                            </td>
-                        </tr>
-
-                        <tr className={styles.table__column}>
-                            <td className={styles.table__paragraph}>
-                                era.ab.02@gmail.com
-                            </td>
-                        </tr>
-
-                        <tr className={styles.table__column}>
-                            <td>
-                                <ul>
-                                    <li className={`${styles.table__title} ${styles.table__paragraph}`}>Заказ №231</li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                        <tr className={styles.table__column}>
-                            <td className={styles.table__paragraph}>
-                                Швея
-                            </td>
-                        </tr>
-
-                        </tbody>
-                    </td>
-                </tr>
-                </tbody>
+                </>
 
             </table>
 

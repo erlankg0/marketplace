@@ -1,49 +1,26 @@
+import React, {useEffect, useState} from "react";
+
 import Logo from "@components/logo/UI/logo.tsx";
-import styles from "./admin.module.scss";
 import SelectButton from "@components/button/UI/selectButton.tsx";
-import React, {useState, useEffect} from "react";
-import HistoryCard from "@components/history/UI/history.tsx";
-import {IHistoryCard} from "@components/history/interface.ts";
-import image from "@assets/images/nitki.jpg";
+
 import {IOrganization} from "@layout/Organization/interface.ts";
 import ListEmployers from "@layout/Organization/employers/list/UI/list.tsx";
-import {getOrganization} from "@network/organization/admin.ts";
-import {IOrganizationData} from "@network/interfaces/organization/organization.tsx";
-import {formatDate} from "@utils/formDate.ts";
 import Create from "@layout/Organization/create/UI/create.tsx";
-import {getOrganizationOrders} from "@network/order/order.ts";
+
+import {getOrganization, getOrganizationOrdersByStage} from "@network/organization/admin.ts";
+import {IOrganizationData} from "@network/interfaces/organization/organization.tsx";
+
+import styles from "./admin.module.scss";
+import {formatDate} from "@utils/formDate.ts";
+import {IHistoryCard} from "@components/history/interface.ts";
+import image from "@assets/images/nitki.jpg";
+import HistoryCard from "@components/history/UI/history.tsx";
 
 const Admin: React.FC<IOrganization> = ({setModalActive}) => {
-    const [selectedButton, setSelectedButton] = useState<'current' | 'done' | 'staffers'>('current');
+    const [selectedButton, setSelectedButton] = useState<'current' | 'completed' | 'staffers'>('current');
     const [organization, setOrganization] = useState<IOrganizationData>();
+    const [orders, setOrders] = useState();
     const LOCAL_STORAGE_KEY = 'adminComponentSelectedButton';
-
-    useEffect(() => {
-        const savedButton = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (savedButton) {
-            setSelectedButton(savedButton as 'current' | 'done' | 'staffers');
-        }
-    }, []);
-
-    const handleGetOrganization = async () => {
-        try {
-            const data = await getOrganization();
-            setOrganization(data.data);
-            return data;
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    useEffect(() => {
-        handleGetOrganization();
-        getOrganizationOrders();
-    }, [])
-    const handleButtonClick = (button: 'current' | 'done' | 'staffers') => {
-        setSelectedButton(button);
-        localStorage.setItem(LOCAL_STORAGE_KEY, button);
-    };
-
     const data: IHistoryCard[] = [
         {
             setModalActive: setModalActive,
@@ -71,6 +48,41 @@ const Admin: React.FC<IOrganization> = ({setModalActive}) => {
         },
         // остальные данные...
     ];
+
+    useEffect(() => {
+        const savedButton = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (savedButton) {
+            setSelectedButton(savedButton as 'current' | 'completed' | 'staffers');
+        }
+    }, []);
+
+    const handleGetOrganization = () => {
+        getOrganization()
+            .then(response => setOrganization(response.data))
+            .catch(error => console.error(error))
+    }
+
+    const handleGetOrdersByStage = () => {
+        if (selectedButton == 'current' || selectedButton == 'completed') {
+            getOrganizationOrdersByStage(selectedButton).then(response => setOrders(response.data.orders));
+        }
+    }
+
+
+    useEffect(() => {
+        handleGetOrganization();
+    }, [])
+
+    useEffect(() => {
+        handleGetOrdersByStage();
+    }, [selectedButton])
+
+    const handleButtonClick = (button: 'current' | 'completed' | 'staffers') => {
+        setSelectedButton(button);
+        localStorage.setItem(LOCAL_STORAGE_KEY, button);
+        console.log(orders)
+    };
+
 
     return (
         <>
@@ -101,8 +113,8 @@ const Admin: React.FC<IOrganization> = ({setModalActive}) => {
                             />
                             <SelectButton
                                 text="Завершенные заказы"
-                                action={selectedButton === 'done'}
-                                onClickAction={() => handleButtonClick('done')}
+                                action={selectedButton === 'completed'}
+                                onClickAction={() => handleButtonClick('completed')}
                             />
                             <SelectButton
                                 text="Список сотрудников"
@@ -112,7 +124,7 @@ const Admin: React.FC<IOrganization> = ({setModalActive}) => {
                         </div>
 
                         <div className={styles.column}>
-                            {selectedButton === 'done' && (
+                            {selectedButton === 'completed' && (
                                 <>
                                     {data.map((history, index) => (
                                         <HistoryCard key={index} {...history} />

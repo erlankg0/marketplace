@@ -20,12 +20,10 @@ const Subscribe: React.FC<IAlert> = ({setModalActive}) => {
             </div>
             <div className={styles.subscribe__text}>
                 <div>
-                    <p className={styles.subscribe__title}>Заполните</p>
-                    <p className={styles.subscribe__title}>обзязательные поля</p>
+                    <p className={styles.subscribe__title}>Успешно!</p>
                 </div>
                 <div>
-                    <p className={styles.subscribe__description}>Они отмечены красной</p>
-                    <p className={styles.subscribe__description}>звездочкой</p>
+                    <p className={styles.subscribe__description}>Сохраненно</p>
                 </div>
             </div>
             <div className={styles.subscribe__footer}>

@@ -23,3 +23,11 @@ export const sendInvitation = async (formData: FormData) => {
         throw `Error: ${error}`;
     }
 }
+
+export const getOrganizationOrdersByStage = async (stage: 'completed' | 'current', pageNo: number = 0, pageSize: number = 4) => {
+    try {
+        return await instance.get(`order/get-organization-orders-by-stage?pageNumber=${pageNo}&pageSize=${pageSize}&stage=${stage}`)
+    } catch (error) {
+        throw `Error: ${error}`
+    }
+}

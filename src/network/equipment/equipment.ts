@@ -14,9 +14,9 @@ export const getEquipmentById = async (id: number| string) => {
     }
 }
 
-export const searchEquipment = async (query: string) => {
+export const searchEquipment = async (query: string, pageNo: number = 0, pageSize: number = 18) => {
     try {
-        const response = await instance.get(`equipment/search-equipment?query=${query}`);
+        const response = await instance.get(`equipment/search-equipment?query=${query}&pageNumber=${pageNo}&pageSize=${pageSize}`);
         return response.data
     } catch (error) {
         console.error(error);

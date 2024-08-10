@@ -103,7 +103,7 @@ const Profile: React.FC = () => {
                         <div className={styles.form__row}>
                             <div className={styles.form__field}>
                                 <label htmlFor={'email'} className={errors.email ? `${styles.form__label} ${styles.error}` : styles.form__label}>Почта</label>
-                                <input placeholder={'example@com.kg'} id={'email'} className={styles.form__input} {...register('email')} />
+                                <input style={{color: 'rgba(#000, .5)'}} readOnly={true} placeholder={'example@com.kg'} id={'email'} className={styles.form__input} {...register('email')} />
                             </div>
                             <div className={styles.form__field}>
                                 <label htmlFor={'phoneNumber'} className={errors.phoneNumber ? `${styles.form__label} ${styles.error}` : styles.form__label}>Номер телефона</label>

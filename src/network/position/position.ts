@@ -9,3 +9,11 @@ export const getAllPosition = async (): Promise<AxiosResponse<IPosition[]>> => {
         throw `Error: ${error}`
     }
 }
+
+export const createPosition = async (formData: FormData) => {
+    try {
+        return await instance.post('position/add-position', formData)
+    } catch (error) {
+        throw `Error: ${error}`
+    }
+}

@@ -34,6 +34,14 @@ export const getServiceById = async (id: number | string) => {
     }
 }
 
+export const getMyServices = async (pageNo: number = 0, pageSize: number = 18) => {
+    try {
+        return await instance.get(`service/my-services?pageNumber=${pageNo}&pageSize=${pageSize}`)
+    } catch (error) {
+        throw `Error: ${error}`
+    }
+}
+
 export const deleteService = async (id: number) => {
     try {
         const response = await instance.delete(`service/delete-service/${id}`);

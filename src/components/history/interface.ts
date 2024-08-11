@@ -7,7 +7,7 @@ export interface IHistoryCard {
     description: string,
     date: Date,
     myAds?: boolean,
-    type?: 'SERVICE' | 'EQUIPMENT' | 'ORDER',
+    type?: 'SERVICE' | 'EQUIPMENT' | 'ORDER' | "ALL",
     id?: number,
     category?: 'ORDER' | 'SERVICE' | 'EQUIPMENT'| undefined,
 }

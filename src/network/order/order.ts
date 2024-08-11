@@ -23,6 +23,16 @@ export const getByIdOrder = async (id: number | string, author?: boolean) => {
     }
 }
 
+export const getMyOrders = async (pageNumber: number = 0, pageSize: number = 18)=>{
+    try {
+        const response = await instance.get(`order/my-orders?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+        return response.data
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 export const deleteOrderById = async (id: number) => {
     try {
         const response = await instance.delete(`order/delete-order/${id}`)

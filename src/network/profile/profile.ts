@@ -30,13 +30,10 @@ export const postSendSubscriptionRequest = () => {
     return instance.post('app-user/send-subscription-request')
 }
 
-export const myAds = async (pageNo: number = 0, pageSize: number = 18) => {
+export const getMyAds = async (pageNo: number = 0, pageSize: number = 18) => {
     try {
-        const response = await instance.get(`account/my-advertisements?pageNumber=${pageNo}&pageSize=${pageSize}`);
-        console.log(response);
-        return response;
+        return await instance.get(`account/my-advertisements?pageNumber=${pageNo}&pageSize=${pageSize}`)
     } catch (error) {
-        console.error("Error fetching ads:", error);
-        throw error;
+        throw `Error: ${error}`
     }
 }

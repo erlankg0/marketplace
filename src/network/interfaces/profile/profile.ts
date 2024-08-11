@@ -23,7 +23,6 @@ export interface IMyAds {
     id: number,
     imagePath: string,
     name: string,
-    type: 'SERVICE' | 'EQUIPMENT' | 'ORDER',
 }
 
 export interface IDetailAds {

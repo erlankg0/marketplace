@@ -12,7 +12,6 @@ import styles from "./detail.module.scss";
 import {getEmployeeOrdersByState} from "@network/employee/employee.ts";
 
 const DetailEmployees = () => {
-    const [modal, setModal] = useState<boolean>(false)
     const [selectedButton, setSelectedButton] = useState<'current' | 'completed' | 'orders'>('current');
 
     const [data, setData] = useState<IEmployeeDetail>();
@@ -44,7 +43,7 @@ const DetailEmployees = () => {
                 (<>
                     <div className={styles.detail__header}>
                         <Left/>
-                        <Person image={''} fullName={data.employeeFullName} module={modal} setModal={setModal}/>
+                        <Person changePhoto={false} image={''} fullName={data.employeeFullName}/>
                         <div className={'row'}>
                             <SelectButton
                                 text="Текущие заказы"
@@ -64,7 +63,7 @@ const DetailEmployees = () => {
                         </div>
                     </div>
                     <div className={styles.detail__items}>
-                        {data && data.orders.map(() => (<OrderEmployer/>))}
+                        {data && data.orders.map((order) => (<OrderEmployer {...order}/>))}
                     </div>
                 </>) :
                 (<h1>Ничего нету</h1>)

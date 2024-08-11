@@ -3,15 +3,18 @@ import React from "react";
 import person from "@assets/icon/person.svg";
 import {IPerson} from "@components/person/interface.ts";
 
-const Person: React.FC<IPerson> = ({setModal, module, fullName, image}) => {
+const Person: React.FC<IPerson> = ({setModal, module, fullName, image, changePhoto = true}) => {
     return (
         <div className={styles.person}>
             <div className={styles.person__image}>
-                <img  src={image ? image : person} alt={'user image'}/>
+                <img src={image ? image : person} alt={'user image'}/>
             </div>
             <div className={styles.person__detail}>
                 <p className={styles.person__name}>{fullName}</p>
-                <p className={styles.person__change} onClick={() => setModal(!module)}>Изменить фото профиля</p>
+                {changePhoto && (
+                    <p
+                        className={styles.person__change}
+                        onClick={setModal && (() => setModal(!module))}>Изменить фото профиля</p>)}
             </div>
         </div>
     )

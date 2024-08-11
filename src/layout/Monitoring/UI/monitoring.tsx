@@ -1,27 +1,27 @@
 import React, {useEffect, useState} from "react";
-import {DragDropContext, Droppable, Draggable, DropResult} from "react-beautiful-dnd";
-import styles from "./monitoring.module.scss"
+import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd";
+import styles from "./monitoring.module.scss";
 import Order from "@components/order/UI/order.tsx";
+import {changeMonitoringOrderById, getMonitoringCurrentOrders} from "@network/monitoring/monitoring.ts";
 
-// заказ
-
-interface IOrder {
-    id: string,
-    content: string
+// Интерфейс для заказа
+export interface IOrderMonitoring {
+    id: string | number;
+    description: string;
+    dateOfStart: Date | string;
 }
 
 // Начальное состояние списка
-const initialOrders: Record<string, IOrder[]> = {
-    'waiting': [{id: '1', content: 'Test'}],
+const initialOrders: Record<string, IOrderMonitoring[]> = {
+    'waiting': [],
     'in-progress': [],
     'review': [],
     'send': [],
     'done': []
 };
 
-
 const Monitoring: React.FC = () => {
-    const [orders, setOrder] = useState<Record<string, IOrder[]>>(initialOrders);
+    const [orders, setOrder] = useState<Record<string, IOrderMonitoring[]>>(initialOrders);
 
     // Функция для проверки допустимости перехода между статусами заказов
     const isTransitionAllowed = (source: string, destination: string | undefined): boolean => {
@@ -41,7 +41,7 @@ const Monitoring: React.FC = () => {
         }
     };
 
-    // Фунция для обработки завершения перетаскивания
+    // Функция для обработки завершения перетаскивания
     const handleValidation = (result: DropResult) => {
         const {source, destination} = result;
 
@@ -64,158 +64,173 @@ const Monitoring: React.FC = () => {
         if (newOrders) {
             setOrder(newOrders);
         }
-        setOrder(orders);
     };
 
+    const handleGetMonitoringOrders = async () => {
+        try {
+            const response = await getMonitoringCurrentOrders();
+            console.log(response.data)
+            setOrder(response.data)
+        } catch (error) {
+            console.error("Failed to fetch orders:", error);
+            // Вы можете установить состояние ошибки здесь, если это необходимо
+        }
+    };
+
+    const handleChangeStatus = async (id: string | number, status: 'MINUS' | 'PLUS') => {
+        try {
+            await changeMonitoringOrderById(id, status);
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
     useEffect(() => {
-        console.log(orders)
-    }, [orders])
+        handleGetMonitoringOrders();
+    }, []);
 
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <div className={styles.monitoring}>
-                {/* Зона "На ожиданнии" */}
-                <Droppable droppableId="waiting">
-                    {(provided) => (
-                        <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className={styles.monitoring__collumn}
-                        >
-                            <h2 className={`${styles.monitoring__head} ${styles.waiting}`}>В ожидании</h2>
-                            <div>
-                                {orders['waiting'].map((item, index) => (
-                                    <Draggable key={item.id} draggableId={item.id} index={index}>
+        <>{orders ? (<DragDropContext onDragEnd={onDragEnd}>
+                <div className={styles.monitoring}>
+                    {/* Зона "На ожидании" */}
+                    <Droppable droppableId="waiting">
+                        {(provided) => (
+                            <div
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                                className={styles.monitoring__collumn}
+                            >
+                                <h2 className={`${styles.monitoring__head} ${styles.waiting}`}>В ожидании</h2>
+                                {orders['waiting'] && orders['waiting'].map((item, index) => (
+                                    <Draggable key={item.id} draggableId={`${item.id}`} index={index}>
                                         {(provided) => (
                                             <div
                                                 ref={provided.innerRef}
                                                 {...provided.draggableProps}
                                                 {...provided.dragHandleProps}
                                             >
-                                                <Order/>
+                                                <Order {...item} />
                                             </div>
                                         )}
                                     </Draggable>
                                 ))}
                                 {provided.placeholder}
-
                             </div>
-                        </div>
-                    )}
-                </Droppable>
-                <Droppable droppableId="in-progress">
-                    {(provided) => (
-                        <div ref={provided.innerRef} {...provided.droppableProps}
-                             className={styles.monitoring__collumn}>
-                            <h2 className={`${styles.monitoring__head} ${styles.progress}`}>В работе</h2>
-                            {orders['in-progress'].map((item, index) => (
-                                <Draggable key={item.id} draggableId={item.id} index={index}>
-                                    {(provided) => (
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
+                        )}
+                    </Droppable>
 
-                                        >
-                                            <Order/>
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
+                    {/* Зона "В работе" */}
+                    <Droppable droppableId="in-progress">
+                        {(provided) => (
+                            <div
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                                className={styles.monitoring__collumn}
+                            >
+                                <h2 className={`${styles.monitoring__head} ${styles.progress}`}>В работе</h2>
+                                {orders['in-progress'] && orders['in-progress'].map((item, index) => (
+                                    <Draggable key={item.id} draggableId={`${item.id}`} index={index}>
+                                        {(provided) => (
+                                            <div
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                            >
+                                                <Order {...item} />
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
 
-                {/* Зона "На Проверка" */}
-                <Droppable droppableId="review">
-                    {(provided) => (
-                        <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className={styles.monitoring__collumn}
-                        >
-                            <h2 className={`${styles.monitoring__head} ${styles.review}`}>Проверка</h2>
-                            {orders['review'].map((item, index) => (
-                                <Draggable key={item.id} draggableId={item.id} index={index}>
-                                    {(provided) => (
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
+                    {/* Зона "На Проверка" */}
+                    <Droppable droppableId="review">
+                        {(provided) => (
+                            <div
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                                className={styles.monitoring__collumn}
+                            >
+                                <h2 className={`${styles.monitoring__head} ${styles.review}`}>Проверка</h2>
+                                {orders['review'] && orders['review'].map((item, index) => (
+                                    <Draggable key={item.id} draggableId={`${item.id}`} index={index}>
+                                        {(provided) => (
+                                            <div
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                            >
+                                                <Order {...item} />
 
-                                        >
-                                            <Order/>
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
 
-                {/* Зона "На Отправка" */}
-                <Droppable droppableId="send">
-                    {(provided) => (
-                        <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className={styles.monitoring__collumn}
-                        >
-                            <h2 className={`${styles.monitoring__head} ${styles.send}`}>Отправка</h2>
-                            {orders['send'].map((item, index) => (
-                                <Draggable key={item.id} draggableId={item.id} index={index}>
-                                    {(provided) => (
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
+                    {/* Зона "На Отправка" */}
+                    <Droppable droppableId="send">
+                        {(provided) => (
+                            <div
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                                className={styles.monitoring__collumn}
+                            >
+                                <h2 className={`${styles.monitoring__head} ${styles.send}`}>Отправка</h2>
+                                {orders['send'] && orders['send'].map((item, index) => (
+                                    <Draggable key={item.id} draggableId={`${item.id}`} index={index}>
+                                        {(provided) => (
+                                            <div
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                            >
+                                                <Order {...item} />
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
 
-                                        >
-                                            <Order/>
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
-
-                {/* Зона "Сделано" */}
-                <Droppable droppableId="done">
-                    {(provided) => (
-                        <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className={styles.monitoring__collumn}
-                        >
-                            <h2 className={`${styles.monitoring__head} ${styles.done}`}>Прибыл</h2>
-                            {orders['done'].map((item, index) => (
-                                <Draggable key={item.id} draggableId={item.id} index={index}>
-                                    {(provided) => (
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-
-                                        >
-                                            <Order/>
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
-            </div>
-
-        </DragDropContext>
-
+                    {/* Зона "Сделано" */}
+                    <Droppable droppableId="done">
+                        {(provided) => (
+                            <div
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                                className={styles.monitoring__collumn}
+                            >
+                                <h2 className={`${styles.monitoring__head} ${styles.done}`}>Прибыл</h2>
+                                {orders['done'] && orders['done'].map((item, index) => (
+                                    <Draggable key={item.id} draggableId={`${item.id}`} index={index}>
+                                        {(provided) => (
+                                            <div
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                            >
+                                                <Order {...item} />
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                </div>
+            </DragDropContext>
+        ) : (<p>Нету заказов</p>)}</>
     );
-
-}
+};
 
 export default Monitoring;

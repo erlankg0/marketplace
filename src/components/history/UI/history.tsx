@@ -13,7 +13,7 @@ const HistoryCard: React.FC<IHistoryCard> = ({
                                                  myAds,
                                                  type,
                                                  id,
-                                                 category
+
                                              }) => {
 
     const handleSetModalActive = () => {
@@ -61,10 +61,11 @@ const HistoryCard: React.FC<IHistoryCard> = ({
             </div>
             <div className={styles.history__time}>
                 <p className={styles.history__date}>{`${formattedDate}`}</p>
-                {id && category ? (
-                    <NavLink className={styles.history__detail} to={`/marketplace/self-detail/${id}/${category}`}>Посмотреть
+                {id && type && type != 'ALL' && (
+                    <NavLink className={styles.history__detail} to={`/marketplace/self-detail/${id}/${type}`}>Посмотреть
                         детали</NavLink>
-                ) : (<p className={styles.history__detail} onClick={handleSetModalActive}>Посмотреть детали</p>)}
+                )}
+                {!type && (<p className={styles.history__detail} onClick={handleSetModalActive}>Посмотреть детали</p>)}
             </div>
         </div>
     )

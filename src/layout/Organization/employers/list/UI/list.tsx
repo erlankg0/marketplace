@@ -55,7 +55,7 @@ const ListEmployers = () => {
                                     <tr className={styles.table__column}>
                                         <td>
                                             <ul>
-                                                {employer.orders.map((order) => (
+                                                {employer.orders && employer.orders.map((order) => (
                                                     <li className={`${styles.table__title} ${styles.table__paragraph}`}>Заказ
                                                         №{order}</li>
                                                 ))}

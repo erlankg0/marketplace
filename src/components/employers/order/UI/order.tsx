@@ -1,9 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import Deadline from "@components/deadline/UI/deadline.tsx";
 import Employer from "@components/employer/UI/employer.tsx";
 import ButtonComponent from "@components/button/UI/button.tsx";
 import styles from "./order.module.scss"
 import {IOrder} from "@network/interfaces/employee/employee.ts";
+import {getCompleteOrder} from "@network/organization/admin.ts";
+import {Modal} from "antd";
+import Alert from "@components/alert/UI/alert.tsx";
 
 const OrderEmployer: React.FC<IOrder> = ({
                                              id,
@@ -16,6 +19,26 @@ const OrderEmployer: React.FC<IOrder> = ({
                                              authorContactInfo,
                                              authorImage
                                          }) => {
+    const [success, setSuccess] = useState<boolean>(false); // Состояние нового модального окна для подтверждения выхода
+    const [erros, setErros] = useState<boolean>(false); // Состояние нового модального окна для подтверждения выхода
+
+    const handleToggleModal = () => {
+        setSuccess(!success);
+    }
+    const handleToggleError = () => {
+        setErros(!erros);
+    }
+
+    const handleCompletedOrder = async () => {
+        try {
+            await getCompleteOrder(id);
+            handleToggleModal();
+        } catch (error) {
+            new Error(`${error}`)
+            handleToggleError();
+        }
+    }
+
     return (
         <div className={styles.order}>
             <div className={styles.order__header}>
@@ -42,13 +65,37 @@ const OrderEmployer: React.FC<IOrder> = ({
             <div>
                 <h2>Заказчик</h2>
                 <div className={'row'}>
-                    <Employer fullName={authorFullName} image={authorImage} contactInfo={authorContactInfo}/>
+                    <Employer
+                        fullName={authorFullName}
+                        image={authorImage}
+                        contactInfo={authorContactInfo}
+                    />
                 </div>
             </div>
             <div className={'line'}></div>
             <div className={styles.order__button}>
-                <ButtonComponent text={'Снять с сотрудника заказ'}/>
+                <ButtonComponent onClick={handleCompletedOrder} text={'Снять с сотрудника заказ'}/>
             </div>
+            <Modal open={success} footer={null} centered={true}
+                   bodyStyle={{
+                       display: 'flex',
+                       justifyContent: 'center',
+                       alignItems: 'center',
+                       maxWidth: '30rem',
+                       margin: '0 auto'
+                   }}>
+                <Alert setModalActive={handleToggleModal} success={success}/>
+            </Modal>
+            <Modal open={erros} footer={null} centered={true}
+                   bodyStyle={{
+                       display: 'flex',
+                       justifyContent: 'center',
+                       alignItems: 'center',
+                       maxWidth: '30rem',
+                       margin: '0 auto'
+                   }}>
+                <Alert setModalActive={handleToggleError} error={erros}/>
+            </Modal>
         </div>
     )
 }

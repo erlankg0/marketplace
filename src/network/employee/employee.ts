@@ -15,3 +15,11 @@ export const getEmployeeOrdersByState = async (stage: 'current' | 'completed', e
         throw `Error: ${error}`
     }
 }
+
+export const postAssignEmployeeToOrder = async (orderId: string | number, employeeId: string | number) => {
+    try {
+        return await instance.post(`order/assign-employee-to-order/${orderId}?employeeId=${employeeId}`);
+    } catch (error) {
+        throw `Error: ${error}`
+    }
+}

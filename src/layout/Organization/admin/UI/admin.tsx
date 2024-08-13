@@ -2,52 +2,21 @@ import React, {useEffect, useState} from "react";
 
 import Logo from "@components/logo/UI/logo.tsx";
 import SelectButton from "@components/button/UI/selectButton.tsx";
-
-import {IOrganization} from "@layout/Organization/interface.ts";
 import ListEmployers from "@layout/Organization/employers/list/UI/list.tsx";
 import Create from "@layout/Organization/create/UI/create.tsx";
 
 import {getOrganization, getOrganizationOrdersByStage} from "@network/organization/admin.ts";
-import {IOrganizationData} from "@network/interfaces/organization/organization.tsx";
+import {IOrganizationData, IOrganizationOrders} from "@network/interfaces/organization/organization.tsx";
 
 import styles from "./admin.module.scss";
 import {formatDate} from "@utils/formDate.ts";
-import {IHistoryCard} from "@components/history/interface.ts";
-import image from "@assets/images/nitki.jpg";
 import HistoryCard from "@components/history/UI/history.tsx";
 
-const Admin: React.FC<IOrganization> = ({setModalActive}) => {
+const Admin: React.FC = () => {
     const [selectedButton, setSelectedButton] = useState<'current' | 'completed' | 'staffers'>('current');
     const [organization, setOrganization] = useState<IOrganizationData>();
-    const [orders, setOrders] = useState();
+    const [orders, setOrders] = useState<IOrganizationOrders>();
     const LOCAL_STORAGE_KEY = 'adminComponentSelectedButton';
-    const data: IHistoryCard[] = [
-        {
-            setModalActive: setModalActive,
-            price: "100",
-            title: "Швейная машинка",
-            description: "Отличная швейная машинка в хорошем состоянии.",
-            date: new Date('2023-01-01'),
-            image,
-        },
-        {
-            setModalActive: setModalActive,
-            price: "150",
-            title: "Смартфон",
-            description: "Последняя модель с отличными характеристиками.",
-            date: new Date('2023-02-15'),
-            image
-        },
-        {
-            setModalActive: setModalActive,
-            price: "200",
-            title: "Ноутбук",
-            description: "Мощный ноутбук для работы и игр.",
-            date: new Date('2024-03-15'),
-            image
-        },
-        // остальные данные...
-    ];
 
     useEffect(() => {
         const savedButton = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -64,7 +33,7 @@ const Admin: React.FC<IOrganization> = ({setModalActive}) => {
 
     const handleGetOrdersByStage = () => {
         if (selectedButton == 'current' || selectedButton == 'completed') {
-            getOrganizationOrdersByStage(selectedButton).then(response => setOrders(response.data.orders));
+            getOrganizationOrdersByStage(selectedButton).then(response => setOrders(response.data));
         }
     }
 
@@ -126,16 +95,16 @@ const Admin: React.FC<IOrganization> = ({setModalActive}) => {
                         <div className={styles.column}>
                             {selectedButton === 'completed' && (
                                 <>
-                                    {data.map((history, index) => (
-                                        <HistoryCard key={index} {...history} />
+                                    {orders && orders.orders.map((history, index) => (
+                                        <HistoryCard key={index} description={history.description} price={history.price} title={history.name} image={history.imageUrl} id={history.id} />
                                     ))}
                                 </>
                             )}
 
                             {selectedButton === 'current' && (
                                 <>
-                                    {data.map((history, index) => (
-                                        <HistoryCard key={index} {...history} />
+                                    {orders && orders.orders.map((history, index) => (
+                                        <HistoryCard accept={true} key={index} description={history.description} price={history.price} title={history.name} image={history.imageUrl} id={history.id} />
                                     ))}
                                 </>
                             )}

@@ -37,3 +37,11 @@ export const getMyAds = async (pageNo: number = 0, pageSize: number = 18) => {
         throw `Error: ${error}`
     }
 }
+
+export const getOrderHistoryUser = async (stage: "completed" | "current", pageNo: number = 0, pageSize: number = 18) => {
+    try {
+        return await instance.get(`order/order-history-for-user?pageNumber=${pageNo}&pageSize=${pageSize}&stage=${stage}`)
+    } catch (error) {
+        throw `Error: ${error}`
+    }
+}

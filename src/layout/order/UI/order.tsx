@@ -113,6 +113,7 @@ const Order = () => {
                 formData.append('images', file.originFileObj as File)
             })
             postOrder(formData);
+            handleToggleModal()
 
         } catch (error) {
             handleToggleModal()

@@ -4,9 +4,10 @@ import {formatDate} from "@utils/formDate.ts";
 import {useEffect, useState} from "react";
 import SelectButton from "@components/button/UI/selectButton.tsx";
 import {data} from "@layout/Profile/history/data.ts";
+import {getOrderHistoryUser} from "@network/profile/profile.ts";
 
 const HistoryList = () => {
-    const [selectedButton, setSelectedButton] = useState<'current' | 'done'>('current');
+    const [selectedButton, setSelectedButton] = useState<'current' | 'completed'>('current');
     const [items, setItems] = useState(data);
 
     const LOCAL_STORAGE_KEY = 'historyListSelectedButton';
@@ -14,15 +15,29 @@ const HistoryList = () => {
     useEffect(() => {
         const savedButton = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (savedButton) {
-            setSelectedButton(savedButton as 'current' | 'done');
+            setSelectedButton(savedButton as 'current' | 'completed');
         }
     }, []);
 
-    const handleButtonClick = (buttonType: 'current' | 'done') => {
+    const handleButtonClick = (buttonType: 'current' | 'completed') => {
         setSelectedButton(buttonType);
         localStorage.setItem(LOCAL_STORAGE_KEY, buttonType);
         setItems(data);
     };
+
+    const handleGetHistory = async () => {
+        try {
+            const response = await getOrderHistoryUser(selectedButton);
+            console.log(response)
+        } catch (error) {
+            new Error(`${error}`)
+        }
+    }
+
+    useEffect(() => {
+        handleGetHistory();
+    }, [selectedButton])
+
     return (
         <section className={styles.table__column}>
             <div className={'row'}>
@@ -33,8 +48,8 @@ const HistoryList = () => {
                 />
                 <SelectButton
                     text="Завершеные заказы"
-                    action={selectedButton === 'done'}
-                    onClickAction={() => handleButtonClick('done')}
+                    action={selectedButton === 'completed'}
+                    onClickAction={() => handleButtonClick('completed')}
                 />
             </div>
             {selectedButton == 'current' && (
@@ -85,7 +100,7 @@ const HistoryList = () => {
 
                 </table>
             )}
-            {selectedButton == 'done' && (
+            {selectedButton == 'completed' && (
                 <table className={styles.table}>
                     <thead>
                     <tr className={styles.table__header}>

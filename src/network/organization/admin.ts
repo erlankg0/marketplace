@@ -31,3 +31,11 @@ export const getOrganizationOrdersByStage = async (stage: 'completed' | 'current
         throw `Error: ${error}`
     }
 }
+
+export const getCompleteOrder = async (id: number | string) => {
+    try {
+        return await instance.get(`order/complete/${id}`)
+    } catch (error) {
+        throw `Error: ${error}`
+    }
+}

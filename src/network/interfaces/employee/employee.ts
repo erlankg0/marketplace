@@ -2,7 +2,11 @@ export interface IEmployee {
     fullName: string;
     image: string;
     salary?: number | string
-    contactInfo?: string
+    contactInfo?: string,
+    email?: string,
+    id?: number | string,
+    position?: string,
+    orders?: string[]
 }
 
 export interface IOrder {

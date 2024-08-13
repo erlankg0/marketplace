@@ -3,13 +3,10 @@ import {Select} from "antd";
 import SelectButton from "@components/button/UI/selectButton.tsx";
 import React, {useState} from "react";
 import DateComponent from "@components/date/UI/date.tsx";
-import HistoryCard from "@components/history/UI/history.tsx";
-import {IHistoryCard} from "@components/history/interface.ts";
-import image from "@assets/images/nitki.jpg";
 import {IOrganization} from "@layout/Organization/interface.ts";
 import style from "./history.module.scss";
 
-const History: React.FC<IOrganization> = ({setModalActive}) => {
+const History: React.FC<IOrganization> = () => {
     const [selectedButton, setSelectedButton] = useState<'current' | 'done' | 'processing'>('current');
     const [selectCategory, setSelectCategory] = useState<string>('')
     const [date, setDate] = useState<string>("");
@@ -17,33 +14,6 @@ const History: React.FC<IOrganization> = ({setModalActive}) => {
     const handleChangeCategory = (value: string) => {
         setSelectCategory(value);
     }
-    const data: IHistoryCard[] = [
-        {
-            setModalActive: setModalActive,
-            price: "100",
-            title: "Швейная машинка",
-            description: "Отличная швейная машинка в хорошем состоянии.",
-            date: new Date('2023-01-01'),
-            image,
-        },
-        {
-            setModalActive: setModalActive,
-            price: "150",
-            title: "Смартфон",
-            description: "Последняя модель с отличными характеристиками.",
-            date: new Date('2023-02-15'),
-            image
-        },
-        {
-            setModalActive: setModalActive,
-            price: "200",
-            title: "Ноутбук",
-            description: "Мощный ноутбук для работы и игр.",
-            date: new Date('2024-03-15'),
-            image
-        },
-        // остальные данные...
-    ];
 
     return (
         <section className={style.history}>
@@ -86,7 +56,7 @@ const History: React.FC<IOrganization> = ({setModalActive}) => {
             </div>
 
             <section className={style.history__column}>
-                {data.map((item) => (<HistoryCard {...item}/>))}
+                {/*{data.map((item) => (<HistoryCard {...item}/>))}*/}
             </section>
 
         </section>

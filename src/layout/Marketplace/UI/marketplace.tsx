@@ -8,7 +8,6 @@ import Modal from "@components/modal/UI/modal.tsx";
 import Cards from "@layout/Cards/UI/cards.tsx";
 import Ads from "@layout/ads/UI/ads.tsx";
 import Monitoring from "@layout/Monitoring/UI/monitoring.tsx";
-import History from "@layout/MonitoringHistory/UI/monitoring.tsx";
 import Profile from "@layout/Profile/UI/profile.tsx";
 import Organization from "@layout/Organization/organization/UI/organization.tsx";
 import HistoryList from "@layout/Profile/history/UI/history.tsx";
@@ -63,7 +62,7 @@ const Marketplace = () => {
                               tabs={
                                   [
                                       {title: "Текущие заказы", url: "current-orders"},
-                                      {title: "История заказов", url: 'marketplace/history-orders'}
+                                      {title: "История заказов", url: 'history-orders'}
                                   ]
                               }/>
 
@@ -108,7 +107,7 @@ const Marketplace = () => {
                     <Route path={'/services'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>
                     <Route path={'/add-order'} element={<Ads/>}/>
                     <Route path={'/current-orders'} element={<Monitoring/>}/>
-                    <Route path={'/history-orders'} element={<History setModalActive={setModalActive}/>}/>
+                    {/*<Route path={'/history-orders'} element={<History/>}/>*/}
                     <Route path={'/organization/*'} element={<Organization setModalActive={setModalActive}/>}/>
                 </Routes>
                 <Modal

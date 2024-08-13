@@ -1,7 +1,15 @@
-import React from "react";
-import styles from "./history.module.scss";
-import {IHistoryCard} from "@components/history/interface.ts";
+import React, {useState} from "react";
 import {NavLink} from "react-router-dom";
+
+import {IHistoryCard} from "@components/history/interface.ts";
+
+import {getProfile} from "@network/profile/profile.ts";
+import {postAssignEmployeeToOrder} from "@network/employee/employee.ts";
+
+import {formatDate} from "@utils/formDate.ts";
+import styles from "./history.module.scss";
+import {Modal} from "antd";
+import Alert from "@components/alert/UI/alert.tsx";
 
 const HistoryCard: React.FC<IHistoryCard> = ({
                                                  setModalActive,
@@ -13,7 +21,7 @@ const HistoryCard: React.FC<IHistoryCard> = ({
                                                  myAds,
                                                  type,
                                                  id,
-
+                                                 accept
                                              }) => {
 
     const handleSetModalActive = () => {
@@ -21,15 +29,28 @@ const HistoryCard: React.FC<IHistoryCard> = ({
             setModalActive(true)
         }
     };
-    const dates = new Date(date);
 
-    // Format the date to '30 июля 2024'
-    const formattedDate = dates.toLocaleDateString('ru-RU', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
+    const [success, setSuccess] = useState<boolean>(false); // Состояние нового модального окна для подтверждения выхода
+    const [errors, setErros] = useState<boolean>(false)
+    const handleToggleModal = () => {
+        setSuccess(!success);
+    }
+    const handleToggleError = () => {
+        setErros(!errors);
+    }
 
+
+    const handleAccessOrder = async (orderId: string | number) => {
+        const {id} = await getProfile();
+        console.log(id, orderId)
+        try {
+            await postAssignEmployeeToOrder(orderId, id);
+            handleToggleModal();
+        } catch (error) {
+            handleToggleError();
+            new Error(`${error}`)
+        }
+    }
 
     return (
         <div className={styles.history}>
@@ -60,13 +81,40 @@ const HistoryCard: React.FC<IHistoryCard> = ({
                 <p className={styles.history__description}>{description}</p>
             </div>
             <div className={styles.history__time}>
-                <p className={styles.history__date}>{`${formattedDate}`}</p>
+                {date && (<p className={styles.history__date}>{`${formatDate(date)}`}</p>)}
                 {id && type && type != 'ALL' && (
                     <NavLink className={styles.history__detail} to={`/marketplace/self-detail/${id}/${type}`}>Посмотреть
                         детали</NavLink>
                 )}
-                {!type && (<p className={styles.history__detail} onClick={handleSetModalActive}>Посмотреть детали</p>)}
+                {type && (<p className={styles.history__detail} onClick={handleSetModalActive}>Посмотреть детали</p>)}
+
+                {setModalActive && (
+                    <p className={styles.history__detail} onClick={handleSetModalActive}>Принять заказ</p>)}
+                {accept && (
+                    <p className={styles.history__detail} onClick={() => handleAccessOrder(id)}>Принять заказ</p>)}
+
             </div>
+
+            <Modal open={success} footer={null} centered={true}
+                   bodyStyle={{
+                       display: 'flex',
+                       justifyContent: 'center',
+                       alignItems: 'center',
+                       maxWidth: '30rem',
+                       margin: '0 auto'
+                   }}>
+                <Alert setModalActive={handleToggleModal} success={success}/>
+            </Modal>
+            <Modal open={errors} footer={null} centered={true}
+                   bodyStyle={{
+                       display: 'flex',
+                       justifyContent: 'center',
+                       alignItems: 'center',
+                       maxWidth: '30rem',
+                       margin: '0 auto'
+                   }}>
+                <Alert setModalActive={handleToggleError} error={errors}/>
+            </Modal>
         </div>
     )
 }

@@ -1,56 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 import SelectButton from "@components/button/UI/selectButton.tsx";
 import DateComponent from "@components/date/UI/date.tsx";
-import HistoryCard from "@components/history/UI/history.tsx";
-
-import { IHistory } from "@layout/MonitoringHistory/interface.ts";
-import image from "@assets/images/nitki.jpg";
 import styles from "./monitoring.module.scss";
-import {IHistoryCard} from "@components/history/interface.ts";
 
-const History: React.FC<IHistory> = ({ setModalActive }) => {
+const History = () => {
     const navigate = useNavigate();
     const [date, setDate] = useState<string>("");
 
-    const data: IHistoryCard[] = [
-        {
-            setModalActive: setModalActive,
-            price: "100",
-            title: "Швейная машинка",
-            description: "Отличная швейная машинка в хорошем состоянии.",
-            date: new Date('2023-01-01'),
-            image,
-        },
-        {
-            setModalActive: setModalActive,
-            price: "150",
-            title: "Смартфон",
-            description: "Последняя модель с отличными характеристиками.",
-            date: new Date('2023-02-15'),
-            image
-        },
-        {
-            setModalActive: setModalActive,
-            price: "200",
-            title: "Ноутбук",
-            description: "Мощный ноутбук для работы и игр.",
-            date: new Date('2024-03-15'),
-            image
-        },
-        // остальные данные...
-    ];
+    // const [filteredData, setFilteredData] = useState<IHistoryCard[]>();
 
-    const [filteredData, setFilteredData] = useState<IHistoryCard[]>(data);
-
-    useEffect(() => {
-        if (date) {
-            setFilteredData(data.filter(item => item.date.toISOString().split('T')[0] === date));
-        } else {
-            setFilteredData(data);
-        }
-    }, [date, data]);
+    // useEffect(() => {
+    //     if (date) {
+    //         const selectedDate = new Date(date);
+    //         const selectedYear = selectedDate.getFullYear();
+    //         const selectedMonth = selectedDate.getMonth();
+    //
+    //         setFilteredData(data.filter(item => {
+    //             const itemDate = new Date(item.date);
+    //             return itemDate.getFullYear() === selectedYear && itemDate.getMonth() === selectedMonth;
+    //         }));
+    //     } else {
+    //         setFilteredData(data);
+    //     }
+    // }, [date]);
 
     return (
         <div className={styles.monitoring}>
@@ -62,7 +36,7 @@ const History: React.FC<IHistory> = ({ setModalActive }) => {
                             text="Текущие"
                             action={false}
                             onClickAction={() => {
-                                navigate('/current-orders');
+                                navigate('/marketplace/current-orders');
                             }}
                         />
                         <SelectButton
@@ -79,9 +53,9 @@ const History: React.FC<IHistory> = ({ setModalActive }) => {
                 </div>
             </section>
             <section className={styles.monitoring__cards}>
-                {filteredData.map((history, index) => (
-                    <HistoryCard key={index} {...history} />
-                ))}
+                {/*{filteredData.map((history, index) => (*/}
+                {/*    <HistoryCard key={index} {...history} />*/}
+                {/*))}*/}
             </section>
         </div>
     )

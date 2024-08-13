@@ -5,4 +5,5 @@ export interface IAlert {
     change?: boolean,
     success?: boolean,
     buy?: boolean,
+    error?: boolean,
 }

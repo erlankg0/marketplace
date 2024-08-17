@@ -9,6 +9,8 @@ export interface IData {
     images?: string[],
     orderStatus: string,
     orderCandidates?: ICandidates[],
+    imagePath?: string,
+    date?: string | Date
 }
 
 export interface ICandidates {

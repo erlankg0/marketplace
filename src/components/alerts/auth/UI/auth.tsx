@@ -1,5 +1,4 @@
 import React from "react";
-import {useNavigate} from "react-router-dom";
 
 import ButtonComponent from "@components/button/UI/button.tsx";
 import {IAlert} from "@components/alert/interface.ts";
@@ -7,15 +6,11 @@ import {IAlert} from "@components/alert/interface.ts";
 import styles from "@components/alerts/subscribe/UI/subscribe.module.scss";
 import error from "@assets/emoji/out.jpeg"
 
-const Error: React.FC<IAlert> = ({setModalActive, text}) => {
-    const navigate = useNavigate();
+const ErrorIsAuth: React.FC<IAlert> = ({setModalActive}) => {
     const handleSuccess = () => {
         setModalActive(false);
-        if (!text) {
-            navigate(-1);
-        }
-
     }
+
     return (
         <div className={styles.subscribe}>
             <div className={styles.subscribe__head}>
@@ -23,7 +18,7 @@ const Error: React.FC<IAlert> = ({setModalActive, text}) => {
             </div>
             <div className={styles.subscribe__text}>
                 <div>
-                    <p className={styles.subscribe__title}>{text && text} Ошибка!</p>
+                    <p className={styles.subscribe__title}>Ошибка! При авторизации </p>
                 </div>
             </div>
             <div className={styles.subscribe__footer}>
@@ -34,4 +29,4 @@ const Error: React.FC<IAlert> = ({setModalActive, text}) => {
     )
 }
 
-export default Error;
+export default ErrorIsAuth;

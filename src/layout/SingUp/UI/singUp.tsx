@@ -1,44 +1,45 @@
-import { useEffect, useCallback } from 'react';
+import {useState} from 'react';
 import {NavLink, useNavigate} from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { Flex } from 'antd';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {useForm} from 'react-hook-form';
+import {Flex, Modal} from 'antd';
+import {yupResolver} from '@hookform/resolvers/yup';
 
-import { IRegister } from "@network/interfaces/auth/register.ts";
+import {IRegister} from "@network/interfaces/auth/register.ts";
 import styles from "@layout/Auth/UI/auth.module.scss";
 import ButtonComponent from "@components/button/UI/button.tsx";
 
-import { login, toggleRemember } from "@redux/slices/singup.ts";
-import { useAddDispatch, useAppSelector } from "@redux/hooks.ts";
-import { singUp } from "@network/auth/singup.ts";
-import { ValidationSingUp } from '@validations/singUp.ts';
+import {login, toggleRemember} from "@redux/slices/singup.ts";
+import {useAddDispatch, useAppSelector} from "@redux/hooks.ts";
+import {signUp} from "@network/auth/singup.ts";
+import {ValidationSingUp} from '@validations/singUp.ts';
 import authBackground from "@assets/images/authBackground.jpg";
+import Alert from "@components/alert/UI/alert.tsx";
 
 const SingUp = () => {
     const navigate = useNavigate();
     const form = useForm<IRegister>({
         resolver: yupResolver(ValidationSingUp),
     });
-    const { register, formState: { errors, touchedFields }, handleSubmit } = form;
+    const {register, formState: {errors, touchedFields}, handleSubmit} = form;
     const dispatch = useAddDispatch();
+    const [error, setError] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>();
 
-    const {
-        email,
-        phoneNumber,
-        firstName,
-        lastName,
-        patronymicName,
-        remember,
-    } = useAppSelector(state => state.singUp);
+    const handleToggleModal = () => {
+        setError(!error);
+    };
+
+    const {email, phoneNumber, firstName, lastName, patronymicName, remember} = useAppSelector(state => state.singUp);
 
     const handleToggle = () => {
         dispatch(toggleRemember());
     };
 
-    const handleSignUp = useCallback(async () => {
+
+    const handleSignUp = async () => {
         if (phoneNumber) {
             try {
-                const response = await singUp({
+                const response = await signUp({
                     email,
                     firstName,
                     lastName,
@@ -46,23 +47,23 @@ const SingUp = () => {
                     phoneNumber,
                     remember,
                 });
-                console.log(response);
-                navigate('/confirmed');
+                if (response) {
+                    navigate('/confirmed')
+                }
+
             } catch (error) {
                 console.error("Registration error:", error);
+                handleToggle();
+                setMessage(`${error}`)
             }
         }
-    }, [email, firstName, lastName, patronymicName, phoneNumber, remember, navigate]);
-
-    const onSubmit = (data: IRegister) => {
-        dispatch(login(data));
-        handleSignUp();
-
+        return false;
     };
 
-    useEffect(() => {
-        console.log(email, phoneNumber, firstName, lastName, patronymicName, remember);
-    }, [handleSignUp]);
+    const onSubmit = async (data: IRegister) => {
+        dispatch(login(data));
+        await handleSignUp();
+    };
 
     return (
         <article className={styles.content}>
@@ -74,7 +75,7 @@ const SingUp = () => {
                 <i className={'line'}></i>
                 <form onSubmit={handleSubmit(onSubmit)}>
 
-                    <Flex vertical style={{ gap: '16px' }}>
+                    <Flex vertical style={{gap: '16px'}}>
                         <div className={styles.field}>
                             <label
                                 className={errors.lastName ? `${styles.label} ${styles.error}` : `${styles.label}`}
@@ -149,10 +150,10 @@ const SingUp = () => {
                             />
                         </div>
                         <Flex vertical={false} gap={5}>
-                            <input checked={remember} type={'checkbox'} onClick={handleToggle} />
+                            <input checked={remember} type={'checkbox'} onClick={handleToggle}/>
                             <label htmlFor={'remember'}>Запомнить меня</label>
                         </Flex>
-                        <ButtonComponent text={'Зарегистрироваться'} onSubmit={() => alert('ok')} />
+                        <ButtonComponent text={'Зарегистрироваться'} onSubmit={() => alert('ok')}/>
                         <Flex gap={5}>
                             <p>Уже зарегистрированы?</p>
                             <NavLink className={'link'} to="/">Войти</NavLink>
@@ -160,7 +161,7 @@ const SingUp = () => {
                     </Flex>
                 </form>
             </section>
-            <section className={styles.intro} style={{ backgroundImage: `url(${authBackground})` }}>
+            <section className={styles.intro} style={{backgroundImage: `url(${authBackground})`}}>
                 <div className={styles.intro__content}>
                     <div className={styles.intro__logo}>
                         <p>ST</p>
@@ -171,6 +172,9 @@ const SingUp = () => {
                     </p>
                 </div>
             </section>
+            <Modal open={error} footer={null} centered={true}>
+                <Alert setModalActive={handleToggleModal} error={error} text={message}/>
+            </Modal>
         </article>
     );
 };

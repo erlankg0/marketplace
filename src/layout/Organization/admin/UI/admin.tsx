@@ -11,12 +11,24 @@ import {IOrganizationData, IOrganizationOrders} from "@network/interfaces/organi
 import styles from "./admin.module.scss";
 import {formatDate} from "@utils/formDate.ts";
 import HistoryCard from "@components/history/UI/history.tsx";
+import {Modal} from "antd";
+import Alert from "@components/alert/UI/alert.tsx";
 
 const Admin: React.FC = () => {
     const [selectedButton, setSelectedButton] = useState<'current' | 'completed' | 'staffers'>('current');
     const [organization, setOrganization] = useState<IOrganizationData>();
     const [orders, setOrders] = useState<IOrganizationOrders>();
     const LOCAL_STORAGE_KEY = 'adminComponentSelectedButton';
+
+    const [success, setSuccess] = useState<boolean>(false); // Состояние нового модального окна для подтверждения выхода
+    const [error, setError] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>()
+    const handleToggleSuccess = () => {
+        setSuccess(!success);
+    }
+    const handleToggleError = () => {
+        setError(!error);
+    }
 
     useEffect(() => {
         const savedButton = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -25,15 +37,31 @@ const Admin: React.FC = () => {
         }
     }, []);
 
-    const handleGetOrganization = () => {
-        getOrganization()
-            .then(response => setOrganization(response.data))
-            .catch(error => console.error(error))
+    const handleGetOrganization = async () => {
+        try {
+            const response = await getOrganization();
+            if ('status' in response) {
+                setMessage(`${response.message}, код: ${response.status}`);
+                handleToggleError();
+
+            } else {
+                setOrganization(response)
+            }
+        } catch (e) {
+            console.error(e)
+        }
     }
 
-    const handleGetOrdersByStage = () => {
+    const handleGetOrdersByStage = async () => {
         if (selectedButton == 'current' || selectedButton == 'completed') {
-            getOrganizationOrdersByStage(selectedButton).then(response => setOrders(response.data));
+            const response = await getOrganizationOrdersByStage(selectedButton);
+            if ('status' in response) {
+                setMessage(`${response.message}, код: ${response.status}`);
+                handleToggleError();
+            } else {
+                setOrders(response);
+            }
+
         }
     }
 
@@ -96,7 +124,8 @@ const Admin: React.FC = () => {
                             {selectedButton === 'completed' && (
                                 <>
                                     {orders && orders.orders.map((history, index) => (
-                                        <HistoryCard key={index} description={history.description} price={history.price} title={history.name} image={history.imageUrl} id={history.id} />
+                                        <HistoryCard key={index} description={history.description} price={history.price}
+                                                     title={history.name} image={history.imageUrl} id={history.id}/>
                                     ))}
                                 </>
                             )}
@@ -104,7 +133,9 @@ const Admin: React.FC = () => {
                             {selectedButton === 'current' && (
                                 <>
                                     {orders && orders.orders.map((history, index) => (
-                                        <HistoryCard accept={true} key={index} description={history.description} price={history.price} title={history.name} image={history.imageUrl} id={history.id} />
+                                        <HistoryCard accept={true} key={index} description={history.description}
+                                                     price={history.price} title={history.name} image={history.imageUrl}
+                                                     id={history.id}/>
                                     ))}
                                 </>
                             )}
@@ -115,9 +146,14 @@ const Admin: React.FC = () => {
 
                         </div>
                     </div>
+                    <Modal open={success} footer={null} centered={true}>
+                        <Alert setModalActive={handleToggleSuccess} success={success}/>
+                    </Modal>
+                    <Modal open={error} footer={null} centered={true}>
+                        <Alert setModalActive={handleToggleError} error={error} text={message}/>
+                    </Modal>
                 </section>
             ) : (<Create/>)}
-
         </>
     );
 }

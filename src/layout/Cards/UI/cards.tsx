@@ -8,13 +8,20 @@ import {getAllServices} from "@network/service/service";
 import {getAllOrders} from "@network/order/order";
 import {IData} from "@network/interfaces/response/service";
 import {useAppSelector} from "@redux/hooks.ts";
+import {IError} from "@network/interfaces/network/error.ts";
+import {ICards as ICardsResponse} from "@network/interfaces/basic.ts";
 
 const Cards: React.FC<ICards> = ({url}) => {
     const [items, setItems] = useState<IData[]>([]);
+    const [totalItems, setTotalItems] = useState<number>(0);
+
+    // loader and errors
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    // category select
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalItems, setTotalItems] = useState<number>(0);
+    // search
     const searchText = useAppSelector(state => state.search.text);
     const [debouncedSearchText, setDebouncedSearchText] = useState<string>(searchText);
 
@@ -33,33 +40,56 @@ const Cards: React.FC<ICards> = ({url}) => {
         try {
             setLoading(true);
             setError(null);
-            let response: { advertisement: IData[], isLast: boolean, totalCount: number };
-
+            let response: ICardsResponse | IError;
+            setLoading(true);
             switch (url) {
                 case 'order':
                     response = await getAllOrders(page - 1, 8);
+                    if ('status' in response) {
+                        setError(`${response.message}, код: ${response.status}`)
+                        console.log(response.message)
+                    } else {
+                        setItems(response.advertisement);
+                        setTotalItems(response.totalCount);
+                    }
                     break;
                 case 'services':
                     response = await getAllServices(page - 1, 8);
+                    if ('status' in response) {
+                        setError(`${response.message}, код: ${response.status}`)
+                        console.log(response.message)
+                    } else {
+                        setItems(response.advertisement);
+                        setItems(response.advertisement);
+                        setTotalItems(response.totalCount);
+                    }
                     break;
                 case 'equipment':
                     if (searchText) {
                         response = await searchEquipment(searchText);
+                        if ('status' in response) {
+                            setError(`${response.message}, код: ${response.status}`)
+                            console.log(response.message)
+                        } else {
+                            setItems(response.advertisement);
+                            setItems(response.advertisement);
+                            setTotalItems(response.totalCount);
+                        }
                     } else {
                         response = await getAllEquipment(page - 1, 8);
+                        if ('status' in response) {
+                            setError(`${response.message}, код: ${response.status}`)
+                            console.log(response.message)
+                        } else {
+                            setItems(response.advertisement);
+                            setItems(response.advertisement);
+                            setTotalItems(response.totalCount);
+                        }
                     }
                     break;
-                default:
-                    throw new Error('Invalid URL');
-            }
-
-            if (response) {
-                setItems(response.advertisement);
-                setTotalItems(response?.totalCount ? response.totalCount : 1);
             }
         } catch (err) {
             console.error('Error fetching items:', err);
-            setError('An error occurred while fetching data.');
         } finally {
             setLoading(false);
         }
@@ -86,7 +116,7 @@ const Cards: React.FC<ICards> = ({url}) => {
     }
 
     return (
-        <section className={'column'}>
+        <section className="column">
             <div className={styles.cards}>
                 {items.map(item => (
                     <Card category={url} key={item.id} data={item}/>
@@ -96,7 +126,7 @@ const Cards: React.FC<ICards> = ({url}) => {
                 <Pagination
                     current={currentPage}
                     total={totalItems}
-                    pageSize={4}
+                    pageSize={4} // Adjust this if needed
                     onChange={handlePageChange}
                 />
             </div>

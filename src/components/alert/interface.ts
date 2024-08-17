@@ -6,4 +6,6 @@ export interface IAlert {
     success?: boolean,
     buy?: boolean,
     error?: boolean,
+    text?: string,
+    isAuth?: boolean,
 }

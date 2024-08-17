@@ -41,11 +41,15 @@ const HistoryCard: React.FC<IHistoryCard> = ({
 
 
     const handleAccessOrder = async (orderId: string | number) => {
-        const {id} = await getProfile();
-        console.log(id, orderId)
+
         try {
-            await postAssignEmployeeToOrder(orderId, id);
-            handleToggleModal();
+            const profile = await getProfile();
+            if ('status' in profile) {
+                handleToggleError();
+            } else {
+                await postAssignEmployeeToOrder(orderId, profile.id);
+                handleToggleModal();
+            }
         } catch (error) {
             handleToggleError();
             new Error(`${error}`)

@@ -1,4 +1,4 @@
-import {Flex} from "antd";
+import {Flex, Modal} from "antd";
 import {NavLink, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 
@@ -13,8 +13,11 @@ import {validationSchema} from "@validations/auth.ts";
 
 import styles from "./auth.module.scss";
 import authBackground from "@assets/images/authBackground.jpg";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {signIn} from "@network/auth/auth.ts";
+import classNames from "classnames";
+import Alert from "@components/alert/UI/alert.tsx";
+import {IError} from "@network/interfaces/network/error.ts";
 
 const Auth = () => {
     const form = useForm<IAuth>({
@@ -25,32 +28,36 @@ const Auth = () => {
     const dispatch = useAddDispatch();
     const navigate = useNavigate();
     const isAuthorized = useAppSelector(state => state.auth.isAuthorized);
-
+    const [error, setError] = useState<boolean>(false); // Состояние нового модального окна для подтверждения выхода
+    const [message, setMessage] = useState<string>()
+    const handleToggleModal = () => {
+        setError(!error);
+    }
     const handleAuthorization = async (email: string) => {
-        try {
-            const response = await signIn(email); // Исправление функции
-            console.log(response);
+        const response: { message: string } | IError = await signIn(email);
+        if (response) {
             navigate('/confirmed');
-        } catch (error) {
-            console.error('Authorization error:', );
+        } else {
+            handleToggleModal();
+            setMessage(response)
         }
     }
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         const email = getValues('email');
-        handleAuthorization(email);
         dispatch(setEmail(emailValue));
+        await handleAuthorization(email);
+
     };
 
-    const emailValue = watch('email'); // Использование watch для отслеживания изменений email
+    const emailValue = watch('email');
 
     useEffect(() => {
-        console.log(emailValue);
         localStorage.setItem('email', emailValue)
         if (isAuthorized) {
             navigate('/marketplace')
         }
-    }, [emailValue, dispatch]);
+    }, [emailValue, dispatch, isAuthorized, navigate]);
 
     return (
         <section className={styles.content}>
@@ -72,7 +79,7 @@ const Auth = () => {
                                 id="email"
                                 {...register('email')}
                                 autoFocus={touchedFields.email}
-                                className={styles.input}
+                                className={errors ? styles.input : classNames(styles.input, styles.error)}
                                 placeholder={"example@jom.com.kg"}
                             />
                         </div>
@@ -101,6 +108,9 @@ const Auth = () => {
                     </p>
                 </div>
             </section>
+            <Modal open={error} footer={null} centered={true}>
+                <Alert setModalActive={handleToggleModal} error={error} text={message}/>
+            </Modal>
         </section>
     )
 }

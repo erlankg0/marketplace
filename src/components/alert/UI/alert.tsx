@@ -7,8 +7,19 @@ import Change from "@components/alerts/change/UI/change.tsx";
 import Subscribe from "@components/alerts/subscribe/UI/subscribe.tsx";
 import Buy from "@components/alerts/buy/buy.tsx";
 import Error from "@components/alerts/error/UI/error.tsx";
+import ErrorIsAuth from "@components/alerts/auth/UI/auth.tsx";
 
-const Alert: React.FC<IAlert> = ({forgot, success, change, logout, buy, error,setModalActive}) => {
+const Alert: React.FC<IAlert> = ({
+                                     forgot,
+                                     success,
+                                     change,
+                                     logout,
+                                     buy,
+                                     error,
+                                     isAuth,
+                                     text,
+                                     setModalActive
+                                 }) => {
     return (
         <div className={styles.alert}>
             {forgot && (
@@ -18,16 +29,19 @@ const Alert: React.FC<IAlert> = ({forgot, success, change, logout, buy, error,se
                 <Out setModalActive={setModalActive}/>
             )}
             {change == true && (
-                <Change/>
+                <Change setModalActive={setModalActive}/>
             )}
             {success == true && (
-                <Subscribe setModalActive={setModalActive}/>
+                <Subscribe text={text} setModalActive={setModalActive}/>
             )}
             {buy === true && (
                 <Buy setModalActive={setModalActive}/>
             )}
             {error === true && (
-                <Error setModalActive={setModalActive}/>
+                <Error text={text} setModalActive={setModalActive}/>
+            )}
+            {isAuth === true && (
+                <ErrorIsAuth setModalActive={setModalActive}/>
             )}
         </div>
     )

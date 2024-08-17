@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {IError} from "@network/interfaces/network/error.ts";
 
 // Create axios instance
 export const instance = axios.create({
@@ -60,3 +61,7 @@ instance.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+export const handleResponseError = (message: string, status: number): IError => {
+    return {message, status};
+};

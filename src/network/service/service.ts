@@ -1,4 +1,7 @@
 import {instance} from "@network/network.ts";
+import {AxiosResponse} from "axios";
+import {ICards} from "@network/interfaces/basic.ts";
+import {IError} from "@network/interfaces/network/error.ts";
 
 export const postService = async (data: FormData) => {
     try {
@@ -14,14 +17,24 @@ export const postService = async (data: FormData) => {
     }
 }
 
-export const getAllServices = async (pageNo: number = 0, pageSize: number = 16) => {
-    try {
-        const response = await instance.get(`service/get-all-services?pageNumber=${pageNo}&pageSize=${pageSize}`);
+export const getAllServices = async (pageNo: number = 0, pageSize: number = 18): Promise<ICards | IError> => {
+    const response: AxiosResponse<ICards> = await instance.get(`service/get-all-services?pageNumber=${pageNo}&pageSize=${pageSize}`);
+    if (response.status == 200) {
         return response.data
-    } catch (error) {
-        console.error(error);
-        throw error
+    } else {
+        const status = response.status;
+        switch (status) {
+            case 401:
+                return {message: 'Требуется авторизация!', status};
+            case 403:
+                return {message: 'Нет доступа!', status};
+            case 404:
+                return {message: 'Нет оборудования...', status};
+            default:
+                return {message: 'Не известная ошибка!', status};
+        }
     }
+
 }
 
 export const getServiceById = async (id: number | string) => {

@@ -1,16 +1,16 @@
 import SelectButton from "@components/button/UI/selectButton.tsx";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import styles from "./current.module.scss";
-import { IMyAds } from "@network/interfaces/profile/profile.ts";
 import HistoryCard from "@components/history/UI/history.tsx";
-import { getMyEquipments } from "@network/equipment/equipment.ts";
-import { getMyOrders } from "@network/order/order.ts";
-import { getMyServices } from "@network/service/service.ts";
-import { getMyAds } from "@network/profile/profile.ts";
+import {getMyEquipments} from "@network/equipment/equipment.ts";
+import {getMyOrders} from "@network/order/order.ts";
+import {getMyServices} from "@network/service/service.ts";
+import {getMyAds} from "@network/profile/profile.ts";
+import {ICards} from "@network/interfaces/basic.ts";
 
 const CurrentOrders = () => {
     const [selectedButton, setSelectedButton] = useState<'ALL' | 'ORDER' | 'SERVICE' | 'EQUIPMENT'>('ALL');
-    const [items, setItems] = useState<IMyAds[]>([]);
+    const [items, setItems] = useState<ICards>();
     const LOCAL_STORAGE_KEY = 'myAdsListSelectedButton';
 
     const handleGetMyOrder = async () => {
@@ -19,28 +19,35 @@ const CurrentOrders = () => {
             switch (selectedButton) {
                 case "EQUIPMENT":
                     response = await getMyEquipments();
-                    setItems(response.data.advertisement.reverse());
+                    if ('status' in response) {
+                        console.log(response)
+                    } else {
+                        setItems(response);
+                    }
                     break;
                 case "ORDER":
                     response = await getMyOrders();
-                    console.log(response)
-                    setItems(response.advertisement.reverse());
+                    if ('status' in response) {
+                        console.log(response)
+                    } else {
+                        setItems(response);
+                    }
                     break;
                 case "SERVICE":
                     response = await getMyServices();
-                    console.log(response.data)
-                    setItems(response.data.advertisement.reverse());
+                    if ('status' in response) {
+                        console.log(response)
+                    } else {
+                        setItems(response);
+                    }
                     break;
                 case "ALL":
                     response = await getMyAds();
                     setItems(response.data.advertisement.reverse());
                     break;
-                default:
-                    setItems([]); // Fallback to empty list if nothing matches
             }
         } catch (e) {
             console.error('Error fetching items:', e);
-            setItems([]); // Clear items if an error occurs
         }
     };
 
@@ -87,15 +94,15 @@ const CurrentOrders = () => {
             </div>
             <div className={styles.my_ads__column}>
                 {items ? (
-                    items.map(item => (
+                    items.advertisement.map(item => (
                         <HistoryCard
                             key={item.id}
                             id={item.id}
                             myAds={true}
-                            date={item.createdAt}
+                            date={item.date && item.date}
                             title={item.name}
                             description={item.description}
-                            image={item.imagePath}
+                            image={item.imagePath && item.imagePath}
                             type={selectedButton}
                         />
                     ))

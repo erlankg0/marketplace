@@ -5,9 +5,10 @@ import {validationCreateOrganization} from "@validations/organization.ts";
 import styles from "@layout/Organization/styles/styles.module.scss";
 import UploadImage from "@components/uploadImage/UI/upload.tsx";
 import {useState} from "react";
-import {Flex, UploadFile} from "antd";
+import {Flex, Modal, UploadFile} from "antd";
 import ButtonComponent from "@components/button/UI/button.tsx";
 import {createOrganization} from "@network/organization/admin.ts";
+import Alert from "@components/alert/UI/alert.tsx";
 
 const Create = () => {
     const form = useForm<ICreate>({
@@ -18,15 +19,36 @@ const Create = () => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState<UploadFile[]>([]);
-    const onSubmit = (data: ICreate) => {
-        console.log(data, fileList);
-        // не работает так как есть ещё image
-        const formData = new FormData();
-        formData.append('organization', JSON.stringify(data))
-        fileList.forEach(image=> {
-            formData.append('image', image.originFileObj as File)
-        })
-        createOrganization(formData)
+
+    const [success, setSuccess] = useState<boolean>(false); // Состояние нового модального окна для подтверждения выхода
+    const [error, setError] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>()
+    const handleToggleSuccess = () => {
+        setSuccess(!success);
+    }
+    const handleToggleError = () => {
+        setError(!error);
+    }
+
+    const onSubmit = async (data: ICreate) => {
+        try {
+            const formData = new FormData();
+            formData.append('organization', JSON.stringify(data))
+            fileList.forEach(image => {
+                formData.append('image', image.originFileObj as File)
+            })
+
+            const response = await createOrganization(formData)
+            if (typeof response === 'number') {
+                handleToggleSuccess();
+            } else {
+                setMessage(response.message)
+                handleToggleError();
+            }
+        } catch (e) {
+            console.log(`${e}`)
+        }
+
     }
     return (
         <section>
@@ -91,6 +113,12 @@ const Create = () => {
                     </div>
                 </Flex>
             </form>
+            <Modal open={success} footer={null} centered={true}>
+                <Alert setModalActive={handleToggleSuccess} success={success}/>
+            </Modal>
+            <Modal open={error} footer={null} centered={true}>
+                <Alert setModalActive={handleToggleError} error={error} text={message}/>
+            </Modal>
         </section>
     )
 }

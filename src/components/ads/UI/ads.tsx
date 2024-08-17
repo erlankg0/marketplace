@@ -1,20 +1,35 @@
-import styles from "./ads.module.scss";
+import React, {useState} from "react";
+import {Modal} from "antd";
+
+import {IStatusAds} from "@components/ads/interface.ts";
+import ButtonAds from "@components/button/UI/buttonAds.tsx";
+import Alert from "@components/alert/UI/alert.tsx";
+import {postSendSubscriptionRequest} from "@network/profile/profile.ts";
 import gift from "@assets/icon/gift.png";
 import done from "@assets/icon/done.svg";
-import ButtonAds from "@components/button/UI/buttonAds.tsx";
-import {postSendSubscriptionRequest} from "@network/profile/profile.ts";
-import {IStatusAds} from "@components/ads/interface.ts";
-import React from "react";
+import styles from "./ads.module.scss";
 
 const Ads: React.FC<IStatusAds> = ({status}) => {
+    const [success, setSuccess] = useState<boolean>(false); // Состояние нового модального окна для подтверждения выхода
+    const [error, setError] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>()
 
+    const handleToggleSuccess = () => {
+        setSuccess(!success);
+    }
+    const handleToggleError = () => {
+        setError(!error);
+    }
     const handleSendSubscribe = async () => {
-        try {
-            const response = await postSendSubscriptionRequest();
-            console.log(response.data);
-        } catch (error) {
-            console.error(error);
+        const response = await postSendSubscriptionRequest();
+        if ('status' in response) {
+            setMessage(`${response.message}, код: ${response.status}`)
+            handleToggleError()
+        } else {
+            setMessage(response.message);
+            handleToggleSuccess();
         }
+
     }
 
 
@@ -30,7 +45,7 @@ const Ads: React.FC<IStatusAds> = ({status}) => {
                         <p className={styles.ads__date}>Срок: до бесконечности</p>
                     </div>
                 </section>
-            ): (
+            ) : (
                 <section className={styles.ads}>
                     <div>
                         <img src={gift} alt={'gift images'}/>
@@ -45,6 +60,12 @@ const Ads: React.FC<IStatusAds> = ({status}) => {
                     <ButtonAds onClick={handleSendSubscribe} text={'Отправить запрос на подписку'}/>
                 </section>
             )}
+            <Modal open={success} footer={null} centered={true}>
+                <Alert setModalActive={handleToggleSuccess} text={message} success={success}/>
+            </Modal>
+            <Modal open={error} footer={null} centered={true}>
+                <Alert setModalActive={handleToggleError} error={error} text={message}/>
+            </Modal>
         </>
 
     )

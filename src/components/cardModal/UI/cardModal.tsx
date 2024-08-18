@@ -310,13 +310,12 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                                 <p className={styles.content__count}>В наличии: <strong>{item.quantity}</strong></p>
                             )}
                         </div>
-                        {item?.type && (
                             <button
                                 onClick={handleBuy}
                                 className={styles.button}
                             >
                                 {category == 'equipment' ? 'Купить' : category === 'services' ? "Принять заказ" : "Запрос"}
-                            </button>)}
+                            </button>)
 
                     </div>
                 </div>

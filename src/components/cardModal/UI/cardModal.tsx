@@ -18,22 +18,26 @@ import {getServiceById} from "@network/service/service";
 import {buyEquipment, getEquipmentById} from "@network/equipment/equipment";
 import {formatDate} from "@utils/formDate";
 import styles from "./cardModal.module.scss";
+import {IError} from "@network/interfaces/network/error.ts";
+import {IData} from "@network/interfaces/response/service.ts";
 
 SwiperCore.use([Navigation, Pagination, Thumbs, FreeMode]);
 
 
 interface DetailItem {
     id: number;
-    images: string[];
-    date?: Date;
+    images?: string[];
+    date?: Date | string;
     name: string;
     description: string;
     price: number;
-    contactInfo: string;
+    contactInfo?: string;
     authorName: string;
-    authorImage: string;
+    authorImage?: string;
     orderItems?: ISize[];
     quantity?: number;
+    imageUrl?: string,
+    type?: string
 }
 
 const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
@@ -77,7 +81,6 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                         break;
                 }
             } catch (error) {
-                setMessage(`${error}`);
                 setError(true);
             }
         };
@@ -90,41 +93,62 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
         const handleGetData = async () => {
             try {
                 setLoading(true);
-                let response;
+                let response: IError | IData;
 
                 switch (category) {
                     case 'order':
-                        response = await getByIdOrder(id);
-                        setItem({
-                            id: response.id,
-                            images: response.orderImages,
-                            name: response.name,
-                            description: response.description,
-                            price: response.price,
-                            contactInfo: response.contactInfo,
-                            date: response.dateOfExecution,
-                            authorImage: response.authorImage,
-                            authorName: response.authorFullName,
-                            orderItems: response.orderItems,
-                        });
+                        try {
+                            response = await getByIdOrder(id);
+                            if ('message' in response) {
+                                console.log(response.message);
+                            } else {
+                                setItem({
+                                    id: response.id,
+                                    images: response?.orderImages && response.orderImages,
+                                    name: response.name,
+                                    description: response.description,
+                                    price: response.price,
+                                    contactInfo: response.contactInfo,
+                                    date: response.dateOfExecution,
+                                    authorImage: response?.authorImage && response.authorImage,
+                                    authorName: response.authorFullName,
+                                    orderItems: response.orderItems,
+                                });
+                            }
+                        } catch (error) {
+                            const axiosError = error as IError
+                            alert(axiosError.message);
+                        }
+
                         break;
                     case 'services':
-                        response = await getServiceById(id);
+                        try {
+                            response = await getServiceById(id);
+                            if ('message' in response) {
+                                alert(response.message);
+                            } else {
+                                setItem({
+                                    id: response.id,
+                                    images: response.serviceImages,
+                                    name: response.name,
+                                    description: response.description,
+                                    price: response.price,
+                                    contactInfo: response.contactInfo,
+                                    authorImage: response.authorImage,
+                                    authorName: response.authorFullName,
+                                });
+                            }
+                        } catch (error) {
+                            const axiosError = error as IError
+                            alert(axiosError.message);
+                        }
 
-                        setItem({
-                            id: response.id,
-                            images: response.serviceImages,
-                            name: response.name,
-                            description: response.description,
-                            price: response.price,
-                            contactInfo: response.contactInfo,
-                            authorImage: response.authorImage,
-                            authorName: response.authorFullName,
-                        });
                         break;
                     case 'equipment':
                         response = await getEquipmentById(id);
-                        if (response) {
+                        if ('message' in response) {
+                            alert(response)
+                        } else {
                             setItem({
                                 id: response.id,
                                 images: response.equipmentImages,
@@ -136,8 +160,9 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                                 orderItems: response.orderItems,
                                 authorImage: response.authorImage,
                                 authorName: response.authorFullName,
-                                quantity: response.quantity
+                                quantity: response.quantity,
                             });
+
                         }
                         break;
                     default:
@@ -244,7 +269,7 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                                     </TabPanel>
                                     <TabPanel>
                                         <div className={styles.content}>
-                                            {item?.contactInfo.includes('@') ? (
+                                            {item?.contactInfo && item.contactInfo.includes('@') ? (
                                                 <a href={`mailto:${item.contactInfo}`} className={styles.content__text}>
                                                     Э-почта: {item.contactInfo}
                                                 </a>
@@ -285,12 +310,14 @@ const CardModal: React.FC<ICardModal> = ({setModal, id, category}) => {
                                 <p className={styles.content__count}>В наличии: <strong>{item.quantity}</strong></p>
                             )}
                         </div>
-                        <button
-                            onClick={handleBuy}
-                            className={styles.button}
-                        >
-                            {category == 'equipment' ? 'Купить' : category === 'services' ? "Принять заказ" : "Запрос"}
-                        </button>
+                        {item?.type && (
+                            <button
+                                onClick={handleBuy}
+                                className={styles.button}
+                            >
+                                {category == 'equipment' ? 'Купить' : category === 'services' ? "Принять заказ" : "Запрос"}
+                            </button>)}
+
                     </div>
                 </div>
                 <Modal open={buy} footer={null} centered={true}>

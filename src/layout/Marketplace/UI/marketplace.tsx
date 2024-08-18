@@ -101,6 +101,7 @@ const Marketplace = () => {
                     <Route path={'/profile'} element={<Profile/>}/>
                     <Route path={'/profiles/history-orders'} element={<HistoryList/>}/>
                     <Route path={'/self-ads'} element={<CurrentOrders/>}/>
+                    <Route path={'/self-buys'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>
                     <Route path={'/self-detail/:id/:category'} element={<DetailOrder/>}/>
                     <Route path={'/equipment'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>
                     <Route path={'/order'} element={<Cards url={path} setActiveModal={setModalActive}/>}/>

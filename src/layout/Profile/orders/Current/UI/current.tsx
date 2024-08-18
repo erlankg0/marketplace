@@ -43,7 +43,8 @@ const CurrentOrders = () => {
                     break;
                 case "ALL":
                     response = await getMyAds();
-                    setItems(response.data.advertisement.reverse());
+                    console.log(response);
+                    setItems(response);
                     break;
             }
         } catch (e) {
@@ -93,7 +94,7 @@ const CurrentOrders = () => {
                 />
             </div>
             <div className={styles.my_ads__column}>
-                {items ? (
+                {items?.advertisement ? (
                     items.advertisement.map(item => (
                         <HistoryCard
                             key={item.id}

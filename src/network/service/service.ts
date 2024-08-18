@@ -1,7 +1,8 @@
-import {instance} from "@network/network.ts";
-import {AxiosResponse} from "axios";
+import {handleResponseError, instance} from "@network/network.ts";
+import {AxiosError, AxiosResponse} from "axios";
 import {ICards} from "@network/interfaces/basic.ts";
 import {IError} from "@network/interfaces/network/error.ts";
+import {IData} from "@network/interfaces/response/service.ts";
 
 export const postService = async (data: FormData) => {
     try {
@@ -37,15 +38,21 @@ export const getAllServices = async (pageNo: number = 0, pageSize: number = 18):
 
 }
 
-export const getServiceById = async (id: number | string) => {
+export const getServiceById = async (id: number | string): Promise<IData | IError> => {
     try {
-        const response = await instance.get(`service/get-service-detailed/${id}`);
-        return response.data;
+        const response: AxiosResponse<IData> = await instance.get(`service/get-service-detailed/${id}`);
+        if (response.status == 200) {
+            return response.data;
+        } else {
+            return handleResponseError(response.statusText, response.status);
+        }
     } catch (error) {
-        console.error(error);
-        throw error
+        const axiosError = error as AxiosError;
+        return handleResponseError(axiosError.message, axiosError.response?.status);
+
     }
 }
+
 
 export const getMyServices = async (pageNo: number = 0, pageSize: number = 18) => {
     try {

@@ -10,6 +10,7 @@ import {IData} from "@network/interfaces/response/service";
 import {useAppSelector} from "@redux/hooks.ts";
 import {IError} from "@network/interfaces/network/error.ts";
 import {ICards as ICardsResponse} from "@network/interfaces/basic.ts";
+import {getMyPurchases} from "@network/profile/profile.ts";
 
 const Cards: React.FC<ICards> = ({url}) => {
     const [items, setItems] = useState<IData[]>([]);
@@ -35,7 +36,7 @@ const Cards: React.FC<ICards> = ({url}) => {
             clearTimeout(handler);
         };
     }, [searchText]);
-
+    console.log(url)
     const handleGetItems = async (url: string, page: number, searchText?: string) => {
         try {
             setLoading(true);
@@ -55,6 +56,17 @@ const Cards: React.FC<ICards> = ({url}) => {
                     break;
                 case 'services':
                     response = await getAllServices(page - 1, 8);
+                    if ('status' in response) {
+                        setError(`${response.message}, код: ${response.status}`)
+                        console.log(response.message)
+                    } else {
+                        setItems(response.advertisement);
+                        setItems(response.advertisement);
+                        setTotalItems(response.totalCount);
+                    }
+                    break;
+                case 'self-buys':
+                    response = await getMyPurchases(page - 1, 8);
                     if ('status' in response) {
                         setError(`${response.message}, код: ${response.status}`)
                         console.log(response.message)

@@ -1,7 +1,8 @@
-import {instance} from "@network/network.ts";
+import {handleResponseError, instance} from "@network/network.ts";
 import {IEditProfile, IProfile} from "@network/interfaces/profile/profile.ts";
 import {IError} from "@network/interfaces/network/error.ts";
-import axios, {AxiosResponse} from "axios";
+import axios, {AxiosError, AxiosResponse} from "axios";
+import {ICards} from "@network/interfaces/basic.ts";
 
 export const getProfile = async (): Promise<IProfile | IError> => {
     try {
@@ -154,10 +155,23 @@ export const postSendSubscriptionRequest = async (): Promise<{ message: string }
 }
 
 export const getMyAds = async (pageNo: number = 0, pageSize: number = 18) => {
-    try {
-        return await instance.get(`account/my-advertisements?pageNumber=${pageNo}&pageSize=${pageSize}`)
-    } catch (error) {
-        throw `Error: ${error}`
+    const response = await instance.get(`account/my-advertisements?pageNumber=${pageNo}&pageSize=${pageSize}`);
+    if (response.status == 200) {
+        return response.data
+    } else {
+        const status = response.status;
+        switch (status) {
+            case 400:
+                return {message: response.data, status};
+            case 401:
+                return {message: response.data, status};
+            case 403:
+                return {message: response.data, status};
+            case 419:
+                return {message: response.data, status};
+            default:
+                return {message: response.data, status};
+        }
     }
 }
 
@@ -168,3 +182,38 @@ export const getOrderHistoryUser = async (stage: "completed" | "current", pageNo
         throw `Error: ${error}`
     }
 }
+export const getMyPurchases = async (pageNumber: number = 0, pageSize: number = 10): Promise<ICards | IError> => {
+    try {
+        const url = `account/my-purchases?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+        const response: AxiosResponse<ICards> = await instance.get(url);
+
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            return handleResponseError(response.statusText, response.status);
+        }
+    } catch (error) {
+        const axiosError = error as AxiosError;
+        return handleResponseError(axiosError.message, axiosError.response?.status);
+    }
+};
+
+export const getUserOrderHistory = async (
+    stage: 'current' | 'completed',
+    pageNumber: number = 0,
+    pageSize: number = 10,
+): Promise<ICards| IError> => {
+    try {
+        const url = `/order/order-history-for-user?pageNumber=${pageNumber}&pageSize=${pageSize}&stage=${stage}`;
+        const response: AxiosResponse<ICards> = await instance.get(url);
+
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            return handleResponseError(response.statusText, response.status);
+        }
+    } catch (error) {
+        const axiosError = error as AxiosError;
+        return handleResponseError(axiosError.message, axiosError.response?.status);
+    }
+};

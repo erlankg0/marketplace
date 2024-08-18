@@ -62,6 +62,10 @@ instance.interceptors.response.use(
     }
 );
 
-export const handleResponseError = (message: string, status: number): IError => {
-    return {message, status};
+export const handleResponseError = (message?: string, status: number = 500): IError => {
+    if (message) {
+        return {message, status};
+    }
+    return {message: 'Не известная ошибка', status: status};
+
 };

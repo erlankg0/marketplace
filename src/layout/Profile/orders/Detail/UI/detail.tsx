@@ -17,6 +17,7 @@ import {deleteEquipment, getEquipmentById, hideEquipment} from "@network/equipme
 import {IDetailAds} from "@network/interfaces/profile/profile.ts";
 import {useNavigate} from "react-router-dom";
 import Alert from "@components/alert/UI/alert.tsx";
+import {IError} from "@network/interfaces/network/error.ts";
 
 const DetailOrder = () => {
     const [data, setData] = useState<IData>();
@@ -39,7 +40,7 @@ const DetailOrder = () => {
     const [success, setSuccess] = useState<boolean>(false); // Состояние нового модального окна для подтверждения выхода
 
     const handleToggleModal = () => {
-        setSuccess(!success);
+        setSuccess(!success)
     }
     const handleSelectCategory = (category: 'equipment' | 'order' | 'service') => {
         setSelectedCategory(category);
@@ -57,38 +58,49 @@ const DetailOrder = () => {
         try {
             setLoading(true);
             setError(null);
-            let response: IData;
-            if (id) {
-                switch (category) {
-                    case 'ORDER':
-                        response = await getByIdOrder(+id, true);
-                        break;
-                    case 'SERVICE':
-                        response = await getServiceById(+id);
-                        break;
-                    case 'EQUIPMENT':
-                        response = await getEquipmentById(+id);
-                        break;
-                    default:
-                        throw new Error('Invalid URL');
-                }
-                setData(response);
-                reset({
-                    name: response.name,
-                    description: response.description,
-                    contactInfo: 'example@mail.com.org',
-                    price: response.price,
-                });
+
+            if (!id) {
+                throw new Error('Error: Ошибка нету такого ID');
+            }
+
+            let response: IData | IError;
+
+            switch (category) {
+                case 'ORDER':
+                    response = await getByIdOrder(+id, true);
+                    break;
+                case 'SERVICE':
+                    response = await getServiceById(+id);
+                    break;
+                case 'EQUIPMENT':
+                    response = await getEquipmentById(+id);
+                    break;
+                default:
+                    console.error('Invalid category:', category);
+                    return; // Exit if category is invalid
+            }
+
+            if ('message' in response) {
+                // Handle potential error message from the response
+                console.error('Error from API:', response.message);
+                setError('An error occurred while fetching data.'); // Or provide a more specific message
             } else {
-                new Error('Error: Ошибка нету такого ID');
+                // Cast response to IData if it's successful
+                const data = response as IData;
+                setData(data);
+                reset({
+                    name: data.name,
+                    description: data.description,
+                    contactInfo: 'example@mail.com.org',
+                    price: data.price,
+                });
             }
         } catch (err) {
-            setError('An error occurred while fetching data.');
+            setError(err instanceof Error ? err.message : 'An error occurred while fetching data.');
         } finally {
             setLoading(false);
         }
     };
-
     const handleDeleteItem = async () => {
         try {
             if (id) {
@@ -172,7 +184,9 @@ const DetailOrder = () => {
 
     return (
         <section className={'column'}>
-            <h2>Статус: {data?.orderStatus} </h2>
+            {data?.orderCandidates && (
+                <h2>Статус: {data.orderStatus} </h2>
+            )}
             <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
                 <p className={styles.form__title}>Тип объявления</p>
                 <div className={'row'}>
@@ -323,14 +337,7 @@ const DetailOrder = () => {
                     </div>
                 </div>
             </form>
-            <Modal open={success} footer={null} centered={true}
-                   bodyStyle={{
-                       display: 'flex',
-                       justifyContent: 'center',
-                       alignItems: 'center',
-                       maxWidth: '30rem',
-                       margin: '0 auto'
-                   }}>
+            <Modal open={success} footer={null} centered={true}>
                 <Alert setModalActive={handleToggleModal} success={success}/>
             </Modal>
         </section>

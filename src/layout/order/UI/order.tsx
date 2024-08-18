@@ -278,14 +278,7 @@ const Order = () => {
                     <ButtonComponent text={'Разместить Объявления'}/>
                 </div>
             </form>
-            <Modal open={success} footer={null} centered={true}
-                   bodyStyle={{
-                       display: 'flex',
-                       justifyContent: 'center',
-                       alignItems: 'center',
-                       maxWidth: '30rem',
-                       margin: '0 auto'
-                   }}>
+            <Modal open={success} footer={null} centered={true}>
                 <Alert setModalActive={handleToggleModal} success={success}/>
             </Modal>
         </section>

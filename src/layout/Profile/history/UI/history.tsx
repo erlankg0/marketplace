@@ -1,15 +1,12 @@
 import styles from "@layout/Organization/employers/list/UI/list.module.scss";
-import Status from "@components/status/UI/status.tsx";
-import {formatDate} from "@utils/formDate.ts";
 import {useEffect, useState} from "react";
 import SelectButton from "@components/button/UI/selectButton.tsx";
-import {data} from "@layout/Profile/history/data.ts";
-import {getOrderHistoryUser} from "@network/profile/profile.ts";
+import {getMyPurchases, getUserOrderHistory} from "@network/profile/profile.ts";
+import {ICards} from "@network/interfaces/basic.ts";
 
 const HistoryList = () => {
     const [selectedButton, setSelectedButton] = useState<'current' | 'completed'>('current');
-    const [items, setItems] = useState(data);
-
+    const [items, setItems] = useState<ICards>();
     const LOCAL_STORAGE_KEY = 'historyListSelectedButton';
 
     useEffect(() => {
@@ -22,15 +19,28 @@ const HistoryList = () => {
     const handleButtonClick = (buttonType: 'current' | 'completed') => {
         setSelectedButton(buttonType);
         localStorage.setItem(LOCAL_STORAGE_KEY, buttonType);
-        setItems(data);
     };
 
     const handleGetHistory = async () => {
         try {
-            const response = await getOrderHistoryUser(selectedButton);
-            console.log(response)
+            const response = await getUserOrderHistory(selectedButton);
+            if ('message' in response) {
+                alert(response)
+            } else {
+                console.log(response);
+                setItems(response)
+            }
         } catch (error) {
             new Error(`${error}`)
+        }
+    }
+
+    const handleGetMyPurchases = async () => {
+        const response = await getMyPurchases();
+        if ('message' in response) {
+            console.log(response)
+        } else {
+            setItems(response);
         }
     }
 
@@ -38,6 +48,9 @@ const HistoryList = () => {
         handleGetHistory();
     }, [selectedButton])
 
+    useEffect(() => {
+        handleGetMyPurchases();
+    }, [])
     return (
         <section className={styles.table__column}>
             <div className={'row'}>
@@ -62,7 +75,7 @@ const HistoryList = () => {
                         <th className={styles.table__th}>Дата заверщения</th>
                     </tr>
                     </thead>
-                    {items['current'].map(item => (
+                    {items && items.advertisement.map(item => (
                         <tbody className={styles.table__body}>
 
                         <tr className={styles.table__column}>
@@ -70,7 +83,7 @@ const HistoryList = () => {
 
                             <tr className={styles.table__column}>
                                 <td className={`${styles.table__title} ${styles.table__paragraph}`}>
-                                    {item.order}
+                                    {item.price}
                                 </td>
                             </tr>
 
@@ -82,13 +95,13 @@ const HistoryList = () => {
 
                             <tr className={styles.table__column}>
                                 <td>
-                                    <Status status={item.status}/>
+                                    {/*<Status status={i}/>*/}
                                 </td>
                             </tr>
 
                             <tr className={styles.table__column}>
                                 <td className={styles.table__paragraph}>
-                                    {formatDate(item.date)}
+                                    {/*{formatDate(item.date)}*/}
                                 </td>
                             </tr>
 
@@ -109,37 +122,6 @@ const HistoryList = () => {
                         <th className={styles.table__th}>Дата заверщения</th>
                     </tr>
                     </thead>
-                    {items['done'].map(item => (
-                        <tbody className={styles.table__body}>
-
-                        <tr className={styles.table__column}>
-                            <td>
-                                <tbody className={styles.table__body}>
-
-                                <tr className={styles.table__column}>
-                                    <td className={`${styles.table__title} ${styles.table__paragraph}`}>
-                                        {item.order}
-                                    </td>
-                                </tr>
-
-                                <tr className={styles.table__column}>
-                                    <td className={styles.table__paragraph}>
-                                        {item.price} сом
-                                    </td>
-                                </tr>
-
-                                <tr className={styles.table__column}>
-                                    <td className={styles.table__paragraph}>
-                                        {formatDate(item.date)}
-                                    </td>
-                                </tr>
-
-                                </tbody>
-                            </td>
-                        </tr>
-                        </tbody>
-                    ))}
-
                 </table>
             )}
 

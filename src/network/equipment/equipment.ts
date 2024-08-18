@@ -1,7 +1,9 @@
-import {instance} from "@network/network.ts";
+import {handleResponseError, instance} from "@network/network.ts";
 import axios, {AxiosResponse} from "axios";
 import {ICards} from "@network/interfaces/basic.ts";
 import {IError} from "@network/interfaces/network/error.ts";
+import {AxiosError} from "axios";
+import {IData} from "@network/interfaces/response/service.ts";
 
 export const getAllEquipment = async (pageNo: number = 0, pageSize: number = 18): Promise<ICards | IError> => {
     const response: AxiosResponse<ICards> = await instance.get(`equipment/get-all-equipments?pageNumber=${pageNo}&pageSize=${pageSize}`)
@@ -20,13 +22,17 @@ export const getAllEquipment = async (pageNo: number = 0, pageSize: number = 18)
     }
 }
 
-export const getEquipmentById = async (id: number | string) => {
+export const getEquipmentById = async (id: number | string): Promise<IData | IError> => {
     try {
-        const response = await instance.get(`equipment/get-equipment-detailed/${id}`)
-        return response.data
+        const response: AxiosResponse<IData> = await instance.get(`equipment/get-equipment-detailed/${id}`)
+        if (response.status == 200) {
+            return response.data;
+        } else {
+            return handleResponseError(response.statusText, response.status);
+        }
     } catch (error) {
-        console.error(error);
-        throw error
+        const axiosError = error as AxiosError;
+        return handleResponseError(axiosError.message, axiosError.response?.status);
     }
 }
 
@@ -103,31 +109,67 @@ export const buyEquipment = async (id: number) => {
 
 // post, delete, hide,
 export const postEquipment = async (data: FormData) => {
-    try {
-        const response = await instance.post('equipment/add-equipment', data, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            }
-        });
-        return response.data
-    } catch (error) {
-        console.error(error);
-        throw error
+    const response: AxiosResponse<string> = await instance.post('equipment/add-equipment', data, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        }
+    });
+    if (response.status === 201) {
+        return response.data;
+    } else {
+        const status = response.status;
+        switch (status) {
+            case 401:
+                return {message: 'Требуется авторизация!', status};
+            case 403:
+                return {message: 'Нет доступа!', status};
+            case 413:
+                return {message: 'Максимум 10 мб фотографии...', status};
+            default:
+                return {message: 'Не известная ошибка!', status};
+        }
     }
+
 }
 
 export const deleteEquipment = async (id: number) => {
-    try {
-        return await instance.delete(`equipment/delete-equipment/${id}`)
-    } catch (error) {
-        throw `Error: ${error}`
+
+    const response: AxiosResponse<string> = await instance.delete(`equipment/delete-equipment/${id}`);
+    if (response.status === 200) {
+        return response.data
+    } else {
+        const status = response.status;
+        switch (status) {
+            case 401:
+                return {message: 'Требуется авторизация!', status};
+            case 403:
+                return {message: 'Нет доступа!', status};
+            case 404:
+                return {message: 'Не найдено обородувания...', status};
+            default:
+                return {message: 'Не известная ошибка!', status};
+        }
     }
+
 }
 
 export const hideEquipment = async (id: number) => {
-    try {
-        return await instance.get(`equipment/hide/${id}`);
-    } catch (error) {
-        throw `Error: ${error}`;
+
+    const response: AxiosResponse<string> = await instance.get(`equipment/hide/${id}`);
+    if (response.status == 200) {
+        return response.data
+    } else {
+        const status = response.status;
+        switch (status) {
+            case 401:
+                return {message: 'Требуется авторизация!', status};
+            case 403:
+                return {message: 'Нет доступа!', status};
+            case 404:
+                return {message: 'Не найдено обородувания...', status};
+            default:
+                return {message: 'Не известная ошибка!', status};
+        }
     }
+
 }

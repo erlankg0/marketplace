@@ -22,10 +22,10 @@ const Cards: React.FC<ICards> = ({url}) => {
 
     // category select
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [bought, setBought] = useState<boolean>(false)
     // search
     const searchText = useAppSelector(state => state.search.text);
     const [debouncedSearchText, setDebouncedSearchText] = useState<string>(searchText);
-
     // Debounce the search text
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -36,7 +36,6 @@ const Cards: React.FC<ICards> = ({url}) => {
             clearTimeout(handler);
         };
     }, [searchText]);
-    console.log(url)
     const handleGetItems = async (url: string, page: number, searchText?: string) => {
         try {
             setLoading(true);
@@ -53,6 +52,8 @@ const Cards: React.FC<ICards> = ({url}) => {
                         setItems(response.advertisement);
                         setTotalItems(response.totalCount);
                     }
+                    setBought(false)
+
                     break;
                 case 'services':
                     response = await getAllServices(page - 1, 8);
@@ -64,6 +65,8 @@ const Cards: React.FC<ICards> = ({url}) => {
                         setItems(response.advertisement);
                         setTotalItems(response.totalCount);
                     }
+                    setBought(false)
+
                     break;
                 case 'self-buys':
                     response = await getMyPurchases(page - 1, 8);
@@ -72,8 +75,8 @@ const Cards: React.FC<ICards> = ({url}) => {
                         console.log(response.message)
                     } else {
                         setItems(response.advertisement);
-                        setItems(response.advertisement);
                         setTotalItems(response.totalCount);
+                        setBought(true)
                     }
                     break;
                 case 'equipment':
@@ -98,6 +101,7 @@ const Cards: React.FC<ICards> = ({url}) => {
                             setTotalItems(response.totalCount);
                         }
                     }
+                    setBought(false)
                     break;
             }
         } catch (err) {
@@ -131,7 +135,7 @@ const Cards: React.FC<ICards> = ({url}) => {
         <section className="column">
             <div className={styles.cards}>
                 {items.map(item => (
-                    <Card category={url} key={item.id} data={item}/>
+                    <Card category={url != 'self-buys' ? url : item.type || url} bought={bought} key={item.id} data={item}/>
                 ))}
             </div>
             <div style={{display: 'flex', justifyContent: "center"}}>

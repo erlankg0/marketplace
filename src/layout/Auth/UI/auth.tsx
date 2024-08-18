@@ -34,13 +34,18 @@ const Auth = () => {
         setError(!error);
     }
     const handleAuthorization = async (email: string) => {
-        const response: { message: string } | IError = await signIn(email);
-        if (response) {
+        try {
+            const response: { message: string } | IError = await signIn(email);
+            if ('status' in response) {
+                handleToggleModal();
+                setMessage(response.message)
+            } else {
+                navigate('/confirmed');
+            }
+        } catch (e) {
             navigate('/confirmed');
-        } else {
-            handleToggleModal();
-            setMessage(response)
         }
+
     }
 
     const onSubmit = async () => {

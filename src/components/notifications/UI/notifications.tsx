@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Notification from "@components/notification/UI/notification.tsx";
-import { INotifications } from "@components/notifications/interface.ts";
+import {INotifications} from "@components/notifications/interface.ts";
 
 import eyes from "@assets/icon/eyes.svg";
 import styles from "./notification.module.scss";
 
-const Notifications: React.FC<INotifications> = ({ active }) => {
+const Notifications: React.FC<INotifications> = ({active}) => {
     const [messages, setMessages] = useState<string[]>([]);
     const [ws, setWs] = useState<WebSocket | null>(null);
 

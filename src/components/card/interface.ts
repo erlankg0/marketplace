@@ -3,4 +3,5 @@ export interface ICard<T> {
     setModal?: () => void,
     data: T,
     category: 'order' | 'equipment' | 'services' | string,
+    bought: boolean,
 }

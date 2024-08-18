@@ -23,6 +23,7 @@ export interface IData {
     quantity?: number,
     type?: string,
     updatedAt: string | Date,
+    status?: string,
 }
 
 export interface ICandidates {

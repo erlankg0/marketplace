@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import React from "react";
 
 import Admin from "@layout/Organization/admin/UI/admin.tsx";
@@ -12,6 +12,7 @@ import {IOrganization} from "@layout/Organization/interface.ts";
 const Organization: React.FC<IOrganization> = ({setModalActive}) => {
     return (
         <Routes>
+            <Route path="/" element={<Navigate to="/marketplace/organization/admin" replace />} /> {/* Default Route */}
             <Route path={'/admin'} element={<Admin/>}/>
             <Route path={'/add-employer'} element={<Add/>}/>
             <Route path={'/admin/detail-employer/:id'} element={<DetailEmployees/>}/>

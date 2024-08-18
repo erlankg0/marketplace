@@ -76,35 +76,37 @@ export const searchEquipment = async (query: string, pageNo: number = 0, pageSiz
 
 }
 
-export const buyEquipment = async (id: number) => {
+export const buyEquipment = async (id: number): Promise<{ message: string } | IError> => {
     try {
         const response: AxiosResponse<{ message: string }> = await instance.get(`equipment/buy-equipment/${id}`);
 
-        // If the request is successful (status 2xx), return the response data
-        return response.data;
+        if (response.status === 200) {
+            return { message: response.data.message };
+        } else {
+            return handleResponseError('Неизвестная ошибка', response.status) as IError;
+        }
     } catch (error) {
-        // Axios wraps the error in a response object when the request fails
         if (axios.isAxiosError(error) && error.response) {
-            const {status} = error.response;
+            const { status } = error.response;
             switch (status) {
                 case 401:
-                    return {message: 'Требуется авторизация!', status};
+                    return { message: 'Требуется авторизация!', status } as IError;
                 case 403:
-                    return {message: 'Нет доступа!', status};
+                    return { message: 'Нет доступа!', status } as IError;
                 case 404:
-                    return {message: 'Нет оборудования...', status};
+                    return { message: 'Нет оборудования...', status } as IError;
                 case 409:
-                    return {message: 'Пользовать не в организации...', status};
+                    return { message: 'Пользователь не в организации...', status } as IError;
                 default:
-                    return {message: 'Не известная ошибка!', status};
+                    return { message: 'Не известная ошибка!', status } as IError;
             }
         } else {
-            // Handle errors that are not related to HTTP responses
+            // Handle other errors (e.g., network issues)
             console.error('Error making the request:', error);
-            return {message: 'An error occurred while making the request.', status: 500};
+            return { message: 'An error occurred while making the request.', status: 500 } as IError;
         }
     }
-}
+};
 
 
 // post, delete, hide,

@@ -1,8 +1,9 @@
 import styles from "@layout/Organization/employers/list/UI/list.module.scss";
 import {useEffect, useState} from "react";
 import SelectButton from "@components/button/UI/selectButton.tsx";
-import {getMyPurchases, getUserOrderHistory} from "@network/profile/profile.ts";
+import {getMyPurchases} from "@network/profile/profile.ts";
 import {ICards} from "@network/interfaces/basic.ts";
+import {formatDate} from "@utils/formDate.ts";
 
 const HistoryList = () => {
     const [selectedButton, setSelectedButton] = useState<'current' | 'completed'>('current');
@@ -21,19 +22,6 @@ const HistoryList = () => {
         localStorage.setItem(LOCAL_STORAGE_KEY, buttonType);
     };
 
-    const handleGetHistory = async () => {
-        try {
-            const response = await getUserOrderHistory(selectedButton);
-            if ('message' in response) {
-                alert(response)
-            } else {
-                console.log(response);
-                setItems(response)
-            }
-        } catch (error) {
-            new Error(`${error}`)
-        }
-    }
 
     const handleGetMyPurchases = async () => {
         const response = await getMyPurchases();
@@ -44,9 +32,6 @@ const HistoryList = () => {
         }
     }
 
-    useEffect(() => {
-        handleGetHistory();
-    }, [selectedButton])
 
     useEffect(() => {
         handleGetMyPurchases();
@@ -95,13 +80,13 @@ const HistoryList = () => {
 
                             <tr className={styles.table__column}>
                                 <td>
-                                    {/*<Status status={i}/>*/}
+                                    {/*<Status status={item.status}/>*/}
                                 </td>
                             </tr>
 
                             <tr className={styles.table__column}>
                                 <td className={styles.table__paragraph}>
-                                    {/*{formatDate(item.date)}*/}
+                                    {item?.updatedAt && formatDate(item.updatedAt.toString())}
                                 </td>
                             </tr>
 

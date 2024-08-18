@@ -7,7 +7,7 @@ import Modal from "@components/modal/UI/modal.tsx";
 import CardModal from "@components/cardModal/UI/cardModal.tsx";
 
 
-const Card: React.FC<ICard<IData>> = ({data, category}) => {
+const Card: React.FC<ICard<IData>> = ({data, category, bought}) => {
     const [modalActive, setModalActive] = useState<boolean>(false);
 
     return (
@@ -37,7 +37,8 @@ const Card: React.FC<ICard<IData>> = ({data, category}) => {
                 componentProps={{
                     setModal: (active: boolean) => setModalActive(active),
                     id: data.id,
-                    category: category
+                    category: category,
+                    bought: bought
                 }}
             />
         </div>

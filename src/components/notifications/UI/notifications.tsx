@@ -2,32 +2,37 @@ import React, {useEffect, useState} from "react";
 import Notification from "@components/notification/UI/notification.tsx";
 import {INotifications} from "@components/notifications/interface.ts";
 
-import eyes from "@assets/icon/eyes.svg";
+// import eyes from "@assets/icon/eyes.svg";
 import styles from "./notification.module.scss";
+import {INotification} from "@interfaces/notification.ts";
 
 const Notifications: React.FC<INotifications> = ({active}) => {
-    const [messages, setMessages] = useState<string[]>([]);
+    const [messages, setMessages] = useState<INotification[]>([]);
     const [ws, setWs] = useState<WebSocket | null>(null);
 
     useEffect(() => {
         const websocket = new WebSocket('ws://smarttailor.xyz:8090/websocket');
 
         websocket.onopen = () => {
-            console.log('Connected');
-            console.log(ws)
+            console.log('Connected', ws);
         }
 
         websocket.onmessage = (event: MessageEvent) => {
-            console.log('Get new message', event.data);
-            setMessages(prevState => [...prevState, event.data]);
+            try {
+                const parsedData = JSON.parse(event.data);
+                console.log('Get new message', parsedData);
+                setMessages(prevState => [...prevState, parsedData]);
+            } catch (error) {
+                console.error('Error parsing WebSocket message:', error);
+            }
         }
 
         websocket.onerror = (error) => {
             console.error('WebSocket Error:', error);
         }
 
-        websocket.onclose = () => {
-            console.log('WebSocket соединение закрыто', ws);
+        websocket.onclose = (event) => {
+            console.log('WebSocket connection closed:', event);
         };
 
         setWs(websocket);
@@ -36,7 +41,7 @@ const Notifications: React.FC<INotifications> = ({active}) => {
         return () => {
             websocket.close();
         }
-    }, []);
+    }, [messages]);
 
     return (
         <div className={active ? `${styles.notification} ${styles.active}` : styles.notification}>
@@ -45,19 +50,16 @@ const Notifications: React.FC<INotifications> = ({active}) => {
             </div>
             <div className={'line'}></div>
             <div className={styles.notification__content}>
-                {messages.map((mes, index) => (
-                    <p key={index}>{mes}</p>
-                ))}
-                <Notification/>
-                <Notification/>
-                <Notification/>
-                <Notification/>
+                {messages.length > 1 ? messages.map((msg) => (
+                    <Notification {...msg}/>
+                )) : <div>Нету сообщений</div>}
+
             </div>
             <div className={'line'}></div>
-            <div className={styles.notification__footer}>
-                <img className={styles.notification__eyes} src={eyes} alt={'eyes icon'}/>
-                <p>Отметить все прочитанными</p>
-            </div>
+            {/*<div className={styles.notification__footer}>*/}
+            {/*    <img className={styles.notification__eyes} src={eyes} alt={'eyes icon'}/>*/}
+            {/*    <p>Отметить все прочитанными</p>*/}
+            {/*</div>*/}
         </div>
     );
 }

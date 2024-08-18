@@ -1,3 +1,3 @@
 export interface INotifications {
-    active: boolean
+    active: boolean,
 }
